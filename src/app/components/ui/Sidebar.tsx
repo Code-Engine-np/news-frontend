@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { NewsArticle, Advertisement } from "@/app/types";
+import { NewsArticle, Advertisement } from "@/src/app/types";
 import TrendingList from "./TrendingList";
 import AdvertisementBanner from "./AdvertisementBanner";
 import NewsletterForm from "./NewsletterForm";

@@ -1,7 +1,7 @@
 "use client";
 
-import { NewsArticle } from "@/app/types";
-import ArticleCard from "@/app/components/cards/ArticleCard";
+import { NewsArticle } from "@/src/app/types";
+import ArticleCard from "@/src/app/components/cards/ArticleCard";
 
 interface HeroSectionProps {
   articles: NewsArticle[];

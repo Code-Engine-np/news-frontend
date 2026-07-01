@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Advertisement } from "@/app/types";
+import { Advertisement } from "@/src/app/types";
 
 interface AdvertisementBannerProps {
   advertisement: Advertisement;
@@ -36,7 +36,9 @@ const AdvertisementBanner = ({ advertisement }: AdvertisementBannerProps) => {
             sizes="(max-width: 768px) 100vw, 300px"
           />
           <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-            <span className="text-white font-medium text-sm">Advertisement</span>
+            <span className="text-white font-medium text-sm">
+              Advertisement
+            </span>
           </div>
         </div>
       </Link>

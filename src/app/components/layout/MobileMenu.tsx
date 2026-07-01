@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { X } from "lucide-react";
-import { CATEGORIES } from "@/app/lib/mock/data";
+import { CATEGORIES } from "@/src/app/lib/mock/data";
 
 interface MobileMenuProps {
   isOpen: boolean;

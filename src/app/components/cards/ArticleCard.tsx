@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { NewsArticle } from "@/app/types";
+import { NewsArticle } from "@/src/app/types";
 import { Calendar, Clock } from "lucide-react";
 
 interface ArticleCardProps {
@@ -11,7 +11,8 @@ interface ArticleCardProps {
 }
 
 const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
-  const { title, excerpt, featuredImage, category, author, publishedAt, slug } = article;
+  const { title, excerpt, featuredImage, category, author, publishedAt, slug } =
+    article;
 
   const formattedDate = new Date(publishedAt).toLocaleDateString("en-IN", {
     day: "numeric",

@@ -1,19 +1,50 @@
-import { NewsArticle, Category, Author, Tag, Advertisement } from "@/app/types";
+import {
+  NewsArticle,
+  Category,
+  Author,
+  Tag,
+  Advertisement,
+} from "@/src/app/types";
 
 // TODO: Replace with actual API calls to the NestJS backend
 
 const AUTHORS: Author[] = [
-  { id: "a1", name: "Ravi Sharma", avatar: "https://i.pravatar.cc/150?u=a1", slug: "ravi-sharma" },
-  { id: "a2", name: "Priya Patel", avatar: "https://i.pravatar.cc/150?u=a2", slug: "priya-patel" },
-  { id: "a3", name: "Amit Kumar", avatar: "https://i.pravatar.cc/150?u=a3", slug: "amit-kumar" },
-  { id: "a4", name: "Sneha Gupta", avatar: "https://i.pravatar.cc/150?u=a4", slug: "sneha-gupta" },
+  {
+    id: "a1",
+    name: "Ravi Sharma",
+    avatar: "https://i.pravatar.cc/150?u=a1",
+    slug: "ravi-sharma",
+  },
+  {
+    id: "a2",
+    name: "Priya Patel",
+    avatar: "https://i.pravatar.cc/150?u=a2",
+    slug: "priya-patel",
+  },
+  {
+    id: "a3",
+    name: "Amit Kumar",
+    avatar: "https://i.pravatar.cc/150?u=a3",
+    slug: "amit-kumar",
+  },
+  {
+    id: "a4",
+    name: "Sneha Gupta",
+    avatar: "https://i.pravatar.cc/150?u=a4",
+    slug: "sneha-gupta",
+  },
 ];
 
 const CATEGORIES: Category[] = [
   { id: "c1", name: "Politics", slug: "politics", color: "bg-blue-600" },
   { id: "c2", name: "Business", slug: "business", color: "bg-emerald-600" },
   { id: "c3", name: "Sports", slug: "sports", color: "bg-orange-500" },
-  { id: "c4", name: "Entertainment", slug: "entertainment", color: "bg-pink-600" },
+  {
+    id: "c4",
+    name: "Entertainment",
+    slug: "entertainment",
+    color: "bg-pink-600",
+  },
   { id: "c5", name: "Technology", slug: "technology", color: "bg-purple-600" },
   { id: "c6", name: "Health", slug: "health", color: "bg-teal-500" },
   { id: "c7", name: "World", slug: "world", color: "bg-red-600" },
@@ -34,9 +65,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art1",
     title: "Lok Sabha Elections 2024: Key Battlegrounds to Watch",
     slug: "lok-sabha-elections-2024-key-battlegrounds",
-    excerpt: "As India heads to the polls, we break down the most crucial constituencies that could decide the fate of the next government.",
+    excerpt:
+      "As India heads to the polls, we break down the most crucial constituencies that could decide the fate of the next government.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1540912150693-2c768cfb1845?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1540912150693-2c768cfb1845?w=800&auto=format&fit=crop",
     category: CATEGORIES[0], // Politics
     author: AUTHORS[0],
     tags: [TAGS[0], TAGS[5]],
@@ -51,9 +84,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art2",
     title: "Stock Market Hits All-Time High Amid Economic Reforms",
     slug: "stock-market-all-time-high-economic-reforms",
-    excerpt: "The Sensex and Nifty surged to record levels today as investors cheer the government's latest economic policies.",
+    excerpt:
+      "The Sensex and Nifty surged to record levels today as investors cheer the government's latest economic policies.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1611974765270-ca0041e5e840?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1611974765270-ca0041e5e840?w=800&auto=format&fit=crop",
     category: CATEGORIES[1], // Business
     author: AUTHORS[1],
     tags: [TAGS[5], TAGS[1]],
@@ -68,9 +103,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art3",
     title: "IPL 2024: RCB vs CSK - A Thrilling Last-Over Finish",
     slug: "ipl-2024-rcb-vs-csk-last-over-finish",
-    excerpt: "Royal Challengers Bangalore clinched a nail-biting victory against Chennai Super Kings in a match that went down to the wire.",
+    excerpt:
+      "Royal Challengers Bangalore clinched a nail-biting victory against Chennai Super Kings in a match that went down to the wire.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1541240290614-ebc879577886?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1541240290614-ebc879577886?w=800&auto=format&fit=crop",
     category: CATEGORIES[2], // Sports
     author: AUTHORS[2],
     tags: [TAGS[2]],
@@ -85,9 +122,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art4",
     title: "New AI Model Promises Breakthrough in Medical Diagnostics",
     slug: "new-ai-model-medical-diagnostics",
-    excerpt: "Researchers at IIT Delhi have developed a new AI model that can detect early signs of heart disease with 95% accuracy.",
+    excerpt:
+      "Researchers at IIT Delhi have developed a new AI model that can detect early signs of heart disease with 95% accuracy.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1555949963-ff9fe0c870ec?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1555949963-ff9fe0c870ec?w=800&auto=format&fit=crop",
     category: CATEGORIES[4], // Technology
     author: AUTHORS[3],
     tags: [TAGS[4]],
@@ -102,9 +141,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art5",
     title: "Monsoon Predictions: Above-Normal Rainfall Expected This Year",
     slug: "monsoon-predictions-above-normal-rainfall",
-    excerpt: "The Meteorological Department predicts a good monsoon this year, which is expected to boost agricultural output.",
+    excerpt:
+      "The Meteorological Department predicts a good monsoon this year, which is expected to boost agricultural output.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1534274983857-a8e810f5e99d?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1534274983857-a8e810f5e99d?w=800&auto=format&fit=crop",
     category: CATEGORIES[7], // Local
     author: AUTHORS[0],
     tags: [],
@@ -119,9 +160,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art6",
     title: "Hollywood Star Visits Mumbai for Film Premiere",
     slug: "hollywood-star-visits-mumbai-film-premiere",
-    excerpt: "A-list Hollywood actor makes a surprise visit to Mumbai, turning heads at a major film premiere event.",
+    excerpt:
+      "A-list Hollywood actor makes a surprise visit to Mumbai, turning heads at a major film premiere event.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop",
     category: CATEGORIES[3], // Entertainment
     author: AUTHORS[1],
     tags: [TAGS[3]],
@@ -136,9 +179,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art7",
     title: "Global Climate Summit: India Pledges Net Zero by 2070",
     slug: "global-climate-summit-india-net-zero",
-    excerpt: "At the Global Climate Summit, India reaffirmed its commitment to achieving net-zero carbon emissions by 2070.",
+    excerpt:
+      "At the Global Climate Summit, India reaffirmed its commitment to achieving net-zero carbon emissions by 2070.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop",
     category: CATEGORIES[6], // World
     author: AUTHORS[2],
     tags: [],
@@ -153,9 +198,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
     id: "art8",
     title: "New Health Scheme to Cover 10 Crore Families",
     slug: "new-health-scheme-10-crore-families",
-    excerpt: "The government announces a massive health insurance scheme aimed at providing coverage to 10 crore families across the nation.",
+    excerpt:
+      "The government announces a massive health insurance scheme aimed at providing coverage to 10 crore families across the nation.",
     content: "Full content goes here...",
-    featuredImage: "https://images.unsplash.com/photo-1576091160399-112ba8b3058c?w=800&auto=format&fit=crop",
+    featuredImage:
+      "https://images.unsplash.com/photo-1576091160399-112ba8b3058c?w=800&auto=format&fit=crop",
     category: CATEGORIES[5], // Health
     author: AUTHORS[3],
     tags: [],
@@ -194,4 +241,11 @@ const ADVERTISEMENTS: Advertisement[] = [
   },
 ];
 
-export { AUTHORS, CATEGORIES, TAGS, MOCK_ARTICLES, BREAKING_NEWS, ADVERTISEMENTS };
+export {
+  AUTHORS,
+  CATEGORIES,
+  TAGS,
+  MOCK_ARTICLES,
+  BREAKING_NEWS,
+  ADVERTISEMENTS,
+};

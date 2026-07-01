@@ -22,9 +22,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-    // Domains array is kept for compatibility, but remotePatterns is preferred
-    // TODO: Remove domains once remotePatterns is fully adopted in your Next.js version
-    domains: ["images.unsplash.com", "i.pravatar.cc", "via.placeholder.com"],
   },
 };
 
