@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <header className="bg-white">
-      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-0 lg:py-6">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-0 lg:py-6">
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

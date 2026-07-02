@@ -1,22 +1,12 @@
 "use client";
 
 import Link from "next/link";
-
-const NAV_ITEMS = [
-  { label: "गृहपृष्ठ", href: "/" },
-  { label: "समसामयिक", href: "/category/current-affairs" },
-  { label: "समाज", href: "/category/society" },
-  { label: "अर्थ/विकास", href: "/category/economy" },
-  { label: "विशेष", href: "/category/features" },
-  { label: "दृष्टिकोण", href: "/category/opinion" },
-  { label: "कला", href: "/category/arts" },
-  { label: "खेलकुद", href: "/category/sports" },
-];
+import { MAIN_NAV_ITEMS } from "@/src/app/lib/site";
 
 const Navigation = () => {
   return (
     <nav aria-label="Main navigation">
-      <div className="mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-0">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-0">
         <div className="overflow-x-auto pb-2">
           <div className="flex min-w-max items-center gap-2 rounded-[10px] bg-[#05a76f] px-3 py-2 shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
             <Link
@@ -35,7 +25,7 @@ const Navigation = () => {
               </svg>
             </Link>
 
-            {NAV_ITEMS.map((item) => (
+            {MAIN_NAV_ITEMS.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}

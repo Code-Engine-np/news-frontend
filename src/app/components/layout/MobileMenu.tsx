@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { X } from "lucide-react";
 import { CATEGORIES } from "@/src/app/lib/mock/data";
+import { MAIN_NAV_ITEMS } from "@/src/app/lib/site";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -37,6 +38,26 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
         <nav className="p-4 space-y-1" aria-label="Mobile navigation">
           <ul className="space-y-1">
+            {MAIN_NAV_ITEMS.map((item) => (
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className="block px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:text-brand-600 rounded-lg transition-colors"
+                  onClick={onClose}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="border-t border-gray-200 mt-4 pt-4">
+            <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              Categories
+            </h3>
+          </div>
+
+          <ul className="space-y-1">
             {CATEGORIES.map((category) => (
               <li key={category.id}>
                 <Link
@@ -59,6 +80,15 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
               Quick Links
             </h3>
             <ul className="space-y-1">
+              <li>
+                <Link
+                  href="/trending"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand-600 rounded-lg transition-colors"
+                  onClick={onClose}
+                >
+                  Trending
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/about"

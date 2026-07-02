@@ -34,16 +34,21 @@ const YoutubeIcon = ({ className }: { className?: string }) => (
 );
 
 const TopBar = () => {
-  const today = "Tuesday, 14 June 2026";
+  const today = new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date());
 
   return (
     <div className="bg-[#ededed] text-sm text-black">
-      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-0 lg:py-3">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-0 lg:py-3">
         <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          <span className="whitespace-nowrap font-[family-name:var(--font-inter)] text-[16px]">
+          <span className="whitespace-nowrap font-(family-name:--font-inter) text-[16px]">
             {today}
           </span>
-          <span className="whitespace-nowrap font-[family-name:var(--font-inter)] text-[16px]">
+          <span className="whitespace-nowrap font-(family-name:--font-inter) text-[16px]">
             27°C Kathmandu
           </span>
         </div>

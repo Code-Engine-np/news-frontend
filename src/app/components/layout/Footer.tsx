@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FOOTER_LINK_GROUPS } from "@/src/app/lib/site";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg
@@ -36,7 +37,7 @@ const YoutubeIcon = ({ className }: { className?: string }) => (
 const Footer = () => {
   return (
     <footer className="bg-[#05a76f] text-white">
-      <div className="mx-auto w-full max-w-[1280px] px-4 pb-4 pt-4 sm:px-6 lg:px-0 lg:pb-5 lg:pt-4">
+      <div className="mx-auto w-full max-w-7xl px-4 pb-4 pt-4 sm:px-6 lg:px-0 lg:pb-5 lg:pt-4">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-[430px]">
@@ -90,28 +91,31 @@ const Footer = () => {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold">Best Khabar Pvt. Ptd.</h3>
-              <p className="text-sm text-white/95">Fill Details</p>
-              <p className="text-sm text-white/95">Fill Details</p>
+              <h3 className="text-lg font-semibold">Best Khabar Pvt. Ltd.</h3>
+              <p className="text-sm text-white/95">
+                A fast, Nepali-first news experience built around national and
+                local coverage.
+              </p>
+              <p className="text-sm text-white/95">Kathmandu, Nepal</p>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold">सम्पर्क विवरण</h3>
-              <p className="text-sm text-white/95">Fill Details</p>
-              <p className="text-sm text-white/95">Fill Details</p>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold">विज्ञापन</h3>
-              <p className="text-sm text-white/95">Fill Details</p>
-              <p className="text-sm text-white/95">Fill Details</p>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold">विज्ञापन</h3>
-              <p className="text-sm text-white/95">Fill Details</p>
-              <p className="text-sm text-white/95">Fill Details</p>
-            </div>
+            {FOOTER_LINK_GROUPS.map((group) => (
+              <div key={group.title} className="space-y-3">
+                <h3 className="text-lg font-semibold">{group.title}</h3>
+                <ul className="space-y-2 text-sm text-white/95">
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="transition-colors hover:text-white"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
