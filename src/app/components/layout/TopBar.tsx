@@ -1,5 +1,6 @@
-import { getVisitorWeather } from "@/src/app/services/weather.service";
+// import { getVisitorWeather } from "@/src/app/services/weather.service";
 import Link from "next/link";
+import Weather from "@/src/app/components/ui/Weather";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg
@@ -42,9 +43,9 @@ const TopBar = async () => {
     year: "numeric",
   }).format(new Date());
 
-  const weather = await getVisitorWeather();
+  // const weather = await getVisitorWeather();?
 
-  console.log("Weather data in TopBar:", weather); // Debugging line
+  // console.log("Weather data in TopBar:", weather); // Debugging line
 
   return (
     <div className="bg-[#ededed] text-sm text-black">
@@ -54,7 +55,7 @@ const TopBar = async () => {
             {today}
           </span>
           <span className="whitespace-nowrap font-(family-name:--font-inter) text-[16px]">
-            {weather && `${weather.city}, ${weather.temperature}°C`}
+            <Weather />
           </span>
         </div>
 

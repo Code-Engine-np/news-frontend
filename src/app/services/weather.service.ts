@@ -1,18 +1,17 @@
-import { getVisitorLocation } from "@/src/app/lib/location";
 import { fetchWeather } from "@/src/app/lib/weather";
 import { Weather } from "@/src/app/types/weather";
 
-export async function getVisitorWeather(): Promise<Weather | null> {
-  const location = await getVisitorLocation();
-
-  if (!location) {
-    return null;
-  }
-
-  const weather = await fetchWeather(location.latitude, location.longitude);
+export async function getCurrentWeather(
+  latitude: number,
+  longitude: number,
+): Promise<Weather> {
+  const data = await fetchWeather(latitude, longitude);
 
   return {
-    city: weather.name,
-    temperature: Math.round(weather.main.temp),
+    city: data.location.name,
+    country: data.location.country,
+    temperature: Math.round(data.current.temp_c),
+    condition: data.current.condition.text,
+    icon: `https:${data.current.condition.icon}`,
   };
 }

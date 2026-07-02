@@ -1,17 +1,12 @@
-const OPENWEATHER_API_KEY = process.env.OPEN_WEATHER_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY!;
 
-export async function fetchWeather(latitude: string, longitude: string) {
+export async function fetchWeather(lat: number, lon: number) {
   const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OPENWEATHER_API_KEY}&units=metric`,
-    {
-      next: {
-        revalidate: 600,
-      },
-    },
+    `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat},${lon}`,
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch weather.");
+    throw new Error("Failed to fetch weather");
   }
 
   return response.json();

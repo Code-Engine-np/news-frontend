@@ -1,19 +1,23 @@
 import { headers } from "next/headers";
 
-export async function getVisitorLocation() {
-  const headerList = await headers();
+export async function getClientIP(): Promise<string | null> {
+  const headersList = await headers();
 
-  const city = headerList.get("x-vercel-ip-city");
-  const latitude = headerList.get("x-vercel-ip-latitude");
-  const longitude = headerList.get("x-vercel-ip-longitude");
+  const forwarded = headersList.get("x-forwarded-for");
+  const realIP = headersList.get("x-real-ip");
+  const cfIP = headersList.get("cf-connecting-ip");
 
-  if (!latitude || !longitude) {
-    return null;
+  if (cfIP) {
+    return cfIP;
   }
 
-  return {
-    city,
-    latitude,
-    longitude,
-  };
+  if (forwarded) {
+    return forwarded.split(",")[0].trim();
+  }
+
+  if (realIP) {
+    return realIP;
+  }
+
+  return null;
 }
