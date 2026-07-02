@@ -1,3 +1,4 @@
+import { getVisitorWeather } from "@/src/app/services/weather.service";
 import Link from "next/link";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -33,13 +34,17 @@ const YoutubeIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const TopBar = () => {
+const TopBar = async () => {
   const today = new Intl.DateTimeFormat("en-GB", {
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
   }).format(new Date());
+
+  const weather = await getVisitorWeather();
+
+  console.log("Weather data in TopBar:", weather); // Debugging line
 
   return (
     <div className="bg-[#ededed] text-sm text-black">
@@ -49,7 +54,7 @@ const TopBar = () => {
             {today}
           </span>
           <span className="whitespace-nowrap font-(family-name:--font-inter) text-[16px]">
-            27°C Kathmandu
+            {weather && `${weather.city}, ${weather.temperature}°C`}
           </span>
         </div>
 
