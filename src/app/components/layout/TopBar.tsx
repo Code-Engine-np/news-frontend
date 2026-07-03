@@ -1,4 +1,3 @@
-// import { getVisitorWeather } from "@/src/app/services/weather.service";
 import Link from "next/link";
 import Weather from "@/src/app/components/ui/Weather";
 
@@ -42,10 +41,6 @@ const TopBar = async () => {
     month: "long",
     year: "numeric",
   }).format(new Date());
-
-  // const weather = await getVisitorWeather();?
-
-  // console.log("Weather data in TopBar:", weather); // Debugging line
 
   return (
     <div className="bg-[#ededed] text-sm text-black">

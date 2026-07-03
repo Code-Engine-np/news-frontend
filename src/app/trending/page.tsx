@@ -17,20 +17,20 @@ export default function TrendingPage() {
   return (
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
-        <div className="rounded-2xl border border-[#d8dfd8] bg-white p-6 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0a8f61]">
+        <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             Live popularity
           </p>
-          <h1 className="mt-2 text-3xl font-extrabold text-[#1a1c1c] sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">
             Trending stories
           </h1>
-          <p className="mt-3 max-w-3xl text-base leading-7 text-[#51605a]">
+          <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
             Stories the audience is reading most across politics, business,
             sports, and culture.
           </p>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px]">
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
           <section className="space-y-6">
             <TrendingList articles={trendingArticles} />
 
@@ -40,17 +40,17 @@ export default function TrendingPage() {
               ))}
             </div>
 
-            <div className="rounded-2xl border border-[#d8dfd8] bg-white p-6">
+            <div className="rounded-2xl border border-line bg-white p-6">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0a8f61]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                     Keep reading
                   </p>
-                  <h2 className="mt-2 text-2xl font-bold text-[#1a1c1c]">
+                  <h2 className="mt-2 text-2xl font-bold text-ink">
                     Jump back to the homepage
                   </h2>
                 </div>
-                <Link href="/" className="text-sm font-semibold text-[#0a8f61]">
+                <Link href="/" className="text-sm font-semibold text-primary">
                   Home
                 </Link>
               </div>

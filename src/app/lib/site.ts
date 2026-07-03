@@ -117,6 +117,14 @@ export function getArticleBySlug(slug: string) {
   return MOCK_ARTICLES.find((article) => article.slug === slug);
 }
 
+export function getAllArticleSlugs() {
+  return MOCK_ARTICLES.map((article) => article.slug);
+}
+
+export function getAllSectionSlugs() {
+  return Object.keys(SECTION_DEFINITIONS);
+}
+
 export function getTrendingArticles(limit = 5) {
   return [...MOCK_ARTICLES]
     .sort((left, right) => right.viewCount - left.viewCount)

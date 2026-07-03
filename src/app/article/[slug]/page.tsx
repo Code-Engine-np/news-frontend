@@ -8,6 +8,7 @@ import NewsShell from "@/src/app/components/layout/NewsShell";
 import Sidebar from "@/src/app/components/ui/Sidebar";
 import {
   ADVERTISEMENTS,
+  getAllArticleSlugs,
   getArticleBySlug,
   getRelatedArticles,
   getTrendingArticles,
@@ -15,6 +16,10 @@ import {
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
+}
+
+export function generateStaticParams() {
+  return getAllArticleSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -48,22 +53,22 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <nav className="text-sm text-[#5f6b66]">
-          <Link href="/" className="hover:text-[#0a8f61]">
+          <Link href="/" className="hover:text-primary">
             Home
           </Link>
           <span className="mx-2">/</span>
           <Link
             href={`/category/${article.category.slug}`}
-            className="hover:text-[#0a8f61]"
+            className="hover:text-primary"
           >
             {article.category.name}
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-[#1a1c1c]">{article.title}</span>
+          <span className="text-ink">{article.title}</span>
         </nav>
 
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px]">
-          <article className="overflow-hidden rounded-2xl border border-[#d8dfd8] bg-white shadow-sm">
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
+          <article className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
             <div className="relative aspect-[16/9]">
               <Image
                 src={article.featuredImage}
@@ -80,7 +85,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               >
                 {article.category.name}
               </span>
-              <h1 className="mt-4 text-3xl font-extrabold leading-tight text-[#1a1c1c] sm:text-4xl">
+              <h1 className="mt-4 text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
                 {article.title}
               </h1>
               <p className="mt-4 max-w-3xl text-lg leading-8 text-[#52615b]">
@@ -107,7 +112,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </span>
               </div>
 
-              <div className="prose prose-slate mt-6 max-w-none prose-headings:text-[#1a1c1c] prose-p:text-[#4d5c56]">
+              <div className="prose prose-slate mt-6 max-w-none prose-headings:text-ink prose-p:text-[#4d5c56]">
                 <p>{article.content}</p>
                 <p>
                   This story is part of Best Khabar&apos;s live news archive.
@@ -121,7 +126,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   {article.tags.map((tag) => (
                     <span
                       key={tag.id}
-                      className="rounded-full bg-[#eef6f0] px-3 py-1 text-xs font-semibold text-[#0a8f61]"
+                      className="rounded-full bg-[#eef6f0] px-3 py-1 text-xs font-semibold text-primary"
                     >
                       #{tag.name}
                     </span>
@@ -130,7 +135,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
                 <button
                   type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#c9d5cd] px-4 py-2 text-sm font-semibold text-[#1a1c1c] transition-colors hover:border-[#0a8f61] hover:text-[#0a8f61]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#c9d5cd] px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-primary hover:text-primary"
                 >
                   <Share2 className="h-4 w-4" />
                   Share
@@ -143,19 +148,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
 
         {relatedArticles.length > 0 && (
-          <section className="mt-10 rounded-2xl border border-[#d8dfd8] bg-white p-6 shadow-sm">
+          <section className="mt-10 rounded-2xl border border-line bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0a8f61]">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                   Related coverage
                 </p>
-                <h2 className="mt-2 text-2xl font-bold text-[#1a1c1c]">
+                <h2 className="mt-2 text-2xl font-bold text-ink">
                   More from {article.category.name}
                 </h2>
               </div>
               <Link
                 href={`/category/${article.category.slug}`}
-                className="text-sm font-semibold text-[#0a8f61]"
+                className="text-sm font-semibold text-primary"
               >
                 View category
               </Link>

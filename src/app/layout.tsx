@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import {
+  Hanken_Grotesk,
+  Inter,
+  Noto_Sans,
+  Poppins,
+  Work_Sans,
+} from "next/font/google";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -14,7 +20,26 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
+const hankenGrotesk = Hanken_Grotesk({
+  variable: "--font-hanken",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+});
+
+const workSans = Work_Sans({
+  variable: "--font-work-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const notoSans = Noto_Sans({
+  variable: "--font-noto",
+  subsets: ["latin", "devanagari"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://bestkhabar.com"),
   title: "Best Khabar - Latest News, Breaking News, Top Headlines",
   description:
     "Best Khabar brings you the latest news, breaking news, top headlines from India and around the world on politics, business, sports, entertainment, technology and more.",
@@ -57,9 +82,6 @@ export const metadata: Metadata = {
     description:
       "Best Khabar brings you the latest news, breaking news, top headlines from India and around the world.",
   },
-  verification: {
-    google: "", // TODO: Add Google Search Console verification code
-  },
   alternates: {
     canonical: "https://bestkhabar.com",
   },
@@ -72,8 +94,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${poppins.variable} ${inter.variable} h-full antialiased`}
+      lang="ne"
+      className={`${poppins.variable} ${inter.variable} ${hankenGrotesk.variable} ${workSans.variable} ${notoSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans">
         {children}

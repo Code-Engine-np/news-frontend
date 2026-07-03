@@ -36,7 +36,7 @@ const YoutubeIcon = ({ className }: { className?: string }) => (
 
 const Footer = () => {
   return (
-    <footer className="bg-[#05a76f] text-white">
+    <footer className="bg-primary-bright text-white">
       <div className="mx-auto w-full max-w-7xl px-4 pb-4 pt-4 sm:px-6 lg:px-0 lg:pb-5 lg:pt-4">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -46,7 +46,7 @@ const Footer = () => {
                 className="inline-flex items-center gap-3"
                 aria-label="Best Khabar home"
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-sm bg-white text-[#05a76f] text-3xl font-black leading-none">
+                <span className="flex h-12 w-12 items-center justify-center rounded-sm bg-white text-primary-bright text-3xl font-black leading-none">
                   B
                 </span>
                 <span>

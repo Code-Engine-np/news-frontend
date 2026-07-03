@@ -11,14 +11,14 @@ export default function PrivacyPage() {
   return (
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
-        <section className="rounded-2xl border border-[#d8dfd8] bg-white p-6 shadow-sm sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0a8f61]">
+        <section className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             Privacy Policy
           </p>
-          <h1 className="mt-2 text-3xl font-extrabold text-[#1a1c1c] sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">
             Reader privacy matters
           </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-[#51605a]">
+          <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
             Best Khabar uses basic analytics, newsletter signups, and
             advertising placements to keep the site running while respecting
             reader privacy.
@@ -34,22 +34,22 @@ export default function PrivacyPage() {
           ].map((item) => (
             <div
               key={item}
-              className="rounded-2xl border border-[#d8dfd8] bg-white p-6 shadow-sm"
+              className="rounded-2xl border border-line bg-white p-6 shadow-sm"
             >
-              <p className="text-base leading-7 text-[#1a1c1c]">{item}</p>
+              <p className="text-base leading-7 text-ink">{item}</p>
             </div>
           ))}
         </section>
 
-        <section className="mt-8 rounded-2xl border border-[#d8dfd8] bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-[#1a1c1c]">Questions?</h2>
-          <p className="mt-3 text-[#51605a]">
+        <section className="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-bold text-ink">Questions?</h2>
+          <p className="mt-3 text-muted">
             Contact the team if you need clarifications about the way Best
             Khabar uses your information.
           </p>
           <Link
             href="/contact"
-            className="mt-4 inline-flex rounded-full bg-[#0a8f61] px-5 py-3 text-sm font-semibold text-white"
+            className="mt-4 inline-flex rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white"
           >
             Contact us
           </Link>

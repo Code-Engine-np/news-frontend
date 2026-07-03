@@ -1,6 +1,5 @@
 "use client";
 
-import { getCurrentWeather } from "@/src/app/services/weather.service";
 import type { Weather } from "@/src/app/types/weather";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -14,11 +13,13 @@ export default function Weather() {
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         try {
-          const data = await getCurrentWeather(
-            coords.latitude,
-            coords.longitude,
+          const response = await fetch(
+            `/api/weather?lat=${coords.latitude}&lon=${coords.longitude}`,
           );
 
+          if (!response.ok) return;
+
+          const data: Weather = await response.json();
           setWeather(data);
         } catch (error) {
           console.error(error);
@@ -33,8 +34,6 @@ export default function Weather() {
   if (!weather) {
     return null;
   }
-
-  console.log("Weather data in Weather component:", weather); // Debugging line
 
   return (
     <div className="flex items-center gap-2">

@@ -8,7 +8,7 @@ const Navigation = () => {
     <nav aria-label="Main navigation">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-0">
         <div className="overflow-x-auto pb-2">
-          <div className="flex min-w-max items-center gap-2 rounded-[10px] bg-[#05a76f] px-3 py-2 shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
+          <div className="flex min-w-max items-center gap-2 rounded-[10px] bg-primary-bright px-3 py-2 shadow-[0_2px_5px_rgba(0,0,0,0.25)]">
             <Link
               href="/"
               className="inline-flex h-[56px] w-[56px] items-center justify-center rounded-[10px] bg-[#f15a24] text-white transition-transform hover:scale-[1.02]"

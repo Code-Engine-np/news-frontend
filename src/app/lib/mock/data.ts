@@ -63,13 +63,13 @@ const TAGS: Tag[] = [
 const MOCK_ARTICLES: NewsArticle[] = [
   {
     id: "art1",
-    title: "Lok Sabha Elections 2024: Key Battlegrounds to Watch",
-    slug: "lok-sabha-elections-2024-key-battlegrounds",
+    title: "Federal Elections: Key Constituencies and Battlegrounds to Watch",
+    slug: "federal-elections-key-constituencies-battlegrounds",
     excerpt:
-      "As India heads to the polls, we break down the most crucial constituencies that could decide the fate of the next government.",
+      "As Nepal prepares for the upcoming polls, we break down the most crucial constituencies across the provinces that could decide the next government.",
     content: "Full content goes here...",
     featuredImage:
-      "https://images.unsplash.com/photo-1540912150693-2c768cfb1845?w=800&auto=format&fit=crop",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWSSrLHfoyHDfF2IyMUcEvFO4I6ToUveoWaneKwZYEg&s=10",
     category: CATEGORIES[0], // Politics
     author: AUTHORS[0],
     tags: [TAGS[0], TAGS[5]],
@@ -82,13 +82,13 @@ const MOCK_ARTICLES: NewsArticle[] = [
   },
   {
     id: "art2",
-    title: "Stock Market Hits All-Time High Amid Economic Reforms",
-    slug: "stock-market-all-time-high-economic-reforms",
+    title: "NEPSE Index Hits Record High Amid New Monetary Policy Reforms",
+    slug: "nepse-index-record-high-monetary-policy-reforms",
     excerpt:
-      "The Sensex and Nifty surged to record levels today as investors cheer the government's latest economic policies.",
+      "The Nepal Stock Exchange surged to record levels today as investors cheer the central bank's latest economic relaxations.",
     content: "Full content goes here...",
     featuredImage:
-      "https://images.unsplash.com/photo-1611974765270-ca0041e5e840?w=800&auto=format&fit=crop",
+      "https://risingnepaldaily.com/storage/media/58742/60f5292de6b83_nepse_up_trend.jpg",
     category: CATEGORIES[1], // Business
     author: AUTHORS[1],
     tags: [TAGS[5], TAGS[1]],
@@ -101,13 +101,14 @@ const MOCK_ARTICLES: NewsArticle[] = [
   },
   {
     id: "art3",
-    title: "IPL 2024: RCB vs CSK - A Thrilling Last-Over Finish",
-    slug: "ipl-2024-rcb-vs-csk-last-over-finish",
+    title:
+      "T20 International: Nepal vs UAE - A Thrilling Last-Over Finish at TU Ground",
+    slug: "t20i-nepal-vs-uae-last-over-finish-tu-ground",
     excerpt:
-      "Royal Challengers Bangalore clinched a nail-biting victory against Chennai Super Kings in a match that went down to the wire.",
+      "The Rhinos clinched a nail-biting victory against the UAE in a packed Kirtipur stadium that went right down to the final ball.",
     content: "Full content goes here...",
     featuredImage:
-      "https://images.unsplash.com/photo-1541240290614-ebc879577886?w=800&auto=format&fit=crop",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg7AYBtB7u89dZq7XJVxiJVGYgfFiWDLJdX5dNaO6vGQ&s=10",
     category: CATEGORIES[2], // Sports
     author: AUTHORS[2],
     tags: [TAGS[2]],
@@ -120,13 +121,14 @@ const MOCK_ARTICLES: NewsArticle[] = [
   },
   {
     id: "art4",
-    title: "New AI Model Promises Breakthrough in Medical Diagnostics",
-    slug: "new-ai-model-medical-diagnostics",
+    title:
+      "New AI Model Developed at TU Promises Breakthrough in Medical Diagnostics",
+    slug: "tu-ai-model-medical-diagnostics",
     excerpt:
-      "Researchers at IIT Delhi have developed a new AI model that can detect early signs of heart disease with 95% accuracy.",
+      "Researchers at Tribhuvan University have developed a new AI model that can detect early signs of heart disease with 95% accuracy in rural clinics.",
     content: "Full content goes here...",
     featuredImage:
-      "https://images.unsplash.com/photo-1555949963-ff9fe0c870ec?w=800&auto=format&fit=crop",
+      "https://nepalesexpress.com/uploads/user/10/AIxCSfor-Nepal-69b00bb370b40.jpg",
     category: CATEGORIES[4], // Technology
     author: AUTHORS[3],
     tags: [TAGS[4]],
@@ -139,13 +141,14 @@ const MOCK_ARTICLES: NewsArticle[] = [
   },
   {
     id: "art5",
-    title: "Monsoon Predictions: Above-Normal Rainfall Expected This Year",
-    slug: "monsoon-predictions-above-normal-rainfall",
+    title:
+      "Monsoon Predictions: Early and Above-Normal Rainfall Expected Across Nepal",
+    slug: "monsoon-predictions-above-normal-rainfall-nepal",
     excerpt:
-      "The Meteorological Department predicts a good monsoon this year, which is expected to boost agricultural output.",
+      "The Department of Hydrology and Meteorology predicts a strong monsoon this year, which is expected to boost agricultural output but poses landslide risks.",
     content: "Full content goes here...",
     featuredImage:
-      "https://images.unsplash.com/photo-1534274983857-a8e810f5e99d?w=800&auto=format&fit=crop",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ3HMgWS5phT2cm6Q6oQ67Riwnbmlc_lyN5ymS7d2jfNHkPn0CXMV1RVN8&s=10",
     category: CATEGORIES[7], // Local
     author: AUTHORS[0],
     tags: [],
@@ -158,10 +161,10 @@ const MOCK_ARTICLES: NewsArticle[] = [
   },
   {
     id: "art6",
-    title: "Hollywood Star Visits Mumbai for Film Premiere",
-    slug: "hollywood-star-visits-mumbai-film-premiere",
+    title: "Kollywood Star Visits Pokhara for Mountain Film Festival Premiere",
+    slug: "kollywood-star-visits-pokhara-film-festival",
     excerpt:
-      "A-list Hollywood actor makes a surprise visit to Mumbai, turning heads at a major film premiere event.",
+      "A-list Nepali actor makes a surprise appearance in Pokhara, turning heads at the lakeside premiere event.",
     content: "Full content goes here...",
     featuredImage:
       "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop",
@@ -177,10 +180,10 @@ const MOCK_ARTICLES: NewsArticle[] = [
   },
   {
     id: "art7",
-    title: "Global Climate Summit: India Pledges Net Zero by 2070",
-    slug: "global-climate-summit-india-net-zero",
+    title: "Global Climate Summit: Nepal Pledges Net Zero Emissions by 2045",
+    slug: "global-climate-summit-nepal-net-zero",
     excerpt:
-      "At the Global Climate Summit, India reaffirmed its commitment to achieving net-zero carbon emissions by 2070.",
+      "At the Global Climate Summit, Nepal reaffirmed its aggressive commitment to achieving net-zero carbon emissions by 2045, citing Himalayan melting.",
     content: "Full content goes here...",
     featuredImage:
       "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop",
@@ -196,10 +199,11 @@ const MOCK_ARTICLES: NewsArticle[] = [
   },
   {
     id: "art8",
-    title: "New Health Scheme to Cover 10 Crore Families",
-    slug: "new-health-scheme-10-crore-families",
+    title:
+      "Expanded National Health Insurance Scheme to Cover 50 Lakh Families",
+    slug: "expanded-health-insurance-scheme-nepal",
     excerpt:
-      "The government announces a massive health insurance scheme aimed at providing coverage to 10 crore families across the nation.",
+      "The government announces a massive push for the Health Insurance Board program aimed at providing universal coverage to families nationwide.",
     content: "Full content goes here...",
     featuredImage:
       "https://images.unsplash.com/photo-1576091160399-112ba8b3058c?w=800&auto=format&fit=crop",
@@ -234,7 +238,8 @@ const ADVERTISEMENTS: Advertisement[] = [
   {
     id: "ad2",
     title: "Tech Mega Sale",
-    imageUrl: "https://via.placeholder.com/728x90?text=Footer+Ad",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ3SuvzxwlSfW3CRp8y-F3_hcZSRDMWepS5wYOC01Djw&s=10",
     linkUrl: "#",
     position: "footer",
     size: "full-width",
