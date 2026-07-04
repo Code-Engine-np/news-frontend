@@ -60,7 +60,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </p>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
+        <div className="mt-8 grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_352px]">
           <section className="space-y-6">
             <ArticleCard article={featuredArticle} variant="featured" />
 
@@ -71,7 +71,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
 
             <div className="rounded-2xl border border-line bg-white p-6">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                     More in {section.title}
@@ -82,7 +82,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </div>
                 <Link
                   href="/trending"
-                  className="text-sm font-semibold text-primary"
+                  className="shrink-0 whitespace-nowrap text-sm font-semibold text-primary"
                 >
                   View trending
                 </Link>
