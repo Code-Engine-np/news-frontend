@@ -87,13 +87,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   View trending
                 </Link>
               </div>
-              <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {articles.map((article) => (
-                  <ArticleCard
-                    key={article.id}
-                    article={article}
-                    variant="horizontal"
-                  />
+                  <ArticleCard key={article.id} article={article} />
                 ))}
               </div>
             </div>

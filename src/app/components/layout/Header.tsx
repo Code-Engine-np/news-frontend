@@ -27,14 +27,14 @@ const Header = () => {
         </button>
 
         <Link href="/" className="flex-shrink-0">
-          <div className="relative h-[52px] w-[210px] sm:h-[58px] sm:w-[240px] lg:h-[62px] lg:w-[270px]">
+          <div className="relative h-[46px] w-[180px] sm:h-[58px] sm:w-[240px] lg:h-[62px] lg:w-[270px]">
             <Image
               src="/best-khabar-green1.png"
               alt="Best Khabar"
               fill
               className="object-contain object-left"
               priority
-              sizes="(max-width: 640px) 210px, (max-width: 1024px) 240px, 270px"
+              sizes="(max-width: 640px) 180px, (max-width: 1024px) 240px, 270px"
             />
           </div>
         </Link>
