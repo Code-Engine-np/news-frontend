@@ -206,7 +206,7 @@ const MOCK_ARTICLES: NewsArticle[] = [
       "The government announces a massive push for the Health Insurance Board program aimed at providing universal coverage to families nationwide.",
     content: "Full content goes here...",
     featuredImage:
-      "https://images.unsplash.com/photo-1576091160399-112ba8b3058c?w=800&auto=format&fit=crop",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNP7PA9FSfMgE5rus_iX-6xxZcr2Z1wHdZ_2XGcCZs9g&s=10",
     category: CATEGORIES[5], // Health
     author: AUTHORS[3],
     tags: [],
