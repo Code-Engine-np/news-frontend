@@ -87,6 +87,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { AuthProvider } from "@/src/app/context/AuthContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -98,7 +100,9 @@ export default function RootLayout({
       className={`${poppins.variable} ${inter.variable} ${hankenGrotesk.variable} ${workSans.variable} ${notoSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

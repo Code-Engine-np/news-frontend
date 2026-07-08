@@ -144,7 +144,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </article>
 
-          <Sidebar articles={sidebarArticles} advertisements={ADVERTISEMENTS} />
+          <Sidebar articles={sidebarArticles} />
         </div>
 
         {relatedArticles.length > 0 && (

@@ -59,7 +59,7 @@ export default function TrendingPage() {
 
           <Sidebar
             articles={trendingArticles}
-            advertisements={ADVERTISEMENTS}
+           
           />
         </div>
       </div>

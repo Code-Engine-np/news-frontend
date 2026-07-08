@@ -1,12 +1,54 @@
 import NewsShell from "@/src/app/components/layout/NewsShell";
 import BreakingNewsBanner from "@/src/app/components/ui/BreakingNewsBanner";
 import ArticleCard from "@/src/app/components/cards/ArticleCard";
-import { BREAKING_NEWS, MOCK_ARTICLES } from "@/src/app/lib/mock/data";
+import Sidebar from "@/src/app/components/ui/Sidebar";
+import {
+  getPublishedNewsArticles,
+  getCategories,
+  mapApiArticleToNewsArticle,
+  mapApiCategoryToCategory,
+} from "@/src/app/lib/api";
+import { MOCK_ARTICLES as FALLBACK_ARTICLES } from "@/src/app/lib/mock/data";
 
-export default function Home() {
+async function getHomeData() {
+  try {
+    // Fetch articles and categories in parallel
+    const [apiArticles, apiCategories] = await Promise.all([
+      getPublishedNewsArticles(),
+      getCategories(),
+    ]);
+
+    const articles = apiArticles.map(mapApiArticleToNewsArticle);
+    const categories = apiCategories.map(mapApiCategoryToCategory);
+
+    return { articles, categories, error: null };
+  } catch (err) {
+    console.error("Failed to fetch home data:", err);
+    return { articles: [], categories: [], error: "Failed to load data" };
+  }
+}
+
+export default async function Home() {
+  const { articles, categories, error } = await getHomeData();
+
+  // Fallback to mock data if API fails or returns empty
+  const hasData = articles.length > 0;
+  const displayArticles = hasData ? articles : FALLBACK_ARTICLES;
+  const breakingNews = displayArticles
+    .filter((a) => a.isBreaking)
+    .map((a) => a.title);
+
   return (
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
+        {/* Error banner */}
+        {error && (
+          <div className="mb-4 rounded-sm bg-red-50 border border-red-200 p-4 text-red-800">
+            <p className="text-sm">{error}. Showing fallback content.</p>
+          </div>
+        )}
+
+        {/* Advertisement placeholder */}
         <section className="rounded-sm bg-primary-dark px-6 py-10 text-center text-white sm:px-10 sm:py-12">
           <p className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-white/90">
             Advertisement
@@ -19,24 +61,30 @@ export default function Home() {
           </p>
         </section>
 
+        {/* Breaking News */}
         <section className="mt-6 rounded-sm border border-[#bccac0] bg-background p-3 sm:p-4">
           <div className="flex flex-wrap items-center gap-3">
             <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#fe6500]">
               Breaking News
             </span>
             <div className="min-w-0 flex-1">
-              <BreakingNewsBanner items={BREAKING_NEWS} />
+              <BreakingNewsBanner
+                items={breakingNews.length > 0 ? breakingNews : undefined}
+              />
             </div>
           </div>
         </section>
 
+        {/* Main content grid */}
         <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6">
+          {/* Left column - Articles */}
           <div className="lg:col-span-8">
+            {/* Featured article */}
             <h2 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
               शीर्ष समाचार (Top Story)
             </h2>
             <div className="mt-4">
-              {MOCK_ARTICLES.slice(0, 1).map((article) => (
+              {displayArticles.slice(0, 1).map((article) => (
                 <ArticleCard
                   key={article.id}
                   article={article}
@@ -44,56 +92,43 @@ export default function Home() {
                 />
               ))}
             </div>
-          </div>
 
-          <aside className="lg:col-span-4">
-            <div className="rounded-sm border border-[#bccac0] bg-background p-4">
-              <h3 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink">
-                लोकप्रिय समाचार (Trending News)
+            {/* Latest articles grid */}
+            <div className="mt-10">
+              <h3 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
+                ताजा समाचार (Latest News)
               </h3>
-              <div className="mt-4 space-y-4">
-                {MOCK_ARTICLES.slice(1, 5).map((article) => (
-                  <ArticleCard
-                    key={article.id}
-                    article={article}
-                    variant="compact"
-                  />
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {displayArticles.slice(1, 4).map((article) => (
+                  <ArticleCard key={article.id} article={article} />
                 ))}
               </div>
             </div>
+
+            {/* Politics section */}
+            {displayArticles.length > 4 && (
+              <div className="mt-10">
+                <div className="flex items-center justify-between gap-4">
+                  <h3 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
+                    राजनीति (Politics)
+                  </h3>
+                  <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#a33e00]">
+                    सबै हेर्नुहोस्
+                  </span>
+                </div>
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {displayArticles.slice(0, 3).map((article) => (
+                    <ArticleCard key={article.id} article={article} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Right column - Sidebar */}
+          <aside className="lg:col-span-4">
+            <Sidebar articles={displayArticles} />
           </aside>
-        </section>
-
-        <section className="mt-10">
-          <div className="flex items-center justify-between gap-4">
-            <h3 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
-              राजनीति (Politics)
-            </h3>
-            <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#a33e00]">
-              सबै हेर्नुहोस्
-            </span>
-          </div>
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {MOCK_ARTICLES.slice(0, 3).map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-10">
-          <div className="flex items-center justify-between gap-4">
-            <h3 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
-              समाज (Society)
-            </h3>
-            <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#a33e00]">
-              सबै हेर्नुहोस्
-            </span>
-          </div>
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {MOCK_ARTICLES.slice(3, 6).map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
         </section>
       </div>
     </NewsShell>

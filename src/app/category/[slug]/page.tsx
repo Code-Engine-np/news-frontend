@@ -95,7 +95,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           </section>
 
-          <Sidebar articles={sidebarArticles} advertisements={ADVERTISEMENTS} />
+          <Sidebar articles={sidebarArticles} />
         </div>
       </div>
     </NewsShell>

@@ -1,18 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { NewsArticle, Advertisement } from "@/src/app/types";
+import { NewsArticle } from "@/src/app/types";
 import TrendingList from "./TrendingList";
 import AdvertisementBanner from "./AdvertisementBanner";
 import NewsletterForm from "./NewsletterForm";
+import { ADVERTISEMENTS } from "@/src/app/lib/mock/data";
 
 interface SidebarProps {
   articles: NewsArticle[];
-  advertisements: Advertisement[];
 }
 
-const Sidebar = ({ articles, advertisements }: SidebarProps) => {
-  const sidebarAds = advertisements.filter((ad) => ad.position === "sidebar");
+const Sidebar = ({ articles }: SidebarProps) => {
+  const sidebarAds = ADVERTISEMENTS.filter((ad) => ad.position === "sidebar");
 
   return (
     <aside className="space-y-6" aria-label="Sidebar">
