@@ -1,7 +1,7 @@
 "use client";
 
+import { MAIN_NAV_ITEMS } from "@/src/lib/site";
 import Link from "next/link";
-import { MAIN_NAV_ITEMS } from "@/src/app/lib/site";
 
 const Navigation = () => {
   return (

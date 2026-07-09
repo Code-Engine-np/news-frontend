@@ -3,16 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarDays, Eye, MessageSquare, Share2 } from "lucide-react";
-import ArticleCard from "@/src/app/components/cards/ArticleCard";
-import NewsShell from "@/src/app/components/layout/NewsShell";
-import Sidebar from "@/src/app/components/ui/Sidebar";
 import {
-  ADVERTISEMENTS,
   getAllArticleSlugs,
   getArticleBySlug,
   getRelatedArticles,
   getTrendingArticles,
-} from "@/src/app/lib/site";
+} from "@/src/lib/site";
+import NewsShell from "@/src/components/layout/NewsShell";
+import Sidebar from "@/src/components/ui/Sidebar";
+import ArticleCard from "@/src/components/cards/ArticleCard";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;

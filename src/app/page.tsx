@@ -1,14 +1,14 @@
-import NewsShell from "@/src/app/components/layout/NewsShell";
-import BreakingNewsBanner from "@/src/app/components/ui/BreakingNewsBanner";
-import ArticleCard from "@/src/app/components/cards/ArticleCard";
-import Sidebar from "@/src/app/components/ui/Sidebar";
+import NewsShell from "@/src/components/layout/NewsShell";
+import BreakingNewsBanner from "@/src/components/ui/BreakingNewsBanner";
+import ArticleCard from "@/src/components/cards/ArticleCard";
+import Sidebar from "@/src/components/ui/Sidebar";
 import {
   getPublishedNewsArticles,
   getCategories,
   mapApiArticleToNewsArticle,
   mapApiCategoryToCategory,
-} from "@/src/app/lib/api";
-import { MOCK_ARTICLES as FALLBACK_ARTICLES } from "@/src/app/lib/mock/data";
+} from "@/src/lib/api";
+import { MOCK_ARTICLES as FALLBACK_ARTICLES } from "@/src/lib/mock/data";
 
 async function getHomeData() {
   try {

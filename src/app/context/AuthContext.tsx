@@ -2,8 +2,8 @@
 
 import { useCallback, useReducer, createContext, useContext } from "react";
 import type { ReactNode } from "react";
-import { login as apiLogin, getMe } from "@/src/app/lib/api";
-import type { UserProfile } from "@/src/app/types";
+import { login as apiLogin, getMe } from "@/src/lib/api";
+import type { UserProfile } from "@/src/types";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */

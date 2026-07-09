@@ -1,5 +1,5 @@
-import { ADVERTISEMENTS, MOCK_ARTICLES } from "@/src/app/lib/mock/data";
-import type { NewsArticle } from "@/src/app/types";
+import { ADVERTISEMENTS, MOCK_ARTICLES } from "@/src/lib/mock/data";
+import type { NewsArticle } from "@/src/types";
 
 export const MAIN_NAV_ITEMS = [
   { label: "गृहपृष्ठ", href: "/" },

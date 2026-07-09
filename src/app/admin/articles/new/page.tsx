@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createArticle } from "@/src/app/lib/api";
+import { createArticle } from "@/src/lib/api";
+import Editor from "@/src/editor/Editor";
 
 export default function NewArticlePage() {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+  const [content, setContent] = useState("");
 
   const [form, setForm] = useState({
     titleEn: "",
@@ -31,7 +33,6 @@ export default function NewArticlePage() {
     try {
       // Create article using API - we need auth token from context
       const token = localStorage.getItem("best_khabar_access_token");
-      const { createArticle } = await import("@/src/app/lib/api");
       await createArticle(form, token || "");
       router.push("/admin");
     } catch (err) {
@@ -66,6 +67,8 @@ export default function NewArticlePage() {
           </div>
         )}
 
+        <Editor value={content} onChange={setContent} />
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* English */}
           <div className="rounded-2xl border border-line bg-white p-6">
@@ -92,9 +95,7 @@ export default function NewArticlePage() {
                 <input
                   type="text"
                   value={form.slugEn}
-                  onChange={(e) =>
-                    setForm({ ...form, slugEn: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, slugEn: e.target.value })}
                   className={inputClass}
                   required
                 />
@@ -153,9 +154,7 @@ export default function NewArticlePage() {
                 <input
                   type="text"
                   value={form.slugNe}
-                  onChange={(e) =>
-                    setForm({ ...form, slugNe: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, slugNe: e.target.value })}
                   className={inputClass}
                   required
                 />

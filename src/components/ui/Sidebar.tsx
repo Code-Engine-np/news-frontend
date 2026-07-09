@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { NewsArticle } from "@/src/app/types";
 import TrendingList from "./TrendingList";
 import AdvertisementBanner from "./AdvertisementBanner";
 import NewsletterForm from "./NewsletterForm";
-import { ADVERTISEMENTS } from "@/src/app/lib/mock/data";
+import { NewsArticle } from "@/src/types";
+import { ADVERTISEMENTS } from "@/src/lib/mock/data";
 
 interface SidebarProps {
   articles: NewsArticle[];

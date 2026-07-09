@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Zap } from "lucide-react";
-import { BREAKING_NEWS } from "@/src/app/lib/mock/data";
+import { BREAKING_NEWS } from "@/src/lib/mock/data";
 
 interface BreakingNewsBannerProps {
   items?: string[];

@@ -5,8 +5,11 @@ import {
   Noto_Sans,
   Poppins,
   Work_Sans,
+  Geist,
 } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/src/app/context/AuthContext";
+import { cn } from "@/src/lib/utils";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -87,7 +90,7 @@ export const metadata: Metadata = {
   },
 };
 
-import { AuthProvider } from "@/src/app/context/AuthContext";
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export default function RootLayout({
   children,
@@ -97,12 +100,20 @@ export default function RootLayout({
   return (
     <html
       lang="ne"
-      className={`${poppins.variable} ${inter.variable} ${hankenGrotesk.variable} ${workSans.variable} ${notoSans.variable} h-full antialiased`}
+      className={cn(
+        "h-full",
+        "antialiased",
+        poppins.variable,
+        inter.variable,
+        hankenGrotesk.variable,
+        workSans.variable,
+        notoSans.variable,
+        "font-sans",
+        geist.variable,
+      )}
     >
       <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

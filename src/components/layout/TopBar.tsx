@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Weather from "@/src/app/components/ui/Weather";
+import Weather from "@/src/components/ui/Weather";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg

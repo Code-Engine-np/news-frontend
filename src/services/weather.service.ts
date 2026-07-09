@@ -1,5 +1,5 @@
-import { fetchWeather } from "@/src/app/lib/weather";
-import { Weather } from "@/src/app/types/weather";
+import { fetchWeather } from "@/src/lib/weather";
+import { Weather } from "@/src/types/weather";
 
 export async function getCurrentWeather(
   latitude: number,

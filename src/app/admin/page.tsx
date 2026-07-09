@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/src/app/context/AuthContext";
-import { getPublishedNewsArticles } from "@/src/app/lib/api";
-import type { NewsArticle } from "@/src/app/types";
+import { getPublishedNewsArticles } from "@/src/lib/api";
+import type { NewsArticle } from "@/src/types";
 import {
   LayoutDashboard,
   FileText,
@@ -17,6 +16,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { useAuth } from "@/src/app/context/AuthContext";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -62,7 +62,9 @@ export default function AdminDashboard() {
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#f9f9f9]">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-lg font-medium text-[#60706a]">Redirecting to login...</p>
+          <p className="text-lg font-medium text-[#60706a]">
+            Redirecting to login...
+          </p>
           <Link
             href="/login"
             className="mt-4 inline-block rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark"
@@ -225,8 +227,12 @@ export default function AdminDashboard() {
                     {articles.map((article) => (
                       <tr key={article.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
-                          <div className="font-medium text-ink">{article.title}</div>
-                          <div className="text-sm text-[#60706a]">{article.slug}</div>
+                          <div className="font-medium text-ink">
+                            {article.title}
+                          </div>
+                          <div className="text-sm text-[#60706a]">
+                            {article.slug}
+                          </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-[#60706a]">
                           {article.category?.name}
@@ -237,8 +243,8 @@ export default function AdminDashboard() {
                               article.status === "published"
                                 ? "bg-green-100 text-green-800"
                                 : article.status === "draft"
-                                ? "bg-amber-100 text-amber-800"
-                                : "bg-gray-100 text-gray-800"
+                                  ? "bg-amber-100 text-amber-800"
+                                  : "bg-gray-100 text-gray-800"
                             }`}
                           >
                             {article.status}

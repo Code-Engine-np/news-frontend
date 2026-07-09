@@ -1,5 +1,6 @@
+import { FOOTER_LINK_GROUPS } from "@/src/lib/site";
 import Link from "next/link";
-import { FOOTER_LINK_GROUPS } from "@/src/app/lib/site";
+// import { FOOTER_LINK_GROUPS } from "@/src/app/lib/site";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg
