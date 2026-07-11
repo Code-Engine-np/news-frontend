@@ -1,5 +1,5 @@
+import NewsShell from "@/src/components/layout/NewsShell";
 import type { Metadata } from "next";
-import NewsShell from "@/src/app/components/layout/NewsShell";
 
 export const metadata: Metadata = {
   title: "Contact Us | Best Khabar",
@@ -25,9 +25,7 @@ export default function ContactPage() {
 
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <section className="rounded-2xl border border-line bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-bold text-ink">
-              Contact details
-            </h2>
+            <h2 className="text-2xl font-bold text-ink">Contact details</h2>
             <dl className="mt-4 space-y-4 text-sm text-muted">
               <div>
                 <dt className="font-semibold text-ink">Email</dt>
@@ -45,9 +43,7 @@ export default function ContactPage() {
           </section>
 
           <section className="rounded-2xl border border-line bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-bold text-ink">
-              Send a message
-            </h2>
+            <h2 className="text-2xl font-bold text-ink">Send a message</h2>
             <div className="mt-4 space-y-4 text-sm text-muted">
               <div className="rounded-xl bg-[#f6faf7] p-4">
                 This screen is ready for form wiring when the backend endpoint

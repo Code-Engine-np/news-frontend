@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ArticleCard from "@/src/app/components/cards/ArticleCard";
-import NewsShell from "@/src/app/components/layout/NewsShell";
-import TrendingList from "@/src/app/components/ui/TrendingList";
-import Sidebar from "@/src/app/components/ui/Sidebar";
-import { ADVERTISEMENTS, getTrendingArticles } from "@/src/app/lib/site";
+import ArticleCard from "@/src/components/cards/ArticleCard";
+import NewsShell from "@/src/components/layout/NewsShell";
+import TrendingList from "@/src/components/ui/TrendingList";
+import Sidebar from "@/src/components/ui/Sidebar";
+import { ADVERTISEMENTS, getTrendingArticles } from "@/src/lib/site";
 
 export const metadata: Metadata = {
   title: "Trending News | Best Khabar",
@@ -57,10 +57,7 @@ export default function TrendingPage() {
             </div>
           </section>
 
-          <Sidebar
-            articles={trendingArticles}
-           
-          />
+          <Sidebar articles={trendingArticles} />
         </div>
       </div>
     </NewsShell>

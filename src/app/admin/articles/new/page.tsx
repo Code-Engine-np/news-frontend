@@ -1,39 +1,112 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createArticle } from "@/src/lib/api";
+import { createArticle, getCategories } from "@/src/lib/api";
 import Editor from "@/src/editor/Editor";
+import { ApiCategory } from "@/src/types";
 
 export default function NewArticlePage() {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
-  const [content, setContent] = useState("");
+  const [categories, setCategories] = useState<ApiCategory[] | null>(null);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
   const [form, setForm] = useState({
-    titleEn: "",
+    // titleEn: "",
     titleNe: "",
-    slugEn: "",
+    // slugEn: "",
     slugNe: "",
-    summaryEn: "",
+    // summaryEn: "",
     summaryNe: "",
-    contentEn: "",
+    // contentEn: "",
     contentNe: "",
     categoryId: "",
+    categoryName: "",
+    categoryMode: "existing" as "existing" | "new",
     status: "draft" as "draft" | "published",
   });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadCategories = async () => {
+      try {
+        const apiCategories = await getCategories();
+        if (!isMounted) {
+          return;
+        }
+
+        setCategories(apiCategories);
+        if (!apiCategories?.length) {
+          setForm((currentForm) => ({
+            ...currentForm,
+            categoryMode: "new",
+          }));
+        }
+      } catch (loadError) {
+        console.error("Failed to load categories", loadError);
+        if (isMounted) {
+          setCategories(null);
+          setForm((currentForm) => ({
+            ...currentForm,
+            categoryMode: "new",
+          }));
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoadingCategories(false);
+        }
+      }
+    };
+
+    void loadCategories();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     setError("");
 
+    const selectedCategoryId =
+      form.categoryMode === "existing" ? form.categoryId.trim() : "";
+    const newCategoryName =
+      form.categoryMode === "new" ? form.categoryName.trim() : "";
+
+    if (!selectedCategoryId && !newCategoryName) {
+      setError("Select an existing category or add a new one.");
+      setIsSaving(false);
+      return;
+    }
+
+    console.log("Form data:", form);
+
     try {
+      const payload: Record<string, unknown> = {
+        titleNe: form.titleNe,
+        slugNe: form.slugNe,
+        summaryNe: form.summaryNe,
+        contentNe: form.contentNe,
+        status: form.status,
+      };
+
+      if (selectedCategoryId) {
+        payload.categoryId = selectedCategoryId;
+      } else {
+        payload.category = newCategoryName;
+      }
+
       // Create article using API - we need auth token from context
       const token = localStorage.getItem("best_khabar_access_token");
-      await createArticle(form, token || "");
+      console.log("Auth token:", token);
+
+      await createArticle(payload, token || "");
       router.push("/admin");
     } catch (err) {
       setError("Failed to create article");
@@ -67,11 +140,9 @@ export default function NewArticlePage() {
           </div>
         )}
 
-        <Editor value={content} onChange={setContent} />
-
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* English */}
-          <div className="rounded-2xl border border-line bg-white p-6">
+          {/* <div className="rounded-2xl border border-line bg-white p-6">
             <h2 className="mb-4 text-lg font-semibold text-ink">English</h2>
             <div className="space-y-4">
               <div>
@@ -127,7 +198,7 @@ export default function NewArticlePage() {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Nepali */}
           <div className="rounded-2xl border border-line bg-white p-6">
@@ -159,6 +230,24 @@ export default function NewArticlePage() {
                   required
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-ink">
+                  Content
+                </label>
+                {/* <textarea
+                  value={form.contentNe}
+                  onChange={(e) =>
+                    setForm({ ...form, contentNe: e.target.value })
+                  }
+                  className={inputClass + " min-h-[200px]"}
+                  required
+                /> */}
+                <Editor
+                  value={form.contentNe}
+                  onChange={(value) => setForm({ ...form, contentNe: value })}
+                />
+              </div>
               <div>
                 <label className="block text-sm font-medium text-ink">
                   Summary
@@ -168,20 +257,7 @@ export default function NewArticlePage() {
                   onChange={(e) =>
                     setForm({ ...form, summaryNe: e.target.value })
                   }
-                  className={inputClass + " min-h-[80px]"}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-ink">
-                  Content
-                </label>
-                <textarea
-                  value={form.contentNe}
-                  onChange={(e) =>
-                    setForm({ ...form, contentNe: e.target.value })
-                  }
-                  className={inputClass + " min-h-[200px]"}
+                  className={inputClass + " min-h-20"}
                   required
                 />
               </div>
@@ -194,17 +270,82 @@ export default function NewArticlePage() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-ink">
-                  Category ID
+                  Category
                 </label>
-                <input
-                  type="text"
-                  value={form.categoryId}
-                  onChange={(e) =>
-                    setForm({ ...form, categoryId: e.target.value })
-                  }
-                  className={inputClass}
-                  required
-                />
+                <div className="mt-1 space-y-3">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((currentForm) => ({
+                          ...currentForm,
+                          categoryMode: "existing",
+                        }))
+                      }
+                      className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                        form.categoryMode === "existing"
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-line bg-white text-[#60706a] hover:bg-gray-50"
+                      }`}
+                    >
+                      Existing category
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((currentForm) => ({
+                          ...currentForm,
+                          categoryMode: "new",
+                        }))
+                      }
+                      className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                        form.categoryMode === "new"
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-line bg-white text-[#60706a] hover:bg-gray-50"
+                      }`}
+                    >
+                      Add new category
+                    </button>
+                  </div>
+
+                  {form.categoryMode === "existing" ? (
+                    <select
+                      value={form.categoryId}
+                      onChange={(e) =>
+                        setForm({ ...form, categoryId: e.target.value })
+                      }
+                      className={inputClass}
+                      disabled={isLoadingCategories}
+                    >
+                      <option value="">
+                        {isLoadingCategories
+                          ? "Loading categories..."
+                          : "Select a category"}
+                      </option>
+                      {categories?.map((category: ApiCategory) => (
+                        <option key={category.id} value={category.id}>
+                          {category.nameNe || category.nameEn}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={form.categoryName}
+                        onChange={(e) =>
+                          setForm({ ...form, categoryName: e.target.value })
+                        }
+                        className={inputClass}
+                        placeholder="New category name"
+                      />
+                      <p className="text-xs text-[#60706a]">
+                        A category will be created automatically when the
+                        article is saved.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-ink">

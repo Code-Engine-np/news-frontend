@@ -1,6 +1,7 @@
+import NewsShell from "@/src/components/layout/NewsShell";
 import type { Metadata } from "next";
 import Link from "next/link";
-import NewsShell from "@/src/app/components/layout/NewsShell";
+// import NewsShell from "@/src/app/components/layout/NewsShell";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Best Khabar",

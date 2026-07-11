@@ -1,6 +1,6 @@
 import { FOOTER_LINK_GROUPS } from "@/src/lib/site";
+import Image from "next/image";
 import Link from "next/link";
-// import { FOOTER_LINK_GROUPS } from "@/src/app/lib/site";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg
@@ -47,17 +47,15 @@ const Footer = () => {
                 className="inline-flex items-center gap-3"
                 aria-label="Best Khabar home"
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-sm bg-white text-primary-bright text-3xl font-black leading-none">
-                  B
-                </span>
-                <span>
-                  <span className="block text-[2rem] font-extrabold leading-none tracking-tight sm:text-[2.75rem]">
-                    BEST KHABAR
-                  </span>
-                  <span className="block text-xs italic leading-tight text-white/95 sm:text-sm">
-                    “समाचारप्रति यथार्थको खोज, हामी पाठककै भेट वन्य”
-                  </span>
-                </span>
+                <div className="relative h-[46px] w-[180px] sm:h-[58px] sm:w-[240px] lg:h-[62px] lg:w-[270px]">
+                  <Image
+                    src="/best-khabar-green1.png"
+                    alt="Best Khabar Logo"
+                    fill
+                    sizes="(max-width: 640px) 180px, (max-width: 1024px) 240px, 270px"
+                    className="object-contain object-left"
+                  />
+                </div>
               </Link>
             </div>
 
@@ -121,7 +119,8 @@ const Footer = () => {
         </div>
 
         <div className="mt-4 border-t border-white/30 py-4 text-center text-xs sm:text-sm">
-          © Copyright 2026 Best Khabar All Rights Reserved.
+          © Copyright {new Date().getFullYear()} Best Khabar All Rights
+          Reserved.
         </div>
       </div>
     </footer>
