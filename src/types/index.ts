@@ -11,7 +11,6 @@
 export interface ApiArticle {
   id: string;
   categoryId: string;
-  category: ApiCategory;
   slugEn: string;
   slugNe: string;
   titleEn: string;

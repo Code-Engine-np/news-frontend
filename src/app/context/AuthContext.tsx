@@ -2,7 +2,7 @@
 
 import { useCallback, useReducer, createContext, useContext } from "react";
 import type { ReactNode } from "react";
-import { login as apiLogin } from "@/src/lib/api";
+import { login as apiLogin, getMe } from "@/src/lib/api";
 import type { UserProfile } from "@/src/types";
 
 /* ------------------------------------------------------------------ */
@@ -43,8 +43,6 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
       };
     case "LOGIN_ERROR":
       return { ...state, isLoading: false };
-    case "LOGOUT":
-      return { user: null, token: null, isLoading: false };
     default:
       return state;
   }
@@ -58,35 +56,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const ACCESS_TOKEN_KEY = "best_khabar_access_token";
 const REFRESH_TOKEN_KEY = "best_khabar_refresh_token";
-const USER_KEY = "best_khabar_user";
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem(ACCESS_TOKEN_KEY);
-}
-
-function getStoredUser(): UserProfile | null {
-  if (typeof window === "undefined") return null;
-
-  const storedUser = localStorage.getItem(USER_KEY);
-
-  if (!storedUser) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(storedUser) as UserProfile;
-  } catch {
-    return null;
-  }
-}
-
-function getInitialAuthState(): AuthState {
-  return {
-    user: getStoredUser(),
-    token: getToken(),
-    isLoading: false,
-  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -94,23 +67,21 @@ function getInitialAuthState(): AuthState {
 /* ------------------------------------------------------------------ */
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(
-    authReducer,
-    undefined,
-    getInitialAuthState,
-  );
+  const [state, dispatch] = useReducer(authReducer, {
+    user: null,
+    token: getToken(),
+    isLoading: false,
+  });
 
   const login = useCallback(async (email: string, password: string) => {
     dispatch({ type: "LOGIN_START" });
     try {
       const response = await apiLogin({ email, password });
-      // console.log("Login response:", response);
-      // isAuthenticated=?true,
+      console.log("Login response:", response);
       // const { accessToken, refreshToken } = response.AuthTokens;
       const { accessToken, refreshToken } = response.AuthTokens;
       localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
       localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-      localStorage.setItem(USER_KEY, JSON.stringify(response.user));
       dispatch({
         type: "LOGIN_SUCCESS",
         user: response.user,
@@ -125,7 +96,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
     dispatch({ type: "LOGOUT" });
   }, []);
 
@@ -133,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         ...state,
-        isAuthenticated: !!state.token,
+        isAuthenticated: !!state.user,
         login,
         logout,
       }}

@@ -16,7 +16,7 @@ import {
   LoginDto,
   AuthResponse,
   RefreshTokenDto,
-} from "@/src/types";
+} from "@/src/app/types";
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3001/api";
 
@@ -32,34 +32,6 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
       ...init?.headers,
     } as HeadersInit,
   });
-
-  console.log("response status:", res.status, "for", path);
-  if (res.status === 401) {
-    const refreshToken = localStorage.getItem("best_khabar_refresh_token");
-    const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...init?.headers,
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
-    console.log("refresh token response status:", res.status, "for", path);
-
-    if (!res.ok) {
-      throw new Error(`Failed to refresh token: ${res.status}`);
-    }
-
-    const data = await res.json();
-    localStorage.setItem(
-      "best_khabar_access_token",
-      data.AuthTokens.accessToken,
-    );
-    localStorage.setItem(
-      "best_khabar_refresh_token",
-      data.AuthTokens.refreshToken,
-    );
-  }
 
   if (!res.ok) {
     const error = await res.text();
@@ -148,13 +120,9 @@ export async function getPublishedArticles(): Promise<ApiArticle[]> {
   return fetchJson<ApiArticle[]>("/articles/published");
 }
 
-/** GET /api/articles  -  list all articles (auth required) */
-export async function getAllArticles(): Promise<ApiArticle[]> {
-  const accessToken = localStorage.getItem("best_khabar_access_token");
-  return fetchJson<ApiArticle[]>("/articles", {
-    method: "GET",
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+/** GET /api/news-articles/published  -  list published news articles */
+export async function getPublishedNewsArticles(): Promise<ApiArticle[]> {
+  return fetchJson<ApiArticle[]>("/news-articles/published");
 }
 
 /** GET /api/articles/:id  -  single article */
@@ -172,7 +140,7 @@ export async function getNewsArticle(id: string): Promise<ApiArticle> {
 /* ------------------------------------------------------------------ */
 
 /** GET /api/categories */
-export async function getCategories(): Promise<ApiCategory[] | null> {
+export async function getCategories(): Promise<ApiCategory[]> {
   return fetchJson<ApiCategory[]>("/categories");
 }
 

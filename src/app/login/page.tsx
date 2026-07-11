@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const { login, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
-  // console.log("isAuthenticated:", isAuthenticated); // Debugging line
+
   // Redirect after mount if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,12 +25,9 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-
       router.push("/admin");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Login failed. Please try again.",
-      );
+      setError(err instanceof Error ? err.message : "Login failed. Please try again.");
     }
   };
 
