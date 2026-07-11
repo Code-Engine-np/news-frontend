@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ArticleCard from "@/src/app/components/cards/ArticleCard";
-import NewsShell from "@/src/app/components/layout/NewsShell";
-import Sidebar from "@/src/app/components/ui/Sidebar";
 import {
-  ADVERTISEMENTS,
   getAllSectionSlugs,
   getSectionArticles,
   getSectionDefinition,
   getTrendingArticles,
-} from "@/src/app/lib/site";
+} from "@/src/lib/site";
+import NewsShell from "@/src/components/layout/NewsShell";
+import ArticleCard from "@/src/components/cards/ArticleCard";
+import Sidebar from "@/src/components/ui/Sidebar";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;

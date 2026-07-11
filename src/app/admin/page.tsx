@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getPublishedNewsArticles } from "@/src/lib/api";
-import type { NewsArticle } from "@/src/types";
+import { getAllArticles, getPublishedNewsArticles } from "@/src/lib/api";
+import type { ApiArticle, NewsArticle } from "@/src/types";
 import {
   LayoutDashboard,
   FileText,
@@ -21,7 +21,7 @@ import { useAuth } from "@/src/app/context/AuthContext";
 export default function AdminDashboard() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [articles, setArticles] = useState<ApiArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -37,8 +37,9 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function loadArticles() {
       try {
-        const apiArticles = await getPublishedNewsArticles();
-        setArticles(apiArticles as unknown as NewsArticle[]);
+        const apiArticles = await getAllArticles();
+        console.log("Fetched articles:", apiArticles);
+        setArticles(apiArticles);
       } catch (err) {
         setError("Failed to load articles");
         console.error(err);
@@ -228,14 +229,16 @@ export default function AdminDashboard() {
                       <tr key={article.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div className="font-medium text-ink">
-                            {article.title}
+                            {article.titleNe || article.titleEn}
                           </div>
                           <div className="text-sm text-[#60706a]">
                             {article.slug}
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-[#60706a]">
-                          {article.category?.name}
+                          {article.category?.nameNe ||
+                            article.category?.nameEn ||
+                            "Uncategorized"}
                         </td>
                         <td className="px-6 py-4">
                           <span
@@ -251,7 +254,7 @@ export default function AdminDashboard() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-[#60706a]">
-                          {article.viewCount.toLocaleString()}
+                          {article.viewCount || 0}
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-2">

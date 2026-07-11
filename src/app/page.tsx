@@ -3,7 +3,7 @@ import BreakingNewsBanner from "@/src/components/ui/BreakingNewsBanner";
 import ArticleCard from "@/src/components/cards/ArticleCard";
 import Sidebar from "@/src/components/ui/Sidebar";
 import {
-  getPublishedNewsArticles,
+  getPublishedArticles,
   getCategories,
   mapApiArticleToNewsArticle,
   mapApiCategoryToCategory,
@@ -14,12 +14,12 @@ async function getHomeData() {
   try {
     // Fetch articles and categories in parallel
     const [apiArticles, apiCategories] = await Promise.all([
-      getPublishedNewsArticles(),
+      getPublishedArticles(),
       getCategories(),
     ]);
 
-    const articles = apiArticles.map(mapApiArticleToNewsArticle);
-    const categories = apiCategories.map(mapApiCategoryToCategory);
+    const articles = apiArticles?.map(mapApiArticleToNewsArticle);
+    const categories = apiCategories?.map(mapApiCategoryToCategory);
 
     return { articles, categories, error: null };
   } catch (err) {
