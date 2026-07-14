@@ -12,15 +12,13 @@ import {
   AlignRight,
   List,
   ListOrdered,
-  Upload,
 } from "lucide-react";
 
 type MenuBarProps = {
   editor: Editor | null;
-  onUploadImage: () => void;
 };
 
-export default function MenuBar({ editor, onUploadImage }: MenuBarProps) {
+export default function MenuBar({ editor }: MenuBarProps) {
   if (!editor) {
     return null;
   }
@@ -80,11 +78,6 @@ export default function MenuBar({ editor, onUploadImage }: MenuBarProps) {
       icon: <ListOrdered className="size-4" />,
       onClick: () => editor.chain().focus().toggleOrderedList().run(),
       pressed: editor.isActive("orderedList"),
-    },
-    {
-      icon: <Upload className="size-4" />,
-      onClick: onUploadImage,
-      pressed: false,
     },
   ];
 

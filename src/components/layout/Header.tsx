@@ -5,8 +5,13 @@ import Link from "next/link";
 import { ChevronDown, Languages, Menu, Moon, Search, X } from "lucide-react";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
+import type { Category } from "@/src/types";
 
-const Header = () => {
+interface HeaderProps {
+  categories: Category[];
+}
+
+const Header = ({ categories }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -82,6 +87,7 @@ const Header = () => {
       <MobileMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
+        categories={categories}
       />
     </header>
   );

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { NewsArticle } from "@/src/app/types";
-import { Calendar, Clock } from "lucide-react";
+// import { NewsArticle } from "@/src/app/types";
+import { Calendar, Clock, Image as ImageIcon } from "lucide-react";
+import { NewsArticle } from "@/src/types";
 
 interface ArticleCardProps {
   article: NewsArticle;
@@ -18,19 +19,49 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
     year: "numeric",
   });
 
+  // Helper to render image or placeholder
+  const renderImage = (
+    src: string,
+    alt: string,
+    className: string,
+    sizes: string,
+    fill = true,
+    priority = false
+  ) => {
+    if (!src) {
+      return (
+        <div
+          className={`relative bg-gray-100 flex items-center justify-center ${className}`}
+          style={fill ? { width: "100%", height: "100%" } : undefined}
+        >
+          <ImageIcon className="h-8 w-8 text-gray-400" />
+        </div>
+      );
+    }
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        fill={fill}
+        className={className}
+        sizes={sizes}
+        priority={priority}
+      />
+    );
+  };
+
   // Compact variant (small, no excerpt)
   if (variant === "compact") {
     return (
       <Link href={`/article/${slug}`} className="group block">
         <article className="flex items-start space-x-3">
           <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-lg">
-            <Image
-              src={featuredImage}
-              alt={title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="80px"
-            />
+            {renderImage(
+              featuredImage,
+              title,
+              "object-cover group-hover:scale-105 transition-transform duration-300",
+              "80px",
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <span className={"text-xs font-medium text-brand-600 "}>
@@ -55,13 +86,12 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
       <Link href={`/article/${slug}`} className="group block">
         <article className="flex items-start space-x-4">
           <div className="relative w-32 h-24 sm:w-40 sm:h-28 flex-shrink-0 overflow-hidden rounded-lg">
-            <Image
-              src={featuredImage}
-              alt={title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="(max-width: 640px) 128px, 160px"
-            />
+            {renderImage(
+              featuredImage,
+              title,
+              "object-cover group-hover:scale-105 transition-transform duration-300",
+              "(max-width: 640px) 128px, 160px"
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <span
@@ -80,7 +110,7 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
                 <Clock className="h-3 w-3 mr-1" />
                 {formattedDate}
               </span>
-              <span>{author.name}</span>
+<span>{author.fullName}</span>
             </div>
           </div>
         </article>
@@ -93,14 +123,14 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
     return (
       <Link href={`/article/${slug}`} className="group block h-full">
         <article className="relative h-full min-h-[300px] sm:min-h-[400px] rounded-2xl overflow-hidden">
-          <Image
-            src={featuredImage}
-            alt={title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, 800px"
-            priority
-          />
+          {renderImage(
+            featuredImage,
+            title,
+            "object-cover group-hover:scale-105 transition-transform duration-500",
+            "(max-width: 768px) 100vw, 800px",
+            true,
+            true
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
             <span
@@ -121,7 +151,7 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
               </span>
               <span className="flex items-center">
                 <Clock className="h-3.5 w-3.5 mr-1" />
-                {author.name}
+                {author.fullName}
               </span>
             </div>
           </div>
@@ -135,13 +165,12 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
     <Link href={`/article/${slug}`} className="group block h-full">
       <article className="flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
         <div className="relative aspect-video overflow-hidden">
-          <Image
-            src={featuredImage}
-            alt={title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          {renderImage(
+            featuredImage,
+            title,
+            "object-cover group-hover:scale-105 transition-transform duration-300",
+            "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          )}
           <span
             className={`absolute top-3 left-3 ${category.color} text-white text-xs font-medium px-2.5 py-1 rounded-full`}
           >
@@ -158,7 +187,7 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
               <Calendar className="h-3 w-3 mr-1" />
               {formattedDate}
             </span>
-            <span>{author.name}</span>
+            <span>{author.fullName}</span>
           </div>
         </div>
       </article>

@@ -1,5 +1,4 @@
-import { ADVERTISEMENTS, MOCK_ARTICLES } from "@/src/lib/mock/data";
-import type { NewsArticle } from "@/src/types";
+import type { Advertisement, NewsArticle } from "@/src/types";
 
 export const MAIN_NAV_ITEMS = [
   { label: "गृहपृष्ठ", href: "/" },
@@ -34,105 +33,28 @@ export const FOOTER_LINK_GROUPS = [
   },
 ];
 
-type SectionDefinition = {
-  title: string;
-  intro: string;
-  match: (article: NewsArticle) => boolean;
-};
+/**
+ * Static ad-slot placeholders. There is no advertisement entity in the
+ * backend, so these are site configuration rather than mock API data.
+ */
+export const ADVERTISEMENTS: Advertisement[] = [
+  {
+    id: "ad1",
+    title: "Best Khabar Premium",
+    linkUrl: "#",
+    position: "sidebar",
+    size: "medium",
+  },
+];
 
-const SECTION_DEFINITIONS: Record<string, SectionDefinition> = {
-  "current-affairs": {
-    title: "समसामयिक",
-    intro: "Fast-moving developments from politics, business, and world news.",
-    match: (article) =>
-      ["politics", "business", "world"].includes(article.category.slug),
-  },
-  society: {
-    title: "समाज",
-    intro: "Local stories, health coverage, and community reporting.",
-    match: (article) =>
-      ["local", "health", "entertainment"].includes(article.category.slug),
-  },
-  economy: {
-    title: "अर्थ/विकास",
-    intro: "Business, markets, policy, and growth-focused reporting.",
-    match: (article) =>
-      ["business", "technology"].includes(article.category.slug),
-  },
-  features: {
-    title: "विशेष",
-    intro:
-      "Long-form reporting and story-led coverage from across the newsroom.",
-    match: () => true,
-  },
-  opinion: {
-    title: "दृष्टिकोण",
-    intro: "Analysis and perspectives on the issues shaping the public agenda.",
-    match: (article) => ["politics", "world"].includes(article.category.slug),
-  },
-  arts: {
-    title: "कला",
-    intro: "Culture, cinema, and entertainment features.",
-    match: (article) => ["entertainment"].includes(article.category.slug),
-  },
-  sports: {
-    title: "खेलकुद",
-    intro: "Match reports, tournament coverage, and performance stories.",
-    match: (article) => ["sports"].includes(article.category.slug),
-  },
-  politics: {
-    title: "Politics",
-    intro: "National politics and election coverage from the newsroom archive.",
-    match: (article) => article.category.slug === "politics",
-  },
-  business: {
-    title: "Business",
-    intro: "Markets, policy, and enterprise news.",
-    match: (article) => article.category.slug === "business",
-  },
-  world: {
-    title: "World",
-    intro: "International stories and geopolitical updates.",
-    match: (article) => article.category.slug === "world",
-  },
-  technology: {
-    title: "Technology",
-    intro: "New products, AI updates, and digital innovation.",
-    match: (article) => article.category.slug === "technology",
-  },
-  health: {
-    title: "Health",
-    intro: "Public health and wellbeing coverage.",
-    match: (article) => article.category.slug === "health",
-  },
-};
-
-const DEFAULT_SECTION: SectionDefinition = {
-  title: "News",
-  intro: "Latest reporting from Best Khabar.",
-  match: () => true,
-};
-
-export function getArticleBySlug(slug: string) {
-  return MOCK_ARTICLES.find((article) => article.slug === slug);
-}
-
-export function getAllArticleSlugs() {
-  return MOCK_ARTICLES.map((article) => article.slug);
-}
-
-export function getAllSectionSlugs() {
-  return Object.keys(SECTION_DEFINITIONS);
-}
-
-export function getTrendingArticles(limit = 5) {
-  return [...MOCK_ARTICLES]
+export function getTrendingArticles(articles: NewsArticle[], limit = 5) {
+  return [...articles]
     .sort((left, right) => right.viewCount - left.viewCount)
     .slice(0, limit);
 }
 
-export function getLatestArticles(limit = 4) {
-  return [...MOCK_ARTICLES]
+export function getLatestArticles(articles: NewsArticle[], limit = 4) {
+  return [...articles]
     .sort(
       (left, right) =>
         new Date(right.publishedAt).getTime() -
@@ -141,38 +63,28 @@ export function getLatestArticles(limit = 4) {
     .slice(0, limit);
 }
 
-export function getRelatedArticles(article: NewsArticle, limit = 3) {
-  return MOCK_ARTICLES.filter(
-    (candidate) =>
-      candidate.id !== article.id &&
-      candidate.category.slug === article.category.slug,
-  ).slice(0, limit);
-}
-
-export function getSectionDefinition(slug: string) {
-  return SECTION_DEFINITIONS[slug] ?? DEFAULT_SECTION;
-}
-
-export function getSectionArticles(slug: string, limit = 6) {
-  const definition = getSectionDefinition(slug);
-
-  return [...MOCK_ARTICLES]
-    .filter(definition.match)
-    .sort(
-      (left, right) =>
-        new Date(right.publishedAt).getTime() -
-        new Date(left.publishedAt).getTime(),
+export function getRelatedArticles(
+  articles: NewsArticle[],
+  article: NewsArticle,
+  limit = 3,
+) {
+  return articles
+    .filter(
+      (candidate) =>
+        candidate.id !== article.id &&
+        candidate.category.slug === article.category.slug,
     )
     .slice(0, limit);
 }
 
-export function getSidebarArticles(article?: NewsArticle) {
+export function getSidebarArticles(
+  articles: NewsArticle[],
+  article?: NewsArticle,
+) {
   if (!article) {
-    return getTrendingArticles();
+    return getTrendingArticles(articles);
   }
 
-  const related = getRelatedArticles(article, 4);
-  return related.length > 0 ? related : getTrendingArticles();
+  const related = getRelatedArticles(articles, article, 4);
+  return related.length > 0 ? related : getTrendingArticles(articles);
 }
-
-export { ADVERTISEMENTS, MOCK_ARTICLES };

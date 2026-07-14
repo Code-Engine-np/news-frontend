@@ -1,6 +1,6 @@
 "use client";
 
-import type { Weather } from "@/src/app/types/weather";
+import type { Weather } from "@/src/types/weather";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 

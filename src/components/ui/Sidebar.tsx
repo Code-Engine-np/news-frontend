@@ -5,7 +5,7 @@ import TrendingList from "./TrendingList";
 import AdvertisementBanner from "./AdvertisementBanner";
 import NewsletterForm from "./NewsletterForm";
 import { NewsArticle } from "@/src/types";
-import { ADVERTISEMENTS } from "@/src/lib/mock/data";
+import { ADVERTISEMENTS } from "@/src/lib/site";
 
 interface SidebarProps {
   articles: NewsArticle[];
@@ -16,17 +16,6 @@ const Sidebar = ({ articles }: SidebarProps) => {
 
   return (
     <aside className="space-y-6" aria-label="Sidebar">
-      {/* Trending List */}
-      <TrendingList articles={articles} />
-
-      {/* Advertisement */}
-      {sidebarAds.map((ad) => (
-        <AdvertisementBanner key={ad.id} advertisement={ad} />
-      ))}
-
-      {/* Newsletter */}
-      <NewsletterForm />
-
       {/* Latest News (Compact) */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4">Latest News</h3>
@@ -57,6 +46,16 @@ const Sidebar = ({ articles }: SidebarProps) => {
           ))}
         </div>
       </div>
+      {/* Trending List */}
+      <TrendingList articles={articles} />
+
+      {/* Advertisement */}
+      {sidebarAds.map((ad) => (
+        <AdvertisementBanner key={ad.id} advertisement={ad} />
+      ))}
+
+      {/* Newsletter */}
+      <NewsletterForm />
     </aside>
   );
 };

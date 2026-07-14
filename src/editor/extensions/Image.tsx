@@ -31,7 +31,6 @@ function ImageNodeView({ node, selected, deleteNode }: NodeViewProps) {
 
 export const Image = ImageExtension.extend({
   inline: false,
-  allowBase64: true,
   addNodeView() {
     return ReactNodeViewRenderer(ImageNodeView);
   },

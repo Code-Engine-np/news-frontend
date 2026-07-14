@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { X } from "lucide-react";
-import { CATEGORIES } from "@/src/lib/mock/data";
 import { MAIN_NAV_ITEMS } from "@/src/lib/site";
+import type { Category } from "@/src/types";
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  categories: Category[];
 }
 
-const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
   if (!isOpen) return null;
 
   return (
@@ -51,14 +52,16 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             ))}
           </ul>
 
-          <div className="border-t border-gray-200 mt-4 pt-4">
-            <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              Categories
-            </h3>
-          </div>
+          {categories.length > 0 && (
+            <div className="border-t border-gray-200 mt-4 pt-4">
+              <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                Categories
+              </h3>
+            </div>
+          )}
 
           <ul className="space-y-1">
-            {CATEGORIES.map((category) => (
+            {categories.map((category) => (
               <li key={category.id}>
                 <Link
                   href={`/category/${category.slug}`}

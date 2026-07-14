@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Weather from "@/src/components/ui/Weather";
+// import Weather from "@/src/components/ui/Weather";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg
@@ -50,7 +50,7 @@ const TopBar = async () => {
             {today}
           </span>
           <span className="whitespace-nowrap font-(family-name:--font-inter) text-[16px]">
-            <Weather />
+            {/* <Weather /> */}
           </span>
         </div>
 

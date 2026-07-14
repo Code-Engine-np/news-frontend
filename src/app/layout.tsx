@@ -1,27 +1,12 @@
 import type { Metadata } from "next";
 import {
   Hanken_Grotesk,
-  Inter,
   Noto_Sans,
-  Poppins,
   Work_Sans,
-  Geist,
 } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/src/app/context/AuthContext";
 import { cn } from "@/src/lib/utils";
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken",
@@ -90,8 +75,6 @@ export const metadata: Metadata = {
   },
 };
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -103,13 +86,10 @@ export default function RootLayout({
       className={cn(
         "h-full",
         "antialiased",
-        poppins.variable,
-        inter.variable,
         hankenGrotesk.variable,
         workSans.variable,
         notoSans.variable,
         "font-sans",
-        geist.variable,
       )}
     >
       <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans">

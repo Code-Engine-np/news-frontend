@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { Advertisement } from "@/src/app/types";
+import { Advertisement } from "@/src/types";
 
 interface AdvertisementBannerProps {
   advertisement: Advertisement;
@@ -26,20 +25,14 @@ const AdvertisementBanner = ({ advertisement }: AdvertisementBannerProps) => {
         aria-label={`Advertisement: ${advertisement.title}`}
       >
         <div
-          className={`relative w-full ${sizeClasses[advertisement.size]} flex items-center justify-center`}
+          className={`relative w-full ${sizeClasses[advertisement.size]} flex flex-col items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300`}
         >
-          <Image
-            src={advertisement.imageUrl}
-            alt={advertisement.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 300px"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-            <span className="text-white font-medium text-sm">
-              Advertisement
-            </span>
-          </div>
+          <span className="text-sm font-semibold text-gray-500">
+            Advertisement
+          </span>
+          <span className="mt-1 text-xs text-gray-400">
+            {advertisement.title}
+          </span>
         </div>
       </Link>
     </div>

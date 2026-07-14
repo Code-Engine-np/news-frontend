@@ -2,15 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Zap } from "lucide-react";
-import { BREAKING_NEWS } from "@/src/lib/mock/data";
 
 interface BreakingNewsBannerProps {
   items?: string[];
 }
 
-const BreakingNewsBanner = ({
-  items = BREAKING_NEWS,
-}: BreakingNewsBannerProps) => {
+const BreakingNewsBanner = ({ items = [] }: BreakingNewsBannerProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -24,6 +21,10 @@ const BreakingNewsBanner = ({
 
     return () => window.clearInterval(timer);
   }, [items.length]);
+
+  if (items.length === 0) {
+    return null;
+  }
 
   const activeItem = items[activeIndex] ?? "";
 

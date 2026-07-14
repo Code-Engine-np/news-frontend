@@ -1,29 +1,81 @@
 /**
  * Core domain types for the Best Khabar news portal.
- * Aligned with the NestJS backend API schema.
+ * Aligned with the NestJS backend TypeORM entities.
  */
 
 /**
- * Backend Article (Admin/Editor full schema)
+ * Backend Article (matches NewsArticle entity)
  * GET /api/articles/:id
+ * GET /api/articles/published
  * GET /api/news-articles/:id
  */
 export interface ApiArticle {
   id: string;
-  categoryId: string;
-  category: ApiCategory;
-  slugEn: string;
-  slugNe: string;
-  titleEn: string;
-  titleNe: string;
-  summaryEn: string;
-  summaryNe: string;
-  contentEn: string;
-  contentNe: string;
+  slug: string;
+  title: string;
+  summary: string;
+  content: string;
   status: "draft" | "published" | "archived";
-  tagIds: string[];
-  createdAt: string; // ISO 8601
+  author: ApiAuthor;
+  category: ApiCategory;
+  images: ApiImage[];
+  articleTags?: ApiArticleTag[];
+  createdAt: string;
   updatedAt: string;
+}
+
+/**
+ * Backend Author (matches User entity)
+ */
+export interface ApiAuthor {
+  id: string;
+  fullName: string;
+  email?: string;
+  role?: string;
+}
+
+/**
+ * Backend Category (matches Category entity)
+ * GET /api/categories
+ * GET /api/categories/:id
+ * GET /api/categories/slug/:slug
+ */
+export interface ApiCategory {
+  id: string;
+  slug: string;
+  name: string;
+  description?: string | null;
+}
+
+/**
+ * Backend Image (matches Image entity)
+ */
+export interface ApiImage {
+  id: string;
+  secureUrl: string;
+  publicId: string;
+  resourceType: string;
+  altText?: string | null;
+  caption?: string | null;
+}
+
+/**
+ * Backend ArticleTag (matches ArticleTag entity)
+ */
+export interface ApiArticleTag {
+  id: string;
+  tagId: string;
+  tag: ApiTag;
+}
+
+/**
+ * Backend Tag (matches Tag entity)
+ */
+export interface ApiTag {
+  id: string;
+  slug: string;
+  nameEn?: string | null;
+  nameNe?: string | null;
 }
 
 /**
@@ -32,10 +84,10 @@ export interface ApiArticle {
  */
 export interface NewsArticle {
   id: string;
-  title: string; // Maps from titleEn
-  slug: string; // Maps from slugEn
-  excerpt: string; // Maps from summaryEn
-  content: string; // Maps from contentEn
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
   featuredImage: string;
   category: Category;
   author: Author;
@@ -46,21 +98,20 @@ export interface NewsArticle {
   isBreaking: boolean;
   isFeatured: boolean;
   viewCount: number;
-  commentCount: number;
 }
 
 export interface Author {
   id: string;
-  name: string;
+  fullName: string;
   avatar: string;
   slug: string;
 }
 
 export interface Category {
   id: string;
-  name: string; // Backend: nameNe or nameEn
-  slug: string; // Backend: slug
-  color: string; // Tailwind color class
+  name: string;
+  slug: string;
+  color: string;
   description?: string;
 }
 
@@ -73,23 +124,9 @@ export interface Tag {
 export interface Advertisement {
   id: string;
   title: string;
-  imageUrl: string;
   linkUrl: string;
   position: "sidebar" | "footer" | "hero" | "inline";
   size: "small" | "medium" | "large" | "full-width";
-}
-
-/**
- * Backend Category schema
- * GET /api/categories
- */
-export interface ApiCategory {
-  id: string;
-  slug: string;
-  nameEn: string;
-  nameNe: string;
-  descriptionEn?: string;
-  descriptionNe?: string;
 }
 
 /**

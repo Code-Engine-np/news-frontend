@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getAllArticles, getPublishedNewsArticles } from "@/src/lib/api";
-import type { ApiArticle, NewsArticle } from "@/src/types";
+import { deleteArticle, getAllArticles } from "@/src/lib/api";
+import type { ApiArticle } from "@/src/types";
 import {
   LayoutDashboard,
   FileText,
@@ -25,6 +25,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -56,6 +57,25 @@ export default function AdminDashboard() {
   const handleLogout = () => {
     logout();
     router.push("/login");
+  };
+
+  const handleDelete = async (id: string, title: string) => {
+    if (!window.confirm(`Delete "${title}"? This cannot be undone.`)) {
+      return;
+    }
+
+    setDeletingId(id);
+    setError("");
+    try {
+      const token = localStorage.getItem("best_khabar_access_token");
+      await deleteArticle(id, token || "");
+      setArticles((current) => current.filter((article) => article.id !== id));
+    } catch (err) {
+      setError("Failed to delete article");
+      console.error(err);
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   if (!isAuthenticated) {
@@ -226,19 +246,23 @@ export default function AdminDashboard() {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {articles.map((article) => (
-                      <tr key={article.id} className="hover:bg-gray-50">
+                      <tr
+                        key={article.id}
+                        onClick={() =>
+                          router.push(`/admin/articles/${article.id}/edit`)
+                        }
+                        className="cursor-pointer hover:bg-gray-50"
+                      >
                         <td className="px-6 py-4">
                           <div className="font-medium text-ink">
-                            {article.titleNe || article.titleEn}
+                            {article.title}
                           </div>
                           <div className="text-sm text-[#60706a]">
                             {article.slug}
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-[#60706a]">
-                          {article.category?.nameNe ||
-                            article.category?.nameEn ||
-                            "Uncategorized"}
+                          {article.category?.name || "Uncategorized"}
                         </td>
                         <td className="px-6 py-4">
                           <span
@@ -254,10 +278,13 @@ export default function AdminDashboard() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-[#60706a]">
-                          {article.viewCount || 0}
+                          N/A
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
+                          <div
+                            className="flex items-center justify-end gap-2"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <Link
                               href={`/article/${article.slug}`}
                               className="rounded-lg border border-line p-2 text-[#60706a] hover:bg-gray-50"
@@ -272,13 +299,17 @@ export default function AdminDashboard() {
                             >
                               <Pencil className="h-4 w-4" />
                             </Link>
-                            <Link
-                              href={`/admin/articles/${article.id}/delete`}
-                              className="rounded-lg border border-red-200 p-2 text-red-600 hover:bg-red-50"
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDelete(article.id, article.title)
+                              }
+                              disabled={deletingId === article.id}
+                              className="rounded-lg border border-red-200 p-2 text-red-600 hover:bg-red-50 disabled:opacity-50"
                               title="Delete"
                             >
                               <Trash2 className="h-4 w-4" />
-                            </Link>
+                            </button>
                           </div>
                         </td>
                       </tr>

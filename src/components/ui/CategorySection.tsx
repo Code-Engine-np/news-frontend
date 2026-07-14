@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { NewsArticle } from "@/src/app/types";
-import ArticleCard from "@/src/app/components/cards/ArticleCard";
+import { NewsArticle } from "@/src/types";
+import ArticleCard from "@/src/components/cards/ArticleCard";
 
 interface CategorySectionProps {
   title: string;

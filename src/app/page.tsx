@@ -8,18 +8,16 @@ import {
   mapApiArticleToNewsArticle,
   mapApiCategoryToCategory,
 } from "@/src/lib/api";
-import { MOCK_ARTICLES as FALLBACK_ARTICLES } from "@/src/lib/mock/data";
 
 async function getHomeData() {
   try {
-    // Fetch articles and categories in parallel
     const [apiArticles, apiCategories] = await Promise.all([
       getPublishedArticles(),
       getCategories(),
     ]);
 
-    const articles = apiArticles?.map(mapApiArticleToNewsArticle);
-    const categories = apiCategories?.map(mapApiCategoryToCategory);
+    const articles = apiArticles?.map(mapApiArticleToNewsArticle) ?? [];
+    const categories = apiCategories?.map(mapApiCategoryToCategory) ?? [];
 
     return { articles, categories, error: null };
   } catch (err) {
@@ -29,11 +27,8 @@ async function getHomeData() {
 }
 
 export default async function Home() {
-  const { articles, categories, error } = await getHomeData();
+  const { articles: displayArticles, error } = await getHomeData();
 
-  // Fallback to mock data if API fails or returns empty
-  const hasData = articles.length > 0;
-  const displayArticles = hasData ? articles : FALLBACK_ARTICLES;
   const breakingNews = displayArticles
     .filter((a) => a.isBreaking)
     .map((a) => a.title);
@@ -44,7 +39,13 @@ export default async function Home() {
         {/* Error banner */}
         {error && (
           <div className="mb-4 rounded-sm bg-red-50 border border-red-200 p-4 text-red-800">
-            <p className="text-sm">{error}. Showing fallback content.</p>
+            <p className="text-sm">{error}.</p>
+          </div>
+        )}
+
+        {!error && displayArticles.length === 0 && (
+          <div className="mb-4 rounded-sm border border-line bg-white p-6 text-center text-muted">
+            <p className="text-sm">No published articles yet.</p>
           </div>
         )}
 
@@ -62,18 +63,18 @@ export default async function Home() {
         </section>
 
         {/* Breaking News */}
-        <section className="mt-6 rounded-sm border border-[#bccac0] bg-background p-3 sm:p-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#fe6500]">
-              Breaking News
-            </span>
-            <div className="min-w-0 flex-1">
-              <BreakingNewsBanner
-                items={breakingNews.length > 0 ? breakingNews : undefined}
-              />
+        {breakingNews.length > 0 && (
+          <section className="mt-6 rounded-sm border border-[#bccac0] bg-background p-3 sm:p-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#fe6500]">
+                Breaking News
+              </span>
+              <div className="min-w-0 flex-1">
+                <BreakingNewsBanner items={breakingNews} />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Main content grid */}
         <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6">

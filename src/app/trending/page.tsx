@@ -4,15 +4,25 @@ import ArticleCard from "@/src/components/cards/ArticleCard";
 import NewsShell from "@/src/components/layout/NewsShell";
 import TrendingList from "@/src/components/ui/TrendingList";
 import Sidebar from "@/src/components/ui/Sidebar";
-import { ADVERTISEMENTS, getTrendingArticles } from "@/src/lib/site";
+import { getTrendingArticles } from "@/src/lib/site";
+import { getPublishedArticles, mapApiArticleToNewsArticle } from "@/src/lib/api";
+import type { NewsArticle } from "@/src/types";
 
 export const metadata: Metadata = {
   title: "Trending News | Best Khabar",
   description: "The most-read stories on Best Khabar right now.",
 };
 
-export default function TrendingPage() {
-  const trendingArticles = getTrendingArticles(8);
+export default async function TrendingPage() {
+  let allArticles: NewsArticle[];
+  try {
+    const apiArticles = await getPublishedArticles();
+    allArticles = apiArticles.map(mapApiArticleToNewsArticle);
+  } catch {
+    allArticles = [];
+  }
+
+  const trendingArticles = getTrendingArticles(allArticles, 8);
 
   return (
     <NewsShell>
