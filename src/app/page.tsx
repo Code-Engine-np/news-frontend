@@ -44,7 +44,7 @@ export default async function Home() {
         )}
 
         {!error && displayArticles.length === 0 && (
-          <div className="mb-4 rounded-sm border border-line bg-white p-6 text-center text-muted">
+          <div className="mb-4 rounded-sm border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-6 text-center text-muted">
             <p className="text-sm">No published articles yet.</p>
           </div>
         )}

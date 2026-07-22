@@ -53,9 +53,10 @@ export default function EditArticlePage() {
           status: article.status,
           images: (article.images ?? []).map(
             (image): CloudinaryUploadResponse => ({
-              secure_url: image.secureUrl,
-              public_id: image.publicId,
-              resource_type: image.resourceType,
+              secure_url: image.secureUrl ?? undefined,
+              public_id: image.publicId ?? undefined,
+              resource_type: image.resourceType ?? undefined,
+              youtube_url: image.youtubeUrl ?? undefined,
               alt_text: image.altText ?? "",
               caption: image.caption ?? "",
             }),

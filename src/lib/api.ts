@@ -20,6 +20,7 @@ import {
   CloudinaryDeleteSignature,
   CloudinaryUploadSignature,
 } from "@/src/types/cloudinary";
+import { extractYouTubeVideoId } from "@/src/lib/youtube";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
@@ -315,7 +316,11 @@ export function mapApiArticleToNewsArticle(api: ApiArticle): NewsArticle {
         color: "bg-gray-600",
       };
 
-  const featuredImage = api.images?.[0]?.secureUrl || "";
+  const firstImage = api.images?.[0];
+  const featuredImage = firstImage?.secureUrl || "";
+  const featuredVideoId = firstImage?.youtubeUrl
+    ? extractYouTubeVideoId(firstImage.youtubeUrl)
+    : undefined;
 
   return {
     id: api.id,
@@ -324,6 +329,7 @@ export function mapApiArticleToNewsArticle(api: ApiArticle): NewsArticle {
     excerpt: api.summary,
     content: api.content,
     featuredImage,
+    featuredVideoId,
     category,
     author: {
       id: api.author.id,

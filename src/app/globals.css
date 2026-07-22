@@ -4,16 +4,26 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Semantic tokens — overridden per theme below */
+:root {
+  --ink: #1a1c1c;
+  --muted-text: #51605a;
+  --line-border: #d8dfd8;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --page-bg: #f9f9f9;
+}
+
 @theme inline {
-  --color-background: #ffffff;
-  --color-foreground: #171717;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-inter);
 
-  /* Semantic design tokens (from the Figma palette) */
-  --color-ink: #1a1c1c; /* primary headings / text */
-  --color-muted: #51605a; /* secondary body text */
-  --color-line: #d8dfd8; /* borders / dividers */
+  /* Semantic design tokens */
+  --color-ink: var(--ink);
+  --color-muted: var(--muted-text);
+  --color-line: var(--line-border);
   --color-primary: #0a8f61; /* brand green accent */
   --color-primary-dark: #006c4b; /* brand green (dark) */
   --color-primary-bright: #05a76f; /* brand green (bright) */
@@ -130,6 +140,16 @@ body {
 }
 
 .dark {
+  color-scheme: dark;
+
+  /* Semantic token overrides */
+  --ink: #e2ebe8;
+  --muted-text: #8fa89f;
+  --line-border: #2a3832;
+  --surface: #1e2a26;
+  --surface-raised: #243029;
+  --page-bg: #141f1b;
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

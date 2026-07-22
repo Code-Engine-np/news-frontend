@@ -52,9 +52,10 @@ export interface ApiCategory {
  */
 export interface ApiImage {
   id: string;
-  secureUrl: string;
-  publicId: string;
-  resourceType: string;
+  secureUrl?: string | null;
+  publicId?: string | null;
+  resourceType?: string | null;
+  youtubeUrl?: string | null;
   altText?: string | null;
   caption?: string | null;
 }
@@ -89,6 +90,8 @@ export interface NewsArticle {
   excerpt: string;
   content: string;
   featuredImage: string;
+  /** YouTube video ID extracted from embedded content, if present. */
+  featuredVideoId?: string;
   category: Category;
   author: Author;
   tags: Tag[];

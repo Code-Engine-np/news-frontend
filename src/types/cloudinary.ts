@@ -14,9 +14,10 @@ export interface CloudinaryDeleteSignature {
 }
 
 export interface CloudinaryUploadResponse {
-  secure_url: string;
-  resource_type: string;
-  public_id: string;
+  secure_url?: string;
+  resource_type?: string;
+  public_id?: string;
+  youtube_url?: string;
   alt_text?: string;
   caption?: string;
 }

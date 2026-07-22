@@ -58,22 +58,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const articles = allArticles
-    .filter((article) => article.category.slug === slug)
-    .slice(0, 6);
+  const articles = allArticles.filter(
+    (article) => article.category.slug === slug,
+  );
 
-  if (articles.length === 0) {
-    notFound();
-  }
-
-  const featuredArticle = articles[0];
+  const featuredArticle = articles[0] ?? null;
   const gridArticles = articles.slice(1);
   const sidebarArticles = getTrendingArticles(allArticles, 6);
 
   return (
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
-        <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             Category
           </p>
@@ -87,43 +83,38 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           )}
         </div>
 
-        <div className="mt-8 grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_352px]">
-          <section className="space-y-6">
-            <ArticleCard article={featuredArticle} variant="featured" />
+        {articles.length === 0 ? (
+          <div className="mt-8 flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-12 shadow-sm text-center">
+            <p className="text-2xl font-bold text-ink">No articles yet</p>
+            <p className="mt-2 text-muted">
+              Check back soon for stories in {category.name}.
+            </p>
+            <Link
+              href="/"
+              className="mt-6 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary/90"
+            >
+              Back to Home
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-8 grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_352px]">
+            <section className="space-y-6">
+              {featuredArticle && (
+                <ArticleCard article={featuredArticle} variant="featured" />
+              )}
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {gridArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
-            </div>
-
-            <div className="rounded-2xl border border-line bg-white p-6">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                    More in {category.name}
-                  </p>
-                  <h2 className="mt-2 text-2xl font-bold text-ink">
-                    Fresh coverage from the archive
-                  </h2>
+              {gridArticles.length > 0 && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {gridArticles.map((article) => (
+                    <ArticleCard key={article.id} article={article} />
+                  ))}
                 </div>
-                <Link
-                  href="/trending"
-                  className="shrink-0 whitespace-nowrap text-sm font-semibold text-primary"
-                >
-                  View trending
-                </Link>
-              </div>
-              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {gridArticles.map((article) => (
-                  <ArticleCard key={article.id} article={article} />
-                ))}
-              </div>
-            </div>
-          </section>
+              )}
+            </section>
 
-          <Sidebar articles={sidebarArticles} />
-        </div>
+            <Sidebar articles={sidebarArticles} />
+          </div>
+        )}
       </div>
     </NewsShell>
   );

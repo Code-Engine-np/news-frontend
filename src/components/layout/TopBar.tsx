@@ -43,7 +43,7 @@ const TopBar = async () => {
   }).format(new Date());
 
   return (
-    <div className="bg-[#ededed] text-sm text-black">
+    <div className="bg-[#ededed] text-sm text-black dark:bg-[#1a2520] dark:text-gray-300">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-0 lg:py-3">
         <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
           <span className="whitespace-nowrap font-(family-name:--font-inter) text-[16px]">

@@ -17,16 +17,16 @@ const TrendingList = ({ articles }: TrendingListProps) => {
     .slice(0, 5);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-white dark:bg-[#1e2a26] rounded-2xl shadow-sm border border-gray-200 dark:border-[#2a3832] p-6">
       <div className="flex items-center space-x-2 mb-6">
         <TrendingUp className="h-5 w-5 text-brand-600" />
-        <h3 className="text-lg font-bold text-gray-900">Trending Now</h3>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Trending Now</h3>
       </div>
 
       <div className="space-y-5">
         {trendingArticles.map((article, index) => (
           <div key={article.id} className="flex items-start space-x-3">
-            <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-gray-100 text-brand-600 font-bold text-sm rounded-lg">
+            <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-gray-100 dark:bg-[#2a3832] text-brand-600 font-bold text-sm rounded-lg">
               {index + 1}
             </span>
             <div className="flex-1 min-w-0">

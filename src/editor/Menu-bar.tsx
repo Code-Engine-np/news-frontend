@@ -82,7 +82,7 @@ export default function MenuBar({ editor }: MenuBarProps) {
   ];
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       {Options.map((option, index) => (
         <Toggle
           key={index}

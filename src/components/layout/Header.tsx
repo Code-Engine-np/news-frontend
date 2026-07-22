@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Languages, Menu, Moon, Search, X } from "lucide-react";
+import { ChevronDown, Languages, Menu, Moon, Search, Sun, X } from "lucide-react";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
 import type { Category } from "@/src/types";
+import { useTheme } from "@/src/app/context/ThemeContext";
 
 interface HeaderProps {
   categories: Category[];
@@ -13,9 +14,10 @@ interface HeaderProps {
 
 const Header = ({ categories }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggle } = useTheme();
 
   return (
-    <header className="bg-white">
+    <header className="bg-white dark:bg-[#1e2a26] dark:border-b dark:border-[#2a3832]">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-0 lg:py-6">
         <button
           type="button"
@@ -31,8 +33,8 @@ const Header = ({ categories }: HeaderProps) => {
           )}
         </button>
 
-        <Link href="/" className="flex-shrink-0">
-          <div className="relative h-[46px] w-[180px] sm:h-[58px] sm:w-[240px] lg:h-[62px] lg:w-[270px]">
+        <Link href="/" className="flex-1 lg:flex-none lg:flex-shrink-0">
+          <div className="relative h-[46px] w-full sm:h-[58px] sm:w-[240px] lg:h-[62px] lg:w-[270px]">
             <Image
               src="/best-khabar-green1.png"
               alt="Best Khabar"
@@ -65,10 +67,15 @@ const Header = ({ categories }: HeaderProps) => {
 
           <button
             type="button"
-            className="hidden h-10 w-10 items-center justify-center text-gray-900 transition-colors hover:text-brand-600 sm:inline-flex"
+            onClick={toggle}
+            className="hidden h-10 w-10 items-center justify-center text-gray-900 dark:text-gray-100 transition-colors hover:text-brand-600 sm:inline-flex"
             aria-label="Toggle theme"
           >
-            <Moon className="h-6 w-6" />
+            {theme === "dark" ? (
+              <Sun className="h-6 w-6" />
+            ) : (
+              <Moon className="h-6 w-6" />
+            )}
           </button>
 
           <button

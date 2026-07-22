@@ -24,9 +24,9 @@ const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
       />
 
       {/* Menu Panel */}
-      <div className="fixed inset-y-0 left-0 w-80 max-w-full bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <span className="text-lg font-bold text-gray-900">Menu</span>
+      <div className="fixed inset-y-0 left-0 w-80 max-w-full bg-white dark:bg-[#1e2a26] shadow-xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-[#2a3832]">
+          <span className="text-lg font-bold text-gray-900 dark:text-gray-100">Menu</span>
           <button
             type="button"
             onClick={onClose}
@@ -43,7 +43,7 @@ const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
               <li key={item.label}>
                 <Link
                   href={item.href}
-                  className="block px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:text-brand-600 rounded-lg transition-colors"
+                  className="block px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-[#2a3832] hover:text-brand-600 rounded-lg transition-colors"
                   onClick={onClose}
                 >
                   {item.label}
@@ -65,7 +65,7 @@ const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
               <li key={category.id}>
                 <Link
                   href={`/category/${category.slug}`}
-                  className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-brand-600 rounded-lg transition-colors"
+                  className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#2a3832] hover:text-brand-600 rounded-lg transition-colors"
                   onClick={onClose}
                 >
                   <span

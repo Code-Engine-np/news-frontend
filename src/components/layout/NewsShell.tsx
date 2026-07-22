@@ -24,7 +24,7 @@ const NewsShell = async ({ children, mainClassName = "" }: NewsShellProps) => {
   const categories = await getNavCategories();
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#f9f9f9]">
+    <div className="flex min-h-screen flex-col bg-[#f9f9f9] dark:bg-[#141f1b]">
       <TopBar />
       <Header categories={categories} />
       <Navigation />

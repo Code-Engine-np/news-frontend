@@ -6,6 +6,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/src/app/context/AuthContext";
+import { ThemeProvider } from "@/src/app/context/ThemeContext";
 import { cn } from "@/src/lib/utils";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -92,8 +93,18 @@ export default function RootLayout({
         "font-sans",
       )}
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans">
-        <AuthProvider>{children}</AuthProvider>
+      <head>
+        {/* Inline script runs before hydration to set dark class without flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('bk_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');if(t==='dark')document.documentElement.classList.add('dark');})()`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

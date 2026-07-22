@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarDays, Image as ImageIcon, Share2 } from "lucide-react";
+import { Image as ImageIcon, Share2 } from "lucide-react";
 import { getRelatedArticles, getTrendingArticles } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import Sidebar from "@/src/components/ui/Sidebar";
@@ -13,6 +13,7 @@ import {
   getPublishedArticles,
 } from "@/src/lib/api";
 import { sanitizeArticleHtml } from "@/src/lib/sanitize";
+import { getYouTubeEmbedUrl } from "@/src/lib/youtube";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -82,9 +83,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </nav>
 
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
-          <article className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
-            <div className="relative aspect-[16/9]">
-              {article.featuredImage ? (
+          <article className="overflow-hidden rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] shadow-sm">
+            <div className="relative aspect-video bg-black">
+              {article.featuredVideoId ? (
+                <iframe
+                  src={getYouTubeEmbedUrl(article.featuredVideoId)}
+                  title={article.title}
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : article.featuredImage ? (
                 <Image
                   src={article.featuredImage}
                   alt={article.title}
@@ -114,14 +123,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-4 border-y border-[#e5ebe5] py-4 text-sm text-[#60706a]">
-                <span className="inline-flex items-center gap-2">
-                  <CalendarDays className="h-4 w-4" />
-                  {new Date(article.publishedAt).toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </span>
                 <span>{article.author.fullName}</span>
               </div>
 
@@ -148,7 +149,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
 
         {relatedArticles.length > 0 && (
-          <section className="mt-10 rounded-2xl border border-line bg-white p-6 shadow-sm">
+          <section className="mt-10 rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
