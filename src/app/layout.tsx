@@ -1,24 +1,14 @@
 import type { Metadata } from "next";
 import {
   Hanken_Grotesk,
-  Inter,
   Noto_Sans,
-  Poppins,
   Work_Sans,
 } from "next/font/google";
 import "./globals.css";
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import { AuthProvider } from "@/src/app/context/AuthContext";
+import { ThemeProvider } from "@/src/app/context/ThemeContext";
+import { Providers } from "@/src/app/providers";
+import { cn } from "@/src/lib/utils";
 
 const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken",
@@ -95,10 +85,29 @@ export default function RootLayout({
   return (
     <html
       lang="ne"
-      className={`${poppins.variable} ${inter.variable} ${hankenGrotesk.variable} ${workSans.variable} ${notoSans.variable} h-full antialiased`}
+      className={cn(
+        "h-full",
+        "antialiased",
+        hankenGrotesk.variable,
+        workSans.variable,
+        notoSans.variable,
+        "font-sans",
+      )}
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans">
-        {children}
+      <head>
+        {/* Inline script runs before hydration to set dark class without flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('bk_theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');if(t==='dark')document.documentElement.classList.add('dark');})()`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
+        <Providers>
+          <ThemeProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

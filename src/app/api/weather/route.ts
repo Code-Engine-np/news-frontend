@@ -1,5 +1,5 @@
+import { getCurrentWeather } from "@/src/services/weather.service";
 import { NextResponse } from "next/server";
-import { getCurrentWeather } from "@/src/app/services/weather.service";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

@@ -1,20 +1,43 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ArticleCard from "@/src/app/components/cards/ArticleCard";
-import NewsShell from "@/src/app/components/layout/NewsShell";
-import TrendingList from "@/src/app/components/ui/TrendingList";
-import Sidebar from "@/src/app/components/ui/Sidebar";
-import { ADVERTISEMENTS, getTrendingArticles } from "@/src/app/lib/site";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import ArticleCard from "@/src/components/cards/ArticleCard";
+import NewsShell from "@/src/components/layout/NewsShell";
+import TrendingList from "@/src/components/ui/TrendingList";
+import Sidebar from "@/src/components/ui/Sidebar";
+import { getTrendingArticles } from "@/src/lib/site";
+import { mapApiArticleToNewsArticle } from "@/src/lib/api";
+import type { NewsArticle } from "@/src/types";
+import { getQueryClient } from "@/src/lib/query-client";
+import { queryKeys, queryFns } from "@/src/lib/queries";
 
 export const metadata: Metadata = {
   title: "Trending News | Best Khabar",
   description: "The most-read stories on Best Khabar right now.",
 };
 
-export default function TrendingPage() {
-  const trendingArticles = getTrendingArticles(8);
+export default async function TrendingPage() {
+  const queryClient = getQueryClient();
+
+  let allArticles: NewsArticle[];
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: queryKeys.publishedArticles(),
+      queryFn: queryFns.publishedArticles,
+    });
+    const apiArticles =
+      queryClient.getQueryData<
+        Awaited<ReturnType<typeof queryFns.publishedArticles>>
+      >(queryKeys.publishedArticles()) ?? [];
+    allArticles = apiArticles.map(mapApiArticleToNewsArticle);
+  } catch {
+    allArticles = [];
+  }
+
+  const trendingArticles = getTrendingArticles(allArticles, 8);
 
   return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
@@ -57,12 +80,10 @@ export default function TrendingPage() {
             </div>
           </section>
 
-          <Sidebar
-            articles={trendingArticles}
-            advertisements={ADVERTISEMENTS}
-          />
+          <Sidebar articles={trendingArticles} />
         </div>
       </div>
     </NewsShell>
+    </HydrationBoundary>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import NewsShell from "@/src/app/components/layout/NewsShell";
+import NewsShell from "@/src/components/layout/NewsShell";
 
 export const metadata: Metadata = {
   title: "Advertise | Best Khabar",
