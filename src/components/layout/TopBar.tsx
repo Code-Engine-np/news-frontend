@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Link } from "@/src/i18n/navigation";
 // import Weather from "@/src/components/ui/Weather";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -35,7 +36,8 @@ const YoutubeIcon = ({ className }: { className?: string }) => (
 );
 
 const TopBar = async () => {
-  const today = new Intl.DateTimeFormat("en-GB", {
+  const [t, locale] = await Promise.all([getTranslations("TopBar"), getLocale()]);
+  const today = new Intl.DateTimeFormat(locale === "ne" ? "ne-NP" : "en-GB", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -60,19 +62,19 @@ const TopBar = async () => {
               href="/about"
               className="transition-colors hover:text-brand-600"
             >
-              About Us
+              {t("aboutUs")}
             </Link>
             <Link
               href="/advertise"
               className="transition-colors hover:text-brand-600"
             >
-              Advertise
+              {t("advertise")}
             </Link>
             <Link
               href="/contact"
               className="transition-colors hover:text-brand-600"
             >
-              Contact
+              {t("contact")}
             </Link>
           </div>
 
@@ -103,7 +105,7 @@ const TopBar = async () => {
                 <YoutubeIcon className="h-4.5 w-4.5" />
               </Link>
             </div>
-            <span className="hidden sm:block">Follow Us</span>
+            <span className="hidden sm:block">{t("followUs")}</span>
           </div>
         </div>
       </div>

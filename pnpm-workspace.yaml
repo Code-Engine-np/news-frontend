@@ -1,6 +1,10 @@
+# Not a real workspace. The `packages` glob matches nothing on purpose — it
+# exists only so pnpm 9 (used by Vercel) doesn't fail with "packages field
+# missing or empty". `allowBuilds` is honored by pnpm 10+/11 (local).
+packages:
+  - 'packages/*'
 allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
   sharp: true
   unrs-resolver: true
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver

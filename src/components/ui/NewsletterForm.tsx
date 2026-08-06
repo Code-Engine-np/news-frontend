@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { Mail, Send, CheckCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { subscribeNewsletter } from "@/src/lib/api";
 
 const NewsletterForm = () => {
+  const t = useTranslations("Newsletter");
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [status, setStatus] = useState<
@@ -16,7 +18,7 @@ const NewsletterForm = () => {
     e.preventDefault();
     if (!email || !email.includes("@")) {
       setStatus("error");
-      setErrorMessage("Please enter a valid email address.");
+      setErrorMessage(t("invalidEmail"));
       return;
     }
 
@@ -30,7 +32,7 @@ const NewsletterForm = () => {
       setFullName("");
     } catch (err) {
       setStatus("error");
-      setErrorMessage("Failed to subscribe. Please try again later.");
+      setErrorMessage(t("failed"));
       console.error("Newsletter subscription error:", err);
     }
   };
@@ -39,19 +41,15 @@ const NewsletterForm = () => {
     <div className="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl shadow-lg p-6 text-white">
       <div className="flex items-center space-x-2 mb-4">
         <Mail className="h-5 w-5" />
-        <h3 className="text-lg font-bold">Newsletter</h3>
+        <h3 className="text-lg font-bold">{t("title")}</h3>
       </div>
 
-      <p className="text-brand-100 text-sm mb-4">
-        Stay updated with the latest news delivered straight to your inbox.
-      </p>
+      <p className="text-brand-100 text-sm mb-4">{t("subtitle")}</p>
 
       {status === "success" ? (
         <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-4">
           <CheckCircle className="h-5 w-5 text-brand-300" />
-          <span className="text-sm font-medium">
-            Thank you for subscribing!
-          </span>
+          <span className="text-sm font-medium">{t("success")}</span>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-3">
@@ -60,9 +58,9 @@ const NewsletterForm = () => {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="Your name (optional)"
+              placeholder={t("namePlaceholder")}
               className="w-full pl-4 pr-10 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all"
-              aria-label="Full name"
+              aria-label={t("fullNameLabel")}
             />
           </div>
           <div className="relative">
@@ -73,10 +71,10 @@ const NewsletterForm = () => {
                 setEmail(e.target.value);
                 if (status === "error") setStatus("idle");
               }}
-              placeholder="Enter your email"
+              placeholder={t("emailPlaceholder")}
               className="w-full pl-4 pr-10 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all"
               disabled={status === "submitting"}
-              aria-label="Email address"
+              aria-label={t("emailLabel")}
             />
             <Mail className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           </div>
@@ -91,10 +89,10 @@ const NewsletterForm = () => {
             className="w-full flex items-center justify-center px-4 py-3 bg-white text-brand-700 font-medium rounded-lg hover:bg-brand-50 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {status === "submitting" ? (
-              <span className="flex items-center">Subscribing...</span>
+              <span className="flex items-center">{t("subscribing")}</span>
             ) : (
               <span className="flex items-center">
-                Subscribe
+                {t("subscribe")}
                 <Send className="h-4 w-4 ml-2" />
               </span>
             )}
@@ -102,9 +100,7 @@ const NewsletterForm = () => {
         </form>
       )}
 
-      <p className="mt-3 text-xs text-brand-200">
-        We respect your privacy. Unsubscribe at any time.
-      </p>
+      <p className="mt-3 text-xs text-brand-200">{t("privacyNote")}</p>
     </div>
   );
 };

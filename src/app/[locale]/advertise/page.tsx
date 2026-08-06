@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import NewsShell from "@/src/components/layout/NewsShell";
 
 export const metadata: Metadata = {
@@ -7,37 +8,28 @@ export const metadata: Metadata = {
     "Advertising options and sponsorship opportunities at Best Khabar.",
 };
 
-export default function AdvertisePage() {
+export default async function AdvertisePage() {
+  const t = await getTranslations("Advertise");
   return (
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <section className="rounded-2xl bg-primary-dark px-6 py-10 text-center text-white sm:px-10 sm:py-12">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/85">
-            Advertising
+            {t("eyebrow")}
           </p>
           <h1 className="mt-3 text-4xl font-extrabold leading-tight sm:text-5xl">
-            Advertise on Best Khabar
+            {t("title")}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-white/95">
-            Reach readers through hero placements, sidebar inventory, and
-            sponsored content across the site.
+            {t("intro")}
           </p>
         </section>
 
         <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
           {[
-            {
-              title: "Hero placement",
-              text: "High-visibility banner space on the homepage.",
-            },
-            {
-              title: "Sidebar inventory",
-              text: "Contextual placements beside category and article pages.",
-            },
-            {
-              title: "Sponsored features",
-              text: "Branded storytelling for launches and campaigns.",
-            },
+            { title: t("heroTitle"), text: t("heroText") },
+            { title: t("sidebarTitle"), text: t("sidebarText") },
+            { title: t("sponsoredTitle"), text: t("sponsoredText") },
           ].map((item) => (
             <div
               key={item.title}
@@ -50,10 +42,8 @@ export default function AdvertisePage() {
         </section>
 
         <section className="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-ink">Ready to book?</h2>
-          <p className="mt-3 text-muted">
-            Contact the sales team to discuss placements and campaign timing.
-          </p>
+          <h2 className="text-2xl font-bold text-ink">{t("bookTitle")}</h2>
+          <p className="mt-3 text-muted">{t("bookText")}</p>
         </section>
       </div>
     </NewsShell>

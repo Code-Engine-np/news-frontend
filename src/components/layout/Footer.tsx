@@ -1,6 +1,7 @@
+import { getTranslations } from "next-intl/server";
 import { FOOTER_LINK_GROUPS } from "@/src/lib/site";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg
@@ -35,7 +36,8 @@ const YoutubeIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const Footer = () => {
+const Footer = async () => {
+  const t = await getTranslations("Footer");
   return (
     <footer className="bg-primary-bright text-white">
       <div className="mx-auto w-full max-w-7xl px-4 pb-4 pt-4 sm:px-6 lg:px-0 lg:pb-5 lg:pt-4">
@@ -84,23 +86,20 @@ const Footer = () => {
               >
                 <YoutubeIcon className="h-5 w-5" />
               </Link>
-              <span className="text-sm sm:text-base">Follow Us</span>
+              <span className="text-sm sm:text-base">{t("followUs")}</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold">Best Khabar Pvt. Ltd.</h3>
-              <p className="text-sm text-white/95">
-                A fast, Nepali-first news experience built around national and
-                local coverage.
-              </p>
-              <p className="text-sm text-white/95">Kathmandu, Nepal</p>
+              <h3 className="text-lg font-semibold">{t("companyName")}</h3>
+              <p className="text-sm text-white/95">{t("tagline")}</p>
+              <p className="text-sm text-white/95">{t("location")}</p>
             </div>
 
             {FOOTER_LINK_GROUPS.map((group) => (
-              <div key={group.title} className="space-y-3">
-                <h3 className="text-lg font-semibold">{group.title}</h3>
+              <div key={group.titleKey} className="space-y-3">
+                <h3 className="text-lg font-semibold">{t(group.titleKey)}</h3>
                 <ul className="space-y-2 text-sm text-white/95">
                   {group.links.map((link) => (
                     <li key={link.href}>
@@ -108,7 +107,7 @@ const Footer = () => {
                         href={link.href}
                         className="transition-colors hover:text-white"
                       >
-                        {link.label}
+                        {t(link.labelKey)}
                       </Link>
                     </li>
                   ))}
@@ -119,8 +118,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-4 border-t border-white/30 py-4 text-center text-xs sm:text-sm">
-          © Copyright {new Date().getFullYear()} Best Khabar All Rights
-          Reserved.
+          {t("copyright", { year: new Date().getFullYear() })}
         </div>
       </div>
     </footer>

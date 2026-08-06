@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Image as ImageIcon, Share2 } from "lucide-react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Link } from "@/src/i18n/navigation";
 import { getRelatedArticles, getTrendingArticles } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import Sidebar from "@/src/components/ui/Sidebar";
@@ -52,6 +53,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
   const queryClient = getQueryClient();
+  const t = await getTranslations("Article");
 
   let article;
   let allArticles;
@@ -90,7 +92,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <nav className="text-sm text-[#5f6b66]">
           <Link href="/" className="hover:text-primary">
-            Home
+            {t("home")}
           </Link>
           <span className="mx-2">/</span>
           <Link
@@ -160,7 +162,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   className="inline-flex items-center gap-2 rounded-full border border-[#c9d5cd] px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-primary hover:text-primary"
                 >
                   <Share2 className="h-4 w-4" />
-                  Share
+                  {t("share")}
                 </button>
               </div>
             </div>
@@ -174,17 +176,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                  Related coverage
+                  {t("relatedCoverage")}
                 </p>
                 <h2 className="mt-2 text-2xl font-bold text-ink">
-                  More from {article.category.name}
+                  {t("moreFrom", { category: article.category.name })}
                 </h2>
               </div>
               <Link
                 href={`/category/${article.category.slug}`}
                 className="text-sm font-semibold text-primary"
               >
-                View category
+                {t("viewCategory")}
               </Link>
             </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Link } from "@/src/i18n/navigation";
 import ArticleCard from "@/src/components/cards/ArticleCard";
 import NewsShell from "@/src/components/layout/NewsShell";
 import TrendingList from "@/src/components/ui/TrendingList";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 
 export default async function TrendingPage() {
   const queryClient = getQueryClient();
+  const t = await getTranslations("Trending");
 
   let allArticles: NewsArticle[];
   try {
@@ -42,14 +44,13 @@ export default async function TrendingPage() {
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            Live popularity
+            {t("livePopularity")}
           </p>
           <h1 className="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">
-            Trending stories
+            {t("title")}
           </h1>
           <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
-            Stories the audience is reading most across politics, business,
-            sports, and culture.
+            {t("description")}
           </p>
         </div>
 
@@ -67,14 +68,14 @@ export default async function TrendingPage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                    Keep reading
+                    {t("keepReading")}
                   </p>
                   <h2 className="mt-2 text-2xl font-bold text-ink">
-                    Jump back to the homepage
+                    {t("jumpHome")}
                   </h2>
                 </div>
                 <Link href="/" className="text-sm font-semibold text-primary">
-                  Home
+                  {t("home")}
                 </Link>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/src/i18n/navigation";
 import NewsShell from "@/src/components/layout/NewsShell";
 import BreakingNewsBanner from "@/src/components/ui/BreakingNewsBanner";
 import ArticleCard from "@/src/components/cards/ArticleCard";
@@ -16,8 +17,9 @@ import type { ApiAdvertisement, ApiFeaturedImage } from "@/src/types";
 
 export default async function Home() {
   const queryClient = getQueryClient();
+  const t = await getTranslations("Home");
 
-  let error: string | null = null;
+  let hasError = false;
   try {
     await Promise.all([
       queryClient.prefetchQuery({
@@ -38,7 +40,7 @@ export default async function Home() {
       }),
     ]);
   } catch {
-    error = "Failed to load data";
+    hasError = true;
   }
 
   const apiArticles =
@@ -62,15 +64,15 @@ export default async function Home() {
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         {/* Error banner */}
-        {error && (
+        {hasError && (
           <div className="mb-4 rounded-sm bg-red-50 border border-red-200 p-4 text-red-800">
-            <p className="text-sm">{error}.</p>
+            <p className="text-sm">{t("loadError")}</p>
           </div>
         )}
 
-        {!error && displayArticles.length === 0 && (
+        {!hasError && displayArticles.length === 0 && (
           <div className="mb-4 rounded-sm border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-6 text-center text-muted">
-            <p className="text-sm">No published articles yet.</p>
+            <p className="text-sm">{t("noArticles")}</p>
           </div>
         )}
 
@@ -81,14 +83,19 @@ export default async function Home() {
           <div className="mt-2 flex min-h-[180px] items-center justify-center rounded-2xl border-2 border-dashed border-line bg-white dark:border-[#2a3832] dark:bg-[#1e2a26] sm:min-h-[260px]">
             <div className="text-center">
               <p className="text-sm font-semibold text-ink dark:text-gray-200">
-                Featured Carousel
+                {t("featuredCarousel")}
               </p>
               <p className="mt-1 text-xs text-muted">
-                No slides yet —{" "}
-                <Link href="/admin/featured-images/new" className="text-primary underline">
-                  add featured images
-                </Link>{" "}
-                from the admin panel.
+                {t.rich("noSlides", {
+                  link: (chunks) => (
+                    <Link
+                      href="/admin/featured-images/new"
+                      className="text-primary underline"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </p>
             </div>
           </div>
@@ -131,13 +138,13 @@ export default async function Home() {
         ) : (
           <section className="mt-6 rounded-sm bg-primary-dark px-6 py-10 text-center text-white sm:px-10 sm:py-12">
             <p className="text-[12px] font-semibold uppercase tracking-wider text-white/90">
-              Advertisement
+              {t("adLabel")}
             </p>
             <p className="mt-3 text-4xl font-extrabold leading-tight sm:text-5xl">
-              ADVERTISE HERE
+              {t("advertiseHere")}
             </p>
             <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/95">
-              Contact us to showcase your brand in the leading news portal.
+              {t("advertiseSubtitle")}
             </p>
           </section>
         )}
@@ -147,7 +154,7 @@ export default async function Home() {
           <section className="mt-6 rounded-sm border border-[#bccac0] bg-background p-3 sm:p-4">
             <div className="flex flex-wrap items-center gap-3">
               <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#fe6500]">
-                Breaking News
+                {t("breakingNews")}
               </span>
               <div className="min-w-0 flex-1">
                 <BreakingNewsBanner items={breakingNews} />
@@ -162,7 +169,7 @@ export default async function Home() {
           <div className="lg:col-span-8">
             {/* Featured article */}
             <h2 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
-              शीर्ष समाचार (Top Story)
+              {t("topStory")}
             </h2>
             <div className="mt-4">
               {displayArticles.slice(0, 1).map((article) => (
@@ -177,7 +184,7 @@ export default async function Home() {
             {/* Latest articles grid */}
             <div className="mt-10">
               <h3 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
-                ताजा समाचार (Latest News)
+                {t("latestNews")}
               </h3>
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {displayArticles.slice(1, 4).map((article) => (
@@ -191,10 +198,10 @@ export default async function Home() {
               <div className="mt-10">
                 <div className="flex items-center justify-between gap-4">
                   <h3 className="[font-family:var(--font-hanken)] text-2xl font-bold leading-8 text-ink sm:text-[32px] sm:leading-10">
-                    राजनीति (Politics)
+                    {t("politics")}
                   </h3>
                   <span className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-[#a33e00]">
-                    सबै हेर्नुहोस्
+                    {t("viewAll")}
                   </span>
                 </div>
                 <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

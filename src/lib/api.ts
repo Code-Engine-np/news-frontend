@@ -287,6 +287,22 @@ export async function subscribeNewsletter(
   });
 }
 
+export interface ContactMessagePayload {
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
+}
+
+export async function sendContactMessage(
+  payload: ContactMessagePayload,
+): Promise<{ success: boolean }> {
+  return fetchJson<{ success: boolean }>("/contact", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 /** DELETE /api/newsletter-subscriptions/:email */
 export async function unsubscribeNewsletter(email: string): Promise<void> {
   return fetchJson<void>(`/newsletter-subscriptions/${email}`, {

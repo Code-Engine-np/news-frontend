@@ -4,7 +4,11 @@ import {
   Noto_Sans,
   Work_Sans,
 } from "next/font/google";
-import "./globals.css";
+import { notFound } from "next/navigation";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import "@app/globals.css";
+import { routing } from "@/src/i18n/routing";
 import { AuthProvider } from "@/src/app/context/AuthContext";
 import { ThemeProvider } from "@/src/app/context/ThemeContext";
 import { Providers } from "@/src/app/providers";
@@ -77,14 +81,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  // Enable static rendering for this locale.
+  setRequestLocale(locale);
+
   return (
     <html
-      lang="ne"
+      lang={locale}
       className={cn(
         "h-full",
         "antialiased",
@@ -103,11 +120,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
-        <Providers>
-          <ThemeProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </ThemeProvider>
-        </Providers>
+        <NextIntlClientProvider>
+          <Providers>
+            <ThemeProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </ThemeProvider>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

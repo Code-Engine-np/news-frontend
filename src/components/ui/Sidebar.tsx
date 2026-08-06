@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import TrendingList from "./TrendingList";
 import AdvertisementBanner from "./AdvertisementBanner";
 import NewsletterForm from "./NewsletterForm";

@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useRef, useCallback, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
 import { MAIN_NAV_ITEMS } from "@/src/lib/site";
 import type { Category } from "@/src/types";
 
@@ -18,6 +19,7 @@ interface DropdownState {
 }
 
 const Navigation = ({ categories }: NavigationProps) => {
+  const t = useTranslations("Nav");
   const [dropdown, setDropdown] = useState<DropdownState | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -60,9 +62,9 @@ const Navigation = ({ categories }: NavigationProps) => {
               <Link
                 href="/"
                 className="inline-flex h-[56px] w-[56px] items-center justify-center rounded-[10px] bg-[#f15a24] text-white transition-transform hover:scale-[1.02]"
-                aria-label="Home"
+                aria-label={t("homeAria")}
               >
-                <span className="sr-only">Home</span>
+                <span className="sr-only">{t("homeAria")}</span>
                 <svg
                   className="h-7 w-7"
                   viewBox="0 0 24 24"
@@ -82,7 +84,7 @@ const Navigation = ({ categories }: NavigationProps) => {
 
                 return (
                   <div
-                    key={item.label}
+                    key={item.key}
                     onMouseEnter={(e) => {
                       if (slug && subs.length > 0)
                         openMenu(slug, e.currentTarget);
@@ -93,7 +95,7 @@ const Navigation = ({ categories }: NavigationProps) => {
                       href={item.href}
                       className="flex items-center gap-1 whitespace-nowrap px-4 py-3 text-[18px] font-bold leading-none text-white transition-opacity hover:opacity-90 lg:text-[20px]"
                     >
-                      {item.label}
+                      {t(item.key)}
                       {subs.length > 0 && (
                         <ChevronDown
                           className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
@@ -136,7 +138,7 @@ const Navigation = ({ categories }: NavigationProps) => {
                   className="block border-b border-white/10 px-4 py-2.5 text-sm font-semibold text-white/70 hover:bg-white/10 hover:text-white"
                   onClick={() => setDropdown(null)}
                 >
-                  सबै हेर्नुहोस्
+                  {t("viewAll")}
                 </Link>
                 {subs.map((sub) => (
                   <Link

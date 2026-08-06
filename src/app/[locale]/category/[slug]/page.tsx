@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Link } from "@/src/i18n/navigation";
 import { getTrendingArticles } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import ArticleCard from "@/src/components/cards/ArticleCard";
@@ -49,6 +50,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
 
   const queryClient = getQueryClient();
+  const t = await getTranslations("Category");
 
   let category;
   let allArticles;
@@ -92,7 +94,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <div className="rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            Category
+            {t("eyebrow")}
           </p>
           <h1 className="mt-2 font-[family-name:var(--font-sans)] text-3xl font-extrabold text-ink sm:text-4xl">
             {category.name}
@@ -106,15 +108,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
         {articles.length === 0 ? (
           <div className="mt-8 flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-12 shadow-sm text-center">
-            <p className="text-2xl font-bold text-ink">No articles yet</p>
+            <p className="text-2xl font-bold text-ink">{t("noArticles")}</p>
             <p className="mt-2 text-muted">
-              Check back soon for stories in {category.name}.
+              {t("checkBack", { category: category.name })}
             </p>
             <Link
               href="/"
               className="mt-6 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary/90"
             >
-              Back to Home
+              {t("backHome")}
             </Link>
           </div>
         ) : (

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useRouter, Link } from "@/src/i18n/navigation";
 import { useAuth } from "@/src/app/context/AuthContext";
 
 export default function LoginPage() {
+  const t = useTranslations("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,9 +29,7 @@ export default function LoginPage() {
 
       router.push("/admin");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Login failed. Please try again.",
-      );
+      setError(err instanceof Error ? err.message : t("loginFailed"));
     }
   };
 
@@ -38,10 +37,8 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#f9f9f9] px-4">
       <div className="w-full max-w-md rounded-2xl border border-line bg-white p-8 shadow-sm">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-ink">Admin Login</h1>
-          <p className="mt-2 text-sm text-[#60706a]">
-            Sign in to manage articles
-          </p>
+          <h1 className="text-2xl font-bold text-ink">{t("title")}</h1>
+          <p className="mt-2 text-sm text-[#60706a]">{t("subtitle")}</p>
         </div>
 
         {error && (
@@ -56,7 +53,7 @@ export default function LoginPage() {
               htmlFor="email"
               className="block text-sm font-medium text-ink"
             >
-              Email
+              {t("email")}
             </label>
             <input
               id="email"
@@ -73,7 +70,7 @@ export default function LoginPage() {
               htmlFor="password"
               className="block text-sm font-medium text-ink"
             >
-              Password
+              {t("password")}
             </label>
             <input
               id="password"
@@ -90,13 +87,13 @@ export default function LoginPage() {
             disabled={isLoading}
             className="w-full rounded-lg bg-primary py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-50"
           >
-            {isLoading ? "Signing in..." : "Sign In"}
+            {isLoading ? t("signingIn") : t("signIn")}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-[#60706a]">
           <Link href="/" className="hover:text-primary">
-            Back to home
+            {t("backHome")}
           </Link>
         </div>
       </div>

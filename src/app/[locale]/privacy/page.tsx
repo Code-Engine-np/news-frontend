@@ -1,35 +1,32 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import NewsShell from "@/src/components/layout/NewsShell";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/src/i18n/navigation";
 
 export const metadata: Metadata = {
-  title: "About Us | Best Khabar",
-  description: "Learn more about the newsroom behind Best Khabar.",
+  title: "Privacy Policy | Best Khabar",
+  description: "How Best Khabar handles privacy and reader data.",
 };
 
-export default function AboutPage() {
+export default async function PrivacyPage() {
+  const t = await getTranslations("Privacy");
   return (
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <section className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            About Best Khabar
+            {t("eyebrow")}
           </p>
           <h1 className="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">
-            A newsroom designed for quick, readable news
+            {t("title")}
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-muted">
-            Best Khabar brings together national stories, community updates, and
-            breaking coverage in a clean, mobile-friendly format.
+            {t("intro")}
           </p>
         </section>
 
-        <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {[
-            "Verified reporting with quick access to breaking updates.",
-            "A compact layout optimized for desktop and mobile readers.",
-            "Sections that connect politics, economy, society, and culture.",
-          ].map((item) => (
+        <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+          {[t("point1"), t("point2"), t("point3"), t("point4")].map((item) => (
             <div
               key={item}
               className="rounded-2xl border border-line bg-white p-6 shadow-sm"
@@ -40,18 +37,13 @@ export default function AboutPage() {
         </section>
 
         <section className="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-bold text-ink">
-            Need to reach the newsroom?
-          </h2>
-          <p className="mt-3 text-muted">
-            Use the contact page for editorial, advertising, and partnership
-            questions.
-          </p>
+          <h2 className="text-2xl font-bold text-ink">{t("questionsTitle")}</h2>
+          <p className="mt-3 text-muted">{t("questionsText")}</p>
           <Link
             href="/contact"
             className="mt-4 inline-flex rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white"
           >
-            Contact us
+            {t("contactUs")}
           </Link>
         </section>
       </div>
