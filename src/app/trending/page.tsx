@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import ArticleCard from "@/src/components/cards/ArticleCard";
 import NewsShell from "@/src/components/layout/NewsShell";
 import TrendingList from "@/src/components/ui/TrendingList";
 import Sidebar from "@/src/components/ui/Sidebar";
 import { getTrendingArticles } from "@/src/lib/site";
-import { getPublishedArticles, mapApiArticleToNewsArticle } from "@/src/lib/api";
+import { mapApiArticleToNewsArticle } from "@/src/lib/api";
 import type { NewsArticle } from "@/src/types";
+import { getQueryClient } from "@/src/lib/query-client";
+import { queryKeys, queryFns } from "@/src/lib/queries";
 
 export const metadata: Metadata = {
   title: "Trending News | Best Khabar",
@@ -14,9 +17,18 @@ export const metadata: Metadata = {
 };
 
 export default async function TrendingPage() {
+  const queryClient = getQueryClient();
+
   let allArticles: NewsArticle[];
   try {
-    const apiArticles = await getPublishedArticles();
+    await queryClient.prefetchQuery({
+      queryKey: queryKeys.publishedArticles(),
+      queryFn: queryFns.publishedArticles,
+    });
+    const apiArticles =
+      queryClient.getQueryData<
+        Awaited<ReturnType<typeof queryFns.publishedArticles>>
+      >(queryKeys.publishedArticles()) ?? [];
     allArticles = apiArticles.map(mapApiArticleToNewsArticle);
   } catch {
     allArticles = [];
@@ -25,6 +37,7 @@ export default async function TrendingPage() {
   const trendingArticles = getTrendingArticles(allArticles, 8);
 
   return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
@@ -71,5 +84,6 @@ export default async function TrendingPage() {
         </div>
       </div>
     </NewsShell>
+    </HydrationBoundary>
   );
 }

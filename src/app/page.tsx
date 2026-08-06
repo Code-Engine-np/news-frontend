@@ -1,39 +1,64 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
 import NewsShell from "@/src/components/layout/NewsShell";
 import BreakingNewsBanner from "@/src/components/ui/BreakingNewsBanner";
 import ArticleCard from "@/src/components/cards/ArticleCard";
+import FeaturedCarousel from "@/src/components/ui/FeaturedCarousel";
 import Sidebar from "@/src/components/ui/Sidebar";
 import {
   getPublishedArticles,
-  getCategories,
   mapApiArticleToNewsArticle,
-  mapApiCategoryToCategory,
 } from "@/src/lib/api";
-
-async function getHomeData() {
-  try {
-    const [apiArticles, apiCategories] = await Promise.all([
-      getPublishedArticles(),
-      getCategories(),
-    ]);
-
-    const articles = apiArticles?.map(mapApiArticleToNewsArticle) ?? [];
-    const categories = apiCategories?.map(mapApiCategoryToCategory) ?? [];
-
-    return { articles, categories, error: null };
-  } catch (err) {
-    console.error("Failed to fetch home data:", err);
-    return { articles: [], categories: [], error: "Failed to load data" };
-  }
-}
+import { getQueryClient } from "@/src/lib/query-client";
+import { queryKeys, queryFns } from "@/src/lib/queries";
+import type { ApiAdvertisement, ApiFeaturedImage } from "@/src/types";
 
 export default async function Home() {
-  const { articles: displayArticles, error } = await getHomeData();
+  const queryClient = getQueryClient();
+
+  let error: string | null = null;
+  try {
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.publishedArticles(),
+        queryFn: queryFns.publishedArticles,
+      }),
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.categories(),
+        queryFn: queryFns.categories,
+      }),
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.featuredImages(),
+        queryFn: queryFns.featuredImages,
+      }),
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.advertisements("banner"),
+        queryFn: queryFns.advertisements("banner"),
+      }),
+    ]);
+  } catch {
+    error = "Failed to load data";
+  }
+
+  const apiArticles =
+    queryClient.getQueryData<Awaited<ReturnType<typeof getPublishedArticles>>>(
+      queryKeys.publishedArticles(),
+    ) ?? [];
+  const displayArticles = apiArticles.map(mapApiArticleToNewsArticle);
+
+  const featuredSlides =
+    queryClient.getQueryData<ApiFeaturedImage[]>(queryKeys.featuredImages()) ?? [];
+
+  const bannerAds =
+    queryClient.getQueryData<ApiAdvertisement[]>(queryKeys.advertisements("banner")) ?? [];
 
   const breakingNews = displayArticles
     .filter((a) => a.isBreaking)
     .map((a) => a.title);
 
   return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         {/* Error banner */}
@@ -49,18 +74,73 @@ export default async function Home() {
           </div>
         )}
 
-        {/* Advertisement placeholder */}
-        <section className="rounded-sm bg-primary-dark px-6 py-10 text-center text-white sm:px-10 sm:py-12">
-          <p className="[font-family:var(--font-work-sans)] text-[12px] font-semibold uppercase tracking-wider text-white/90">
-            Advertisement
-          </p>
-          <h1 className="mt-3 [font-family:var(--font-hanken)] text-4xl font-extrabold leading-tight sm:text-5xl">
-            ADVERTISE HERE
-          </h1>
-          <p className="mx-auto mt-3 max-w-2xl [font-family:var(--font-noto)] text-base leading-7 text-white/95">
-            Contact us to showcase your brand in the leading news portal.
-          </p>
-        </section>
+        {/* Featured image carousel — always shown; empty state when no slides configured */}
+        {featuredSlides.length > 0 ? (
+          <FeaturedCarousel slides={featuredSlides} />
+        ) : (
+          <div className="mt-2 flex min-h-[180px] items-center justify-center rounded-2xl border-2 border-dashed border-line bg-white dark:border-[#2a3832] dark:bg-[#1e2a26] sm:min-h-[260px]">
+            <div className="text-center">
+              <p className="text-sm font-semibold text-ink dark:text-gray-200">
+                Featured Carousel
+              </p>
+              <p className="mt-1 text-xs text-muted">
+                No slides yet —{" "}
+                <Link href="/admin/featured-images/new" className="text-primary underline">
+                  add featured images
+                </Link>{" "}
+                from the admin panel.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Banner advertisements — dynamic from API */}
+        {bannerAds.length > 0 ? (
+          <div className="mt-6 space-y-3">
+            {bannerAds.map((ad) =>
+              ad.linkUrl ? (
+                <a
+                  key={ad.id}
+                  href={ad.linkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={ad.title}
+                  className="block overflow-hidden rounded-xl"
+                >
+                  <Image
+                    src={ad.imageUrl}
+                    alt={ad.title}
+                    width={1200}
+                    height={200}
+                    className="h-auto max-h-40 w-full object-cover"
+                  />
+                </a>
+              ) : (
+                <div key={ad.id} className="overflow-hidden rounded-xl">
+                  <Image
+                    src={ad.imageUrl}
+                    alt={ad.title}
+                    width={1200}
+                    height={200}
+                    className="h-auto max-h-40 w-full object-cover"
+                  />
+                </div>
+              ),
+            )}
+          </div>
+        ) : (
+          <section className="mt-6 rounded-sm bg-primary-dark px-6 py-10 text-center text-white sm:px-10 sm:py-12">
+            <p className="text-[12px] font-semibold uppercase tracking-wider text-white/90">
+              Advertisement
+            </p>
+            <p className="mt-3 text-4xl font-extrabold leading-tight sm:text-5xl">
+              ADVERTISE HERE
+            </p>
+            <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/95">
+              Contact us to showcase your brand in the leading news portal.
+            </p>
+          </section>
+        )}
 
         {/* Breaking News */}
         {breakingNews.length > 0 && (
@@ -133,5 +213,6 @@ export default async function Home() {
         </section>
       </div>
     </NewsShell>
+    </HydrationBoundary>
   );
 }

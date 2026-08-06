@@ -1,20 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createArticle, getCategories, mapApiCategoryToCategory } from "@/src/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createArticle, mapApiCategoryToCategory } from "@/src/lib/api";
+import { queryKeys, queryFns } from "@/src/lib/queries";
 import Editor from "@/src/editor/Editor";
-import { ApiCategory, Category } from "@/src/types";
 import ImageUploader from "@/src/components/ui/ImageUploader";
 import { CloudinaryUploadResponse } from "@/src/types/cloudinary";
 
 export default function NewArticlePage() {
   const router = useRouter();
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [categories, setCategories] = useState<Category[] | null>(null);
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const queryClient = useQueryClient();
+  const [formError, setFormError] = useState("");
 
   const [form, setForm] = useState({
     title: "",
@@ -27,50 +26,34 @@ export default function NewArticlePage() {
     status: "draft" as "draft" | "published",
   });
 
-  useEffect(() => {
-    let isMounted = true;
+  const { data: apiCategories, isLoading: isLoadingCategories } = useQuery({
+    queryKey: queryKeys.categories(),
+    queryFn: queryFns.categories,
+  });
 
-    const loadCategories = async () => {
-      try {
-        const apiCategories = await getCategories();
-        if (!isMounted) {
-          return;
-        }
+  const categories = apiCategories?.map(mapApiCategoryToCategory) ?? [];
+  const topLevelCats = categories.filter((c) => !c.parentId);
+  const childrenOf = (parentId: string) =>
+    categories.filter((c) => c.parentId === parentId);
 
-        setCategories(apiCategories?.map(mapApiCategoryToCategory) || []);
-        if (!apiCategories?.length) {
-          setForm((currentForm) => ({
-            ...currentForm,
-            categoryMode: "new",
-          }));
-        }
-      } catch (loadError) {
-        console.error("Failed to load categories", loadError);
-        if (isMounted) {
-          setCategories(null);
-          setForm((currentForm) => ({
-            ...currentForm,
-            categoryMode: "new",
-          }));
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingCategories(false);
-        }
-      }
-    };
+  const createMutation = useMutation({
+    mutationFn: (payload: Record<string, unknown>) => {
+      const token = localStorage.getItem("best_khabar_access_token") ?? "";
+      return createArticle(payload, token);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.allArticles() });
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.publishedArticles(),
+      });
+      router.push("/admin");
+    },
+    onError: () => setFormError("Failed to create article"),
+  });
 
-    void loadCategories();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaving(true);
-    setError("");
+    setFormError("");
 
     const selectedCategoryId =
       form.categoryMode === "existing" ? form.categoryId.trim() : "";
@@ -78,40 +61,25 @@ export default function NewArticlePage() {
       form.categoryMode === "new" ? form.categoryName.trim() : "";
 
     if (!selectedCategoryId && !newCategoryName) {
-      setError("Select an existing category or add a new one.");
-      setIsSaving(false);
+      setFormError("Select an existing category or add a new one.");
       return;
     }
 
-    console.log("Form data:", form);
+    const payload: Record<string, unknown> = {
+      title: form.title,
+      images: JSON.stringify(form.images),
+      summary: form.summary,
+      content: form.content,
+      status: form.status,
+    };
 
-    try {
-      const payload: Record<string, unknown> = {
-        title: form.title,
-        images: JSON.stringify(form.images), // Convert array to string for API
-        summary: form.summary,
-        content: form.content,
-        status: form.status,
-      };
-
-      if (selectedCategoryId) {
-        payload.categoryId = selectedCategoryId;
-      } else {
-        payload.category = newCategoryName;
-      }
-
-      // Create article using API - we need auth token from context
-      const token = localStorage.getItem("best_khabar_access_token");
-      console.log("Auth token:", token);
-
-      await createArticle(payload, token || "");
-      router.push("/admin");
-    } catch (err) {
-      setError("Failed to create article");
-      console.error(err);
-    } finally {
-      setIsSaving(false);
+    if (selectedCategoryId) {
+      payload.categoryId = selectedCategoryId;
+    } else {
+      payload.category = newCategoryName;
     }
+
+    createMutation.mutate(payload);
   };
 
   const inputClass =
@@ -132,14 +100,13 @@ export default function NewArticlePage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-8">
-        {error && (
+        {(formError || createMutation.isError) && (
           <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
-            {error}
+            {formError || "Failed to create article"}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Nepali */}
           <div className="rounded-2xl border border-line bg-white p-6">
             <h2 className="mb-4 text-lg font-semibold text-ink">Nepali</h2>
             <div className="space-y-4">
@@ -176,6 +143,7 @@ export default function NewArticlePage() {
                   onChange={(value) => setForm({ ...form, content: value })}
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-ink">
                   Summary
@@ -192,7 +160,6 @@ export default function NewArticlePage() {
             </div>
           </div>
 
-          {/* Meta */}
           <div className="rounded-2xl border border-line bg-white p-6">
             <h2 className="mb-4 text-lg font-semibold text-ink">Meta</h2>
             <div className="space-y-4">
@@ -205,10 +172,7 @@ export default function NewArticlePage() {
                     <button
                       type="button"
                       onClick={() =>
-                        setForm((currentForm) => ({
-                          ...currentForm,
-                          categoryMode: "existing",
-                        }))
+                        setForm((f) => ({ ...f, categoryMode: "existing" }))
                       }
                       className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                         form.categoryMode === "existing"
@@ -221,10 +185,7 @@ export default function NewArticlePage() {
                     <button
                       type="button"
                       onClick={() =>
-                        setForm((currentForm) => ({
-                          ...currentForm,
-                          categoryMode: "new",
-                        }))
+                        setForm((f) => ({ ...f, categoryMode: "new" }))
                       }
                       className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                         form.categoryMode === "new"
@@ -250,11 +211,23 @@ export default function NewArticlePage() {
                           ? "Loading categories..."
                           : "Select a category"}
                       </option>
-                      {categories?.map((category: ApiCategory) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      ))}
+                      {topLevelCats.map((parent) => {
+                        const subs = childrenOf(parent.id);
+                        return subs.length > 0 ? (
+                          <optgroup key={parent.id} label={parent.name}>
+                            <option value={parent.id}>{parent.name} (all)</option>
+                            {subs.map((sub) => (
+                              <option key={sub.id} value={sub.id}>
+                                {sub.name}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ) : (
+                          <option key={parent.id} value={parent.id}>
+                            {parent.name}
+                          </option>
+                        );
+                      })}
                     </select>
                   ) : (
                     <div className="space-y-2">
@@ -275,6 +248,7 @@ export default function NewArticlePage() {
                   )}
                 </div>
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-ink">
                   Status
@@ -296,14 +270,13 @@ export default function NewArticlePage() {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-4">
             <button
               type="submit"
-              disabled={isSaving}
+              disabled={createMutation.isPending}
               className="rounded-lg bg-primary px-6 py-2.5 font-semibold text-white hover:bg-primary-dark disabled:opacity-50"
             >
-              {isSaving ? "Creating..." : "Create Article"}
+              {createMutation.isPending ? "Creating..." : "Create Article"}
             </button>
             <Link
               href="/admin"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getTrendingArticles } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import ArticleCard from "@/src/components/cards/ArticleCard";
@@ -12,6 +13,8 @@ import {
   mapApiArticleToNewsArticle,
   mapApiCategoryToCategory,
 } from "@/src/lib/api";
+import { getQueryClient } from "@/src/lib/query-client";
+import { queryKeys, queryFns } from "@/src/lib/queries";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -45,13 +48,30 @@ export async function generateMetadata({
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
 
+  const queryClient = getQueryClient();
+
   let category;
   let allArticles;
   try {
-    const [apiCategory, apiArticles] = await Promise.all([
-      getCategoryBySlug(slug),
-      getPublishedArticles(),
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.category(slug),
+        queryFn: queryFns.category(slug),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.publishedArticles(),
+        queryFn: queryFns.publishedArticles,
+      }),
     ]);
+
+    const apiCategory = queryClient.getQueryData<
+      Awaited<ReturnType<typeof getCategoryBySlug>>
+    >(queryKeys.category(slug));
+    const apiArticles = queryClient.getQueryData<
+      Awaited<ReturnType<typeof getPublishedArticles>>
+    >(queryKeys.publishedArticles()) ?? [];
+
+    if (!apiCategory) notFound();
     category = mapApiCategoryToCategory(apiCategory);
     allArticles = apiArticles.map(mapApiArticleToNewsArticle);
   } catch {
@@ -67,6 +87,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const sidebarArticles = getTrendingArticles(allArticles, 6);
 
   return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <div className="rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-6 shadow-sm">
@@ -117,5 +138,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         )}
       </div>
     </NewsShell>
+    </HydrationBoundary>
   );
 }

@@ -49,7 +49,7 @@ const Footer = () => {
               >
                 <div className="relative h-[46px] w-[180px] sm:h-[58px] sm:w-[240px] lg:h-[62px] lg:w-[270px]">
                   <Image
-                    src="/best-khabar-green1.png"
+                    src="/best-khabar-footer.png"
                     alt="Best Khabar Logo"
                     fill
                     sizes="(max-width: 640px) 180px, (max-width: 1024px) 240px, 270px"

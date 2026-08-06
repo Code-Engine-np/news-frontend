@@ -12,6 +12,37 @@ export const MAIN_NAV_ITEMS = [
   { label: "प्रचलित", href: "/trending" },
 ];
 
+export const SOCIAL_LINKS = [
+  {
+    id: "facebook",
+    label: "Facebook",
+    href: "https://facebook.com/bestkhabar",
+    color: "#1877F2",
+    hoverColor: "#0d6efd",
+  },
+  {
+    id: "youtube",
+    label: "YouTube",
+    href: "https://youtube.com/@bestkhabar",
+    color: "#FF0000",
+    hoverColor: "#cc0000",
+  },
+  {
+    id: "tiktok",
+    label: "TikTok",
+    href: "https://tiktok.com/@bestkhabar",
+    color: "#010101",
+    hoverColor: "#333",
+  },
+  {
+    id: "twitter",
+    label: "X (Twitter)",
+    href: "https://x.com/bestkhabar",
+    color: "#000000",
+    hoverColor: "#222",
+  },
+] as const;
+
 export const FOOTER_LINK_GROUPS = [
   {
     title: "Explore",

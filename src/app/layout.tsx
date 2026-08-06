@@ -7,6 +7,7 @@ import {
 import "./globals.css";
 import { AuthProvider } from "@/src/app/context/AuthContext";
 import { ThemeProvider } from "@/src/app/context/ThemeContext";
+import { Providers } from "@/src/app/providers";
 import { cn } from "@/src/lib/utils";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -102,9 +103,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
-        <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

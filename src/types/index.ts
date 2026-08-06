@@ -34,6 +34,33 @@ export interface ApiAuthor {
   role?: string;
 }
 
+export interface ApiFeaturedImage {
+  id: string;
+  imageUrl: string;
+  publicId?: string | null;
+  caption?: string | null;
+  linkUrl?: string | null;
+  order: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApiAdvertisement {
+  id: string;
+  title: string;
+  linkUrl?: string | null;
+  imageUrl: string;
+  publicId?: string | null;
+  position: "banner" | "sidebar" | "inline";
+  isActive: boolean;
+  order: number;
+  startDate?: string | null;
+  endDate?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /**
  * Backend Category (matches Category entity)
  * GET /api/categories
@@ -45,6 +72,7 @@ export interface ApiCategory {
   slug: string;
   name: string;
   description?: string | null;
+  parentId?: string | null;
 }
 
 /**
@@ -116,6 +144,7 @@ export interface Category {
   slug: string;
   color: string;
   description?: string;
+  parentId?: string | null;
 }
 
 export interface Tag {

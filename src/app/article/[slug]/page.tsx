@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Image as ImageIcon, Share2 } from "lucide-react";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getRelatedArticles, getTrendingArticles } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import Sidebar from "@/src/components/ui/Sidebar";
@@ -14,6 +15,8 @@ import {
 } from "@/src/lib/api";
 import { sanitizeArticleHtml } from "@/src/lib/sanitize";
 import { getYouTubeEmbedUrl } from "@/src/lib/youtube";
+import { getQueryClient } from "@/src/lib/query-client";
+import { queryKeys, queryFns } from "@/src/lib/queries";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -48,13 +51,30 @@ export async function generateMetadata({
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
+  const queryClient = getQueryClient();
+
   let article;
   let allArticles;
   try {
-    const [apiArticle, apiArticles] = await Promise.all([
-      getArticleBySlug(slug),
-      getPublishedArticles(),
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.article(slug),
+        queryFn: queryFns.article(slug),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.publishedArticles(),
+        queryFn: queryFns.publishedArticles,
+      }),
     ]);
+
+    const apiArticle = queryClient.getQueryData<
+      Awaited<ReturnType<typeof getArticleBySlug>>
+    >(queryKeys.article(slug));
+    const apiArticles = queryClient.getQueryData<
+      Awaited<ReturnType<typeof getPublishedArticles>>
+    >(queryKeys.publishedArticles()) ?? [];
+
+    if (!apiArticle) notFound();
     article = mapApiArticleToNewsArticle(apiArticle);
     allArticles = apiArticles.map(mapApiArticleToNewsArticle);
   } catch {
@@ -65,6 +85,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const sidebarArticles = getTrendingArticles(allArticles, 6);
 
   return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <nav className="text-sm text-[#5f6b66]">
@@ -176,5 +197,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         )}
       </div>
     </NewsShell>
+    </HydrationBoundary>
   );
 }

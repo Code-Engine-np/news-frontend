@@ -7,6 +7,8 @@
  */
 
 import {
+  ApiAdvertisement,
+  ApiFeaturedImage,
   ApiArticle,
   ApiCategory,
   NewsArticle,
@@ -293,6 +295,105 @@ export async function unsubscribeNewsletter(email: string): Promise<void> {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Featured Images                                                    */
+/* ------------------------------------------------------------------ */
+
+export async function getFeaturedImages(): Promise<ApiFeaturedImage[]> {
+  return fetchJson<ApiFeaturedImage[]>("/featured-images");
+}
+
+export async function getAllFeaturedImages(): Promise<ApiFeaturedImage[]> {
+  return fetchAuthed<ApiFeaturedImage[]>("/featured-images/admin/all");
+}
+
+export async function createFeaturedImage(
+  payload: Record<string, unknown>,
+): Promise<ApiFeaturedImage> {
+  return fetchAuthed<ApiFeaturedImage>("/featured-images", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateFeaturedImage(
+  id: string,
+  payload: Record<string, unknown>,
+): Promise<ApiFeaturedImage> {
+  return fetchAuthed<ApiFeaturedImage>(`/featured-images/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteFeaturedImage(id: string): Promise<void> {
+  return fetchAuthed<void>(`/featured-images/${id}`, { method: "DELETE" });
+}
+
+export async function getFeaturedImageUploadSignature() {
+  return fetchAuthed<{
+    timestamp: number;
+    signature: string;
+    apiKey: string;
+    cloudName: string;
+    folder: string;
+  }>("/featured-images/upload-signature");
+}
+
+/* ------------------------------------------------------------------ */
+/*  Advertisements                                                     */
+/* ------------------------------------------------------------------ */
+
+/** GET /api/advertisements?position=banner (public, active only) */
+export async function getAdvertisements(
+  position?: "banner" | "sidebar" | "inline",
+): Promise<ApiAdvertisement[]> {
+  const qs = position ? `?position=${position}` : "";
+  return fetchJson<ApiAdvertisement[]>(`/advertisements${qs}`);
+}
+
+/** GET /api/advertisements/admin/all (admin) */
+export async function getAllAdvertisements(): Promise<ApiAdvertisement[]> {
+  return fetchAuthed<ApiAdvertisement[]>("/advertisements/admin/all");
+}
+
+/** POST /api/advertisements (admin) */
+export async function createAdvertisement(
+  payload: Record<string, unknown>,
+): Promise<ApiAdvertisement> {
+  return fetchAuthed<ApiAdvertisement>("/advertisements", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+/** PATCH /api/advertisements/:id (admin) */
+export async function updateAdvertisement(
+  id: string,
+  payload: Record<string, unknown>,
+): Promise<ApiAdvertisement> {
+  return fetchAuthed<ApiAdvertisement>(`/advertisements/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+/** DELETE /api/advertisements/:id (admin) */
+export async function deleteAdvertisement(id: string): Promise<void> {
+  return fetchAuthed<void>(`/advertisements/${id}`, { method: "DELETE" });
+}
+
+/** GET /api/advertisements/upload-signature (admin) */
+export async function getAdUploadSignature() {
+  return fetchAuthed<{
+    timestamp: number;
+    signature: string;
+    apiKey: string;
+    cloudName: string;
+    folder: string;
+  }>("/advertisements/upload-signature");
+}
+
+/* ------------------------------------------------------------------ */
 /*  Mappers: API -> Frontend types                                     */
 /* ------------------------------------------------------------------ */
 
@@ -303,6 +404,7 @@ export function mapApiCategoryToCategory(apiCat: ApiCategory): Category {
     slug: apiCat.slug,
     color: "bg-gray-600",
     description: apiCat.description ?? undefined,
+    parentId: apiCat.parentId ?? null,
   };
 }
 

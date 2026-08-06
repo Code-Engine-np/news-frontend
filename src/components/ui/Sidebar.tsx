@@ -17,8 +17,10 @@ const Sidebar = ({ articles }: SidebarProps) => {
   return (
     <aside className="space-y-6" aria-label="Sidebar">
       {/* Latest News (Compact) */}
-      <div className="bg-white dark:bg-[#1e2a26] rounded-2xl shadow-sm border border-gray-200 dark:border-[#2a3832] p-6">
-        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Latest News</h3>
+      {/* <div className="bg-white dark:bg-[#1e2a26] rounded-2xl shadow-sm border border-gray-200 dark:border-[#2a3832] p-6">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+          Latest News
+        </h3>
         <div className="space-y-4">
           {articles.slice(0, 4).map((article) => (
             <Link
@@ -28,7 +30,7 @@ const Sidebar = ({ articles }: SidebarProps) => {
             >
               <div className="text-sm">
                 <span
-                  className={`inline-block ${article.category.color} text-white text-xs px-2 py-0.5 rounded-full mb-1`}
+                  className={`inline-block bg-primary-bright text-white text-xs px-2 py-0.5 rounded-full mb-1`}
                 >
                   {article.category.name}
                 </span>
@@ -39,7 +41,7 @@ const Sidebar = ({ articles }: SidebarProps) => {
             </Link>
           ))}
         </div>
-      </div>
+      </div> */}
       {/* Trending List */}
       <TrendingList articles={articles} />
 
