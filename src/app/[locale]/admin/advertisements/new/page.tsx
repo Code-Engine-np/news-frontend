@@ -11,7 +11,7 @@ import { useAuth } from "@/src/app/context/AuthContext";
 import { ArrowLeft, Upload, X } from "lucide-react";
 
 const inputClass =
-  "mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none transition-colors focus:border-primary";
+  "mt-1 w-full rounded-lg border border-line bg-white px-4 py-2.5 text-sm text-ink outline-none transition-colors focus:border-primary dark:bg-[#22302a] dark:text-gray-100";
 
 const POSITIONS = [
   { value: "banner", label: "Banner (full-width above content)" },
@@ -102,18 +102,18 @@ export default function NewAdvertisementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9]">
-      <header className="border-b border-line bg-white">
+    <div className="min-h-screen bg-[#f9f9f9] dark:bg-[#141f1b]">
+      <header className="border-b border-line bg-white dark:bg-[#1e2a26]">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
             <Link
               href="/admin/advertisements"
-              className="flex items-center gap-1 text-sm text-[#60706a] hover:text-primary"
+              className="flex items-center gap-1 text-sm text-muted hover:text-primary"
             >
               <ArrowLeft className="h-4 w-4" />
               Advertisements
             </Link>
-            <span className="text-[#d0d8d0]">/</span>
+            <span className="text-line">/</span>
             <h1 className="text-xl font-bold text-ink">New Advertisement</h1>
           </div>
         </div>
@@ -121,13 +121,13 @@ export default function NewAdvertisementPage() {
 
       <main className="mx-auto max-w-3xl px-4 py-8">
         {formError && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
             {formError}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-2xl border border-line bg-white p-6">
+          <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
             <h2 className="mb-4 text-base font-semibold text-ink">Ad Details</h2>
             <div className="space-y-4">
               <div>
@@ -199,7 +199,7 @@ export default function NewAdvertisementPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-line bg-white p-6">
+          <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
             <h2 className="mb-4 text-base font-semibold text-ink">Settings</h2>
             <div className="space-y-4">
               <div>
@@ -281,7 +281,7 @@ export default function NewAdvertisementPage() {
             </button>
             <Link
               href="/admin/advertisements"
-              className="rounded-lg border border-line px-6 py-2.5 text-sm font-medium text-muted hover:bg-gray-50"
+              className="rounded-lg border border-line px-6 py-2.5 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]"
             >
               Cancel
             </Link>

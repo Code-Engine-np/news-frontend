@@ -119,24 +119,24 @@ export default function EditArticlePage() {
   };
 
   const inputClass =
-    "mt-1 w-full rounded-lg border border-line px-4 py-2.5 outline-none transition-colors focus:border-primary";
+    "mt-1 w-full rounded-lg border border-line bg-white px-4 py-2.5 text-ink outline-none transition-colors focus:border-primary dark:bg-[#22302a] dark:text-gray-100";
 
   if (isLoadingArticle) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f9f9f9]">
-        <p className="text-[#60706a]">Loading article...</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#f9f9f9] dark:bg-[#141f1b]">
+        <p className="text-muted">Loading article...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9]">
-      <header className="border-b border-line bg-white">
+    <div className="min-h-screen bg-[#f9f9f9] dark:bg-[#141f1b]">
+      <header className="border-b border-line bg-white dark:bg-[#1e2a26]">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <h1 className="text-2xl font-bold text-ink">Edit Article</h1>
           <Link
             href="/admin"
-            className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+            className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 dark:bg-[#22302a] dark:text-gray-300 dark:hover:bg-[#2a3832]"
           >
             Cancel
           </Link>
@@ -145,13 +145,13 @@ export default function EditArticlePage() {
 
       <main className="mx-auto max-w-5xl px-4 py-8">
         {(formError || updateMutation.isError) && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
             {formError || "Failed to update article"}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-2xl border border-line bg-white p-6">
+          <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
             <h2 className="mb-4 text-lg font-semibold text-ink">Nepali</h2>
             <div className="space-y-4">
               <div>
@@ -204,7 +204,7 @@ export default function EditArticlePage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-line bg-white p-6">
+          <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
             <h2 className="mb-4 text-lg font-semibold text-ink">Meta</h2>
             <div className="space-y-4">
               <div>
@@ -221,7 +221,7 @@ export default function EditArticlePage() {
                       className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                         form.categoryMode === "existing"
                           ? "border-primary bg-primary/10 text-primary"
-                          : "border-line bg-white text-[#60706a] hover:bg-gray-50"
+                          : "border-line bg-white text-muted hover:bg-gray-50 dark:bg-[#22302a] dark:hover:bg-[#2a3832]"
                       }`}
                     >
                       Existing category
@@ -234,7 +234,7 @@ export default function EditArticlePage() {
                       className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                         form.categoryMode === "new"
                           ? "border-primary bg-primary/10 text-primary"
-                          : "border-line bg-white text-[#60706a] hover:bg-gray-50"
+                          : "border-line bg-white text-muted hover:bg-gray-50 dark:bg-[#22302a] dark:hover:bg-[#2a3832]"
                       }`}
                     >
                       Add new category
@@ -284,7 +284,7 @@ export default function EditArticlePage() {
                         className={inputClass}
                         placeholder="New category name"
                       />
-                      <p className="text-xs text-[#60706a]">
+                      <p className="text-xs text-muted">
                         A category will be created automatically when the
                         article is saved.
                       </p>
@@ -328,7 +328,7 @@ export default function EditArticlePage() {
             </button>
             <Link
               href="/admin"
-              className="rounded-lg border border-line px-6 py-2.5 font-medium text-[#60706a] hover:bg-gray-50"
+              className="rounded-lg border border-line px-6 py-2.5 font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]"
             >
               Cancel
             </Link>

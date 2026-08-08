@@ -40,14 +40,14 @@ export default function FeaturedImagesAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9]">
-      <header className="border-b border-line bg-white">
+    <div className="min-h-screen bg-[#f9f9f9] dark:bg-[#141f1b]">
+      <header className="border-b border-line bg-white dark:bg-[#1e2a26]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
             <Link href="/admin" className="flex items-center gap-1 text-sm text-muted hover:text-primary">
               <ArrowLeft className="h-4 w-4" /> Dashboard
             </Link>
-            <span className="text-[#d0d8d0]">/</span>
+            <span className="text-line">/</span>
             <h1 className="text-xl font-bold text-ink">Featured Images</h1>
           </div>
           <Link
@@ -63,7 +63,7 @@ export default function FeaturedImagesAdminPage() {
         {isLoading ? (
           <p className="text-muted">Loading…</p>
         ) : slides.length === 0 ? (
-          <div className="rounded-2xl border border-line bg-white p-12 text-center">
+          <div className="rounded-2xl border border-line bg-white p-12 text-center dark:bg-[#1e2a26]">
             <p className="font-semibold text-ink">No featured images yet</p>
             <p className="mt-1 text-sm text-muted">Add slides to display the homepage carousel.</p>
             <Link
@@ -78,9 +78,9 @@ export default function FeaturedImagesAdminPage() {
             {slides.map((slide) => (
               <div
                 key={slide.id}
-                className="group overflow-hidden rounded-2xl border border-line bg-white shadow-sm"
+                className="group overflow-hidden rounded-2xl border border-line bg-white shadow-sm dark:bg-[#1e2a26]"
               >
-                <div className="relative h-40 bg-gray-100">
+                <div className="relative h-40 bg-gray-100 dark:bg-[#2a3832]">
                   <Image
                     src={slide.imageUrl}
                     alt={slide.caption ?? "Featured slide"}
@@ -109,7 +109,7 @@ export default function FeaturedImagesAdminPage() {
                   <div className="mt-3 flex items-center gap-2">
                     <Link
                       href={`/admin/featured-images/${slide.id}/edit`}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-muted hover:border-primary hover:text-primary"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-muted hover:border-primary hover:text-primary dark:hover:bg-[#22302a]"
                     >
                       <Pencil className="h-3.5 w-3.5" /> Edit
                     </Link>
@@ -117,7 +117,7 @@ export default function FeaturedImagesAdminPage() {
                       type="button"
                       onClick={() => handleDelete(slide.id)}
                       disabled={deleteMutation.isPending && deleteMutation.variables === slide.id}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-muted hover:border-red-400 hover:text-red-500 disabled:opacity-40"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-muted hover:border-red-400 hover:text-red-500 disabled:opacity-40 dark:hover:bg-[#22302a]"
                     >
                       <Trash2 className="h-3.5 w-3.5" /> Delete
                     </button>

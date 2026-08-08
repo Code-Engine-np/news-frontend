@@ -11,7 +11,7 @@ import { useAuth } from "@/src/app/context/AuthContext";
 import { ArrowLeft, Upload, X } from "lucide-react";
 
 const inputClass =
-  "mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-sm outline-none transition-colors focus:border-primary";
+  "mt-1 w-full rounded-lg border border-line bg-white px-4 py-2.5 text-sm text-ink outline-none transition-colors focus:border-primary dark:bg-[#22302a] dark:text-gray-100";
 
 export default function EditFeaturedImagePage() {
   const { isAuthenticated } = useAuth();
@@ -97,33 +97,33 @@ export default function EditFeaturedImagePage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f9f9f9]">
+      <div className="flex min-h-screen items-center justify-center bg-[#f9f9f9] dark:bg-[#141f1b]">
         <p className="text-muted">Loading…</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9]">
-      <header className="border-b border-line bg-white">
-        <div className="mx-auto flex max-w-3xl items-center px-4 py-4 gap-3">
+    <div className="min-h-screen bg-[#f9f9f9] dark:bg-[#141f1b]">
+      <header className="border-b border-line bg-white dark:bg-[#1e2a26]">
+        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4">
           <Link href="/admin/featured-images" className="flex items-center gap-1 text-sm text-muted hover:text-primary">
             <ArrowLeft className="h-4 w-4" /> Featured Images
           </Link>
-          <span className="text-[#d0d8d0]">/</span>
+          <span className="text-line">/</span>
           <h1 className="text-xl font-bold text-ink">Edit Slide</h1>
         </div>
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-8">
         {(formError || updateMutation.isError) && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
             {formError || "Failed to update slide."}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-2xl border border-line bg-white p-6 space-y-4">
+          <div className="rounded-2xl border border-line bg-white p-6 space-y-4 dark:bg-[#1e2a26]">
             <h2 className="text-base font-semibold text-ink">Image</h2>
 
             {preview ? (
@@ -179,7 +179,7 @@ export default function EditFeaturedImagePage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-line bg-white p-6 space-y-4">
+          <div className="rounded-2xl border border-line bg-white p-6 space-y-4 dark:bg-[#1e2a26]">
             <h2 className="text-base font-semibold text-ink">Settings</h2>
 
             <div>
@@ -215,7 +215,7 @@ export default function EditFeaturedImagePage() {
             </button>
             <Link
               href="/admin/featured-images"
-              className="rounded-lg border border-line px-6 py-2.5 text-sm font-medium text-muted hover:bg-gray-50"
+              className="rounded-lg border border-line px-6 py-2.5 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]"
             >
               Cancel
             </Link>
