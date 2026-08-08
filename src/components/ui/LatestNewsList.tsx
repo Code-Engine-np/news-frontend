@@ -1,0 +1,52 @@
+import Image from "next/image";
+import { ImageIcon } from "lucide-react";
+import { Link } from "@/src/i18n/navigation";
+import type { NewsArticle } from "@/src/types";
+
+interface LatestNewsListProps {
+  articles: NewsArticle[];
+  title: string;
+}
+
+export default function LatestNewsList({ articles, title }: LatestNewsListProps) {
+  if (articles.length === 0) return null;
+
+  return (
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white dark:border-[#2a3832] dark:bg-[#1e2a26]">
+      <div className="shrink-0 bg-primary px-4 py-2">
+        <h3 className="text-sm font-bold uppercase tracking-wide text-white">{title}</h3>
+      </div>
+      <div className="flex-1 divide-y divide-line overflow-y-auto dark:divide-[#2a3832]">
+        {articles.map((article) => (
+          <Link
+            key={article.id}
+            href={`/article/${article.slug}`}
+            className="group flex gap-3 p-3 hover:bg-gray-50 dark:hover:bg-[#22302a]"
+          >
+            <div className="relative h-16 w-24 shrink-0 overflow-hidden">
+              {article.featuredImage ? (
+                <Image
+                  src={article.featuredImage}
+                  alt={article.title}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="96px"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-gray-100 dark:bg-[#2a3832]">
+                  <ImageIcon className="h-5 w-5 text-gray-400" />
+                </div>
+              )}
+            </div>
+            <div className="min-w-0">
+              <h4 className="line-clamp-3 text-xs font-semibold leading-snug text-ink transition-colors group-hover:text-primary dark:text-gray-100 sm:text-sm">
+                {article.title}
+              </h4>
+              <p className="mt-1 text-[10px] text-muted sm:text-xs">{article.category.name}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
