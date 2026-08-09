@@ -45,7 +45,7 @@ const LanguageSwitcher = () => {
         type="button"
         onClick={() => setOpen((v) => !v)}
         disabled={isPending}
-        className="hidden items-center gap-2 bg-brand-600 px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60 sm:inline-flex"
+        className="hidden items-center gap-2 rounded-[10px] bg-brand-600 px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60 sm:inline-flex"
         aria-label={t("languageSelector")}
         aria-haspopup="listbox"
         aria-expanded={open}
