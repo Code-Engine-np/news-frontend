@@ -4,9 +4,9 @@ import { SOCIAL_LINKS } from "@/src/lib/site";
 import {
   FacebookIcon,
   LinkedInIcon,
+  XIcon,
   YoutubeIcon,
 } from "@/src/constants/socialIcons";
-import { XIcon } from "lucide-react";
 
 const TopBar = async () => {
   const [t, locale] = await Promise.all([
