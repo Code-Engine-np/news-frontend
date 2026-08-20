@@ -9,9 +9,10 @@ const INTERVAL_MS = 4000;
 
 interface FeaturedCarouselProps {
   slides: ApiFeaturedImage[];
+  className?: string;
 }
 
-export default function FeaturedCarousel({ slides }: FeaturedCarouselProps) {
+export default function FeaturedCarousel({ slides, className }: FeaturedCarouselProps) {
   const [active, setActive] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pausedRef = useRef(false);
@@ -42,7 +43,7 @@ export default function FeaturedCarousel({ slides }: FeaturedCarouselProps) {
 
   return (
     <div
-      className="relative mt-6 overflow-hidden rounded-2xl"
+      className={className ?? "relative mt-6 overflow-hidden rounded-2xl"}
       onMouseEnter={() => { pausedRef.current = true; stopTimer(); }}
       onMouseLeave={() => { pausedRef.current = false; startTimer(); }}
       onTouchStart={() => { pausedRef.current = true; stopTimer(); }}

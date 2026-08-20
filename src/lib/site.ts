@@ -1,68 +1,77 @@
 import type { Advertisement, NewsArticle } from "@/src/types";
 
+/**
+ * Main navigation. `key` maps to a key in the `Nav` message namespace
+ * (see messages/*.json) so labels are localized at render time; `href` is the
+ * locale-agnostic path (the locale prefix is added by next-intl's <Link>).
+ */
 export const MAIN_NAV_ITEMS = [
-  { label: "गृहपृष्ठ", href: "/" },
-  { label: "समसामयिक", href: "/category/current-affairs" },
-  { label: "समाज", href: "/category/society" },
-  { label: "अर्थ/विकास", href: "/category/economy" },
-  { label: "विशेष", href: "/category/features" },
-  { label: "दृष्टिकोण", href: "/category/opinion" },
-  { label: "कला", href: "/category/arts" },
-  { label: "खेलकुद", href: "/category/sports" },
-  { label: "प्रचलित", href: "/trending" },
-];
+  { key: "home", href: "/" },
+  { key: "currentAffairs", href: "/category/current-affairs" },
+  { key: "society", href: "/category/society" },
+  { key: "economy", href: "/category/economy" },
+  { key: "features", href: "/category/features" },
+  { key: "opinion", href: "/category/opinion" },
+  { key: "arts", href: "/category/arts" },
+  { key: "sports", href: "/category/sports" },
+  { key: "trending", href: "/trending" },
+] as const;
 
 export const SOCIAL_LINKS = [
   {
     id: "facebook",
     label: "Facebook",
-    href: "https://facebook.com/bestkhabar",
+    href: "https://www.facebook.com/Bestkhabarweb/",
     color: "#1877F2",
     hoverColor: "#0d6efd",
   },
   {
     id: "youtube",
     label: "YouTube",
-    href: "https://youtube.com/@bestkhabar",
+    href: "https://www.youtube.com/@bestkhabarnews",
     color: "#FF0000",
     hoverColor: "#cc0000",
   },
   {
-    id: "tiktok",
-    label: "TikTok",
-    href: "https://tiktok.com/@bestkhabar",
+    id: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/bestkhabar/",
     color: "#010101",
     hoverColor: "#333",
   },
   {
     id: "twitter",
     label: "X (Twitter)",
-    href: "https://x.com/bestkhabar",
+    href: "https://x.com/best_khabar",
     color: "#000000",
     hoverColor: "#222",
   },
 ] as const;
 
+/**
+ * Footer link groups. `titleKey` / `labelKey` map to keys in the `Footer`
+ * message namespace so the footer chrome is localized.
+ */
 export const FOOTER_LINK_GROUPS = [
   {
-    title: "Explore",
+    titleKey: "exploreTitle",
     links: [
-      { label: "Trending", href: "/trending" },
-      { label: "Politics", href: "/category/politics" },
-      { label: "Business", href: "/category/business" },
-      { label: "Sports", href: "/category/sports" },
+      { labelKey: "linkTrending", href: "/trending" },
+      { labelKey: "linkPolitics", href: "/category/politics" },
+      { labelKey: "linkBusiness", href: "/category/business" },
+      { labelKey: "linkSports", href: "/category/sports" },
     ],
   },
   {
-    title: "Company",
+    titleKey: "companyTitle",
     links: [
-      { label: "About Us", href: "/about" },
-      { label: "Advertise", href: "/advertise" },
-      { label: "Contact Us", href: "/contact" },
-      { label: "Privacy Policy", href: "/privacy" },
+      { labelKey: "linkAbout", href: "/about" },
+      { labelKey: "linkAdvertise", href: "/advertise" },
+      { labelKey: "linkContact", href: "/contact" },
+      { labelKey: "linkPrivacy", href: "/privacy" },
     ],
   },
-];
+] as const;
 
 /**
  * Static ad-slot placeholders. There is no advertisement entity in the

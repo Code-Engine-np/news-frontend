@@ -1,0 +1,211 @@
+{
+  "Nav": {
+    "home": "Home",
+    "currentAffairs": "Current Affairs",
+    "society": "Society",
+    "economy": "Economy",
+    "features": "Features",
+    "opinion": "Opinion",
+    "arts": "Arts",
+    "sports": "Sports",
+    "trending": "Trending",
+    "viewAll": "View all",
+    "homeAria": "Home"
+  },
+  "TopBar": {
+    "aboutUs": "About Us",
+    "advertise": "Advertise",
+    "contact": "Contact",
+    "followUs": "Follow Us"
+  },
+  "Header": {
+    "languageSelector": "Language selector",
+    "language": "Language",
+    "nepali": "Nepali",
+    "english": "English",
+    "search": "Search",
+    "toggleTheme": "Toggle theme",
+    "toggleMenu": "Toggle menu"
+  },
+  "MobileMenu": {
+    "menu": "Menu",
+    "categories": "Categories",
+    "quickLinks": "Quick Links",
+    "closeMenu": "Close menu",
+    "viewAll": "View all",
+    "trending": "Trending",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "privacyPolicy": "Privacy Policy",
+    "theme": "Theme",
+    "lightMode": "Light",
+    "darkMode": "Dark",
+    "language": "Language"
+  },
+  "Footer": {
+    "companyName": "Best Khabar Pvt. Ltd.",
+    "tagline": "A fast, Nepali-first news experience built around national and local coverage.",
+    "location": "Kathmandu, Nepal",
+    "followUs": "Follow Us",
+    "copyright": "© Copyright {year} Best Khabar. All Rights Reserved.",
+    "exploreTitle": "Explore",
+    "companyTitle": "Company",
+    "linkTrending": "Trending",
+    "linkPolitics": "Politics",
+    "linkBusiness": "Business",
+    "linkSports": "Sports",
+    "linkAbout": "About Us",
+    "linkAdvertise": "Advertise",
+    "linkContact": "Contact Us",
+    "linkPrivacy": "Privacy Policy"
+  },
+  "Home": {
+    "topStory": "Top Story",
+    "latestNews": "Latest News",
+    "politics": "Politics",
+    "viewAll": "View all",
+    "breakingNews": "Breaking News",
+    "noArticles": "No published articles yet.",
+    "loadError": "Failed to load data.",
+    "featuredCarousel": "Featured Carousel",
+    "noSlides": "No slides yet — <link>add featured images</link> from the admin panel.",
+    "adLabel": "Advertisement",
+    "advertiseHere": "ADVERTISE HERE",
+    "advertiseSubtitle": "Contact us to showcase your brand in the leading news portal."
+  },
+  "Newsletter": {
+    "title": "Newsletter",
+    "subtitle": "Stay updated with the latest news delivered straight to your inbox.",
+    "namePlaceholder": "Your name (optional)",
+    "emailPlaceholder": "Enter your email",
+    "fullNameLabel": "Full name",
+    "emailLabel": "Email address",
+    "subscribe": "Subscribe",
+    "subscribing": "Subscribing...",
+    "success": "Thank you for subscribing!",
+    "invalidEmail": "Please enter a valid email address.",
+    "failed": "Failed to subscribe. Please try again later.",
+    "privacyNote": "We respect your privacy. Unsubscribe at any time."
+  },
+  "Error": {
+    "label": "Something went wrong",
+    "title": "We hit an unexpected error",
+    "description": "Please try again. If the problem persists, come back a little later.",
+    "tryAgain": "Try again"
+  },
+  "NotFound": {
+    "label": "404",
+    "title": "Page not found",
+    "description": "The page you are looking for may have been moved, removed, or never existed.",
+    "backHome": "Back to home"
+  },
+  "Loading": {
+    "loading": "Loading"
+  },
+  "Trending": {
+    "livePopularity": "Live popularity",
+    "title": "Trending stories",
+    "description": "Stories the audience is reading most across politics, business, sports, and culture.",
+    "keepReading": "Keep reading",
+    "jumpHome": "Jump back to the homepage",
+    "home": "Home"
+  },
+  "About": {
+    "eyebrow": "About Best Khabar",
+    "title": "A newsroom designed for quick, readable news",
+    "intro": "Best Khabar brings together national stories, community updates, and breaking coverage in a clean, mobile-friendly format.",
+    "point1": "Verified reporting with quick access to breaking updates.",
+    "point2": "A compact layout optimized for desktop and mobile readers.",
+    "point3": "Sections that connect politics, economy, society, and culture.",
+    "reachTitle": "Need to reach the newsroom?",
+    "reachText": "Use the contact page for editorial, advertising, and partnership questions.",
+    "contactUs": "Contact us"
+  },
+  "Contact": {
+    "eyebrow": "Contact us",
+    "title": "Reach the Best Khabar team",
+    "intro": "For story tips, editorial corrections, and partnership requests, use the channels below.",
+    "detailsTitle": "Contact details",
+    "email": "Email",
+    "phone": "Phone",
+    "office": "Office",
+    "officeValue": "Kathmandu, Nepal",
+    "sendTitle": "Send a message",
+    "nameLabel": "Your name",
+    "emailLabel": "Your email",
+    "subjectLabel": "Subject",
+    "messageLabel": "Message",
+    "optional": "(optional)",
+    "namePlaceholder": "Jane Doe",
+    "emailPlaceholder": "you@example.com",
+    "subjectPlaceholder": "What is this about?",
+    "messagePlaceholder": "How can we help?",
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Thanks! Your message has been sent.",
+    "error": "Something went wrong. Please try again.",
+    "invalidEmail": "Please enter a valid email address."
+  },
+  "Privacy": {
+    "eyebrow": "Privacy Policy",
+    "title": "Reader privacy matters",
+    "intro": "Best Khabar uses basic analytics, newsletter signups, and advertising placements to keep the site running while respecting reader privacy.",
+    "point1": "We only collect information needed to operate the site and newsletter.",
+    "point2": "Advertising partners may use standard browser cookies for campaign measurement.",
+    "point3": "You can unsubscribe from email updates at any time.",
+    "point4": "Policy updates will be reflected on this page as the site evolves.",
+    "questionsTitle": "Questions?",
+    "questionsText": "Contact the team if you need clarifications about the way Best Khabar uses your information.",
+    "contactUs": "Contact us"
+  },
+  "Advertise": {
+    "eyebrow": "Advertising",
+    "title": "Advertise on Best Khabar",
+    "intro": "Reach readers through hero placements, sidebar inventory, and sponsored content across the site.",
+    "heroTitle": "Hero placement",
+    "heroText": "High-visibility banner space on the homepage.",
+    "sidebarTitle": "Sidebar inventory",
+    "sidebarText": "Contextual placements beside category and article pages.",
+    "sponsoredTitle": "Sponsored features",
+    "sponsoredText": "Branded storytelling for launches and campaigns.",
+    "bookTitle": "Ready to book?",
+    "bookText": "Contact the sales team to discuss placements and campaign timing."
+  },
+  "Login": {
+    "title": "Admin Login",
+    "subtitle": "Sign in to manage articles",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "backHome": "Back to home",
+    "loginFailed": "Login failed. Please try again."
+  },
+  "Category": {
+    "eyebrow": "Category",
+    "noArticles": "No articles yet",
+    "checkBack": "Check back soon for stories in {category}.",
+    "backHome": "Back to Home"
+  },
+  "Article": {
+    "home": "Home",
+    "share": "Share",
+    "relatedCoverage": "Related coverage",
+    "moreFrom": "More from {category}",
+    "viewCategory": "View category"
+  },
+  "TrendingList": {
+    "trendingNow": "Trending Now",
+    "viewAllTrending": "View All Trending"
+  },
+  "Search": {
+    "placeholder": "Search by title or slug…",
+    "submit": "Search",
+    "close": "Close search",
+    "heading": "Search",
+    "resultsFor": "Results for “{query}”",
+    "count": "{count, plural, =0 {No results} one {# result} other {# results}}",
+    "noResults": "No articles matched your search.",
+    "noQuery": "Type a title or slug to search articles."
+  }
+}

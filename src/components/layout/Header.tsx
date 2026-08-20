@@ -1,10 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { ChevronDown, Languages, Menu, Moon, Search, Sun, X } from "lucide-react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
 import MobileMenu from "./MobileMenu";
+import LanguageSwitcher from "./LanguageSwitcher";
+import SearchBar from "./SearchBar";
 import type { Category } from "@/src/types";
 import { useTheme } from "@/src/app/context/ThemeContext";
 
@@ -15,6 +18,7 @@ interface HeaderProps {
 const Header = ({ categories }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggle } = useTheme();
+  const t = useTranslations("Header");
 
   return (
     <header className="bg-white dark:bg-[#1e2a26] dark:border-b dark:border-[#2a3832]">
@@ -23,7 +27,7 @@ const Header = ({ categories }: HeaderProps) => {
           type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="inline-flex items-center justify-center lg:hidden"
-          aria-label="Toggle menu"
+          aria-label={t("toggleMenu")}
           aria-expanded={isMobileMenuOpen}
         >
           {isMobileMenuOpen ? (
@@ -47,29 +51,15 @@ const Header = ({ categories }: HeaderProps) => {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-          <button
-            type="button"
-            className="hidden items-center gap-2 bg-brand-600 px-3 py-2 text-sm font-semibold text-white sm:inline-flex"
-            aria-label="Language selector"
-          >
-            <Languages className="h-4 w-4" />
-            <span>Nepali</span>
-            <ChevronDown className="h-4 w-4" />
-          </button>
+          <LanguageSwitcher />
 
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center text-gray-900 transition-colors hover:text-brand-600"
-            aria-label="Search"
-          >
-            <Search className="h-6 w-6" />
-          </button>
+          <SearchBar />
 
           <button
             type="button"
             onClick={toggle}
             className="hidden h-10 w-10 items-center justify-center text-gray-900 dark:text-gray-100 transition-colors hover:text-brand-600 sm:inline-flex"
-            aria-label="Toggle theme"
+            aria-label={t("toggleTheme")}
           >
             {theme === "dark" ? (
               <Sun className="h-6 w-6" />
@@ -82,7 +72,7 @@ const Header = ({ categories }: HeaderProps) => {
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="hidden h-10 w-10 items-center justify-center text-gray-900 transition-colors hover:text-brand-600 lg:inline-flex"
-            aria-label="Toggle menu"
+            aria-label={t("toggleMenu")}
             aria-expanded={isMobileMenuOpen}
           >
             <Menu className="h-7 w-7" />

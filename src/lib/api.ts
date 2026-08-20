@@ -24,8 +24,7 @@ import {
 } from "@/src/types/cloudinary";
 import { extractYouTubeVideoId } from "@/src/lib/youtube";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -39,7 +38,10 @@ async function refreshTokens(): Promise<void> {
 
   const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "true",
+    },
     body: JSON.stringify({ refreshToken }),
   });
 
@@ -62,6 +64,7 @@ function buildAuthedHeaders(token: string, extra?: HeadersInit): HeadersInit {
   return {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
+    "ngrok-skip-browser-warning": "true",
     ...extra,
   };
 }
@@ -117,6 +120,7 @@ export async function fetchJson<T>(
     headers: {
       "Content-Type": "application/json",
       ...init?.headers,
+      "ngrok-skip-browser-warning": "true",
     } as HeadersInit,
   });
 
@@ -284,6 +288,22 @@ export async function subscribeNewsletter(
   return fetchJson<void>("/newsletter-subscriptions", {
     method: "POST",
     body: JSON.stringify({ email, fullName }),
+  });
+}
+
+export interface ContactMessagePayload {
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
+}
+
+export async function sendContactMessage(
+  payload: ContactMessagePayload,
+): Promise<{ success: boolean }> {
+  return fetchJson<{ success: boolean }>("/contact", {
+    method: "POST",
+    body: JSON.stringify(payload),
   });
 }
 

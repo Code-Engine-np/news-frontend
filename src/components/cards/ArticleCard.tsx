@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import { Clock, Image as ImageIcon, PlayCircle } from "lucide-react";
 import { NewsArticle } from "@/src/types";
 import { getYouTubeThumbnailUrl, getYouTubeEmbedUrl } from "@/src/lib/youtube";
