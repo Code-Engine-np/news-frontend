@@ -40,7 +40,6 @@ async function refreshTokens(): Promise<void> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "true",
     },
     body: JSON.stringify({ refreshToken }),
   });
@@ -64,7 +63,6 @@ function buildAuthedHeaders(token: string, extra?: HeadersInit): HeadersInit {
   return {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
-    "ngrok-skip-browser-warning": "true",
     ...extra,
   };
 }
@@ -120,7 +118,6 @@ export async function fetchJson<T>(
     headers: {
       "Content-Type": "application/json",
       ...init?.headers,
-      "ngrok-skip-browser-warning": "true",
     } as HeadersInit,
   });
 
