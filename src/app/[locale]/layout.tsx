@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Hanken_Grotesk,
-  Noto_Sans,
-  Work_Sans,
-} from "next/font/google";
+import { Hanken_Grotesk, Noto_Sans, Work_Sans, Mukta } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -30,6 +26,12 @@ const notoSans = Noto_Sans({
   variable: "--font-noto",
   subsets: ["latin", "devanagari"],
   weight: ["400", "500", "600", "700"],
+});
+
+const mukta = Mukta({
+  variable: "--font-mukta",
+  subsets: ["devanagari", "latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -108,6 +110,7 @@ export default async function RootLayout({
         hankenGrotesk.variable,
         workSans.variable,
         notoSans.variable,
+        mukta.variable,
         "font-sans",
       )}
     >
