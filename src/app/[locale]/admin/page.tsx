@@ -94,7 +94,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex min-h-screen bg-[#f9f9f9] dark:bg-[#141f1b]">
-
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
@@ -110,14 +109,16 @@ export default function AdminDashboard() {
         }`}
       >
         <div className="flex items-center justify-between border-b border-line px-5 py-4 dark:border-[#2a3832]">
-          <Image
-            src="/best-khabar-green1.png"
-            alt="Best Khabar"
-            width={130}
-            height={36}
-            className="h-8 w-auto object-contain object-left"
-            priority
-          />
+          <Link href="/">
+            <Image
+              src="/best-khabar-green1.png"
+              alt="Best Khabar"
+              width={130}
+              height={36}
+              className="h-8 w-auto object-contain object-left"
+              priority
+            />
+          </Link>
           <button
             onClick={() => setSidebarOpen(false)}
             className="rounded-lg p-1.5 text-muted hover:bg-gray-100 dark:hover:bg-[#2a3832] lg:hidden"
@@ -129,11 +130,19 @@ export default function AdminDashboard() {
 
         <nav className="flex-1 overflow-y-auto px-4 py-4">
           <div className="space-y-1">
-            <Link href="/admin" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
+            <Link
+              href="/admin"
+              className={navLinkClass}
+              onClick={() => setSidebarOpen(false)}
+            >
               <FileText className="h-5 w-5 shrink-0" />
               Articles
             </Link>
-            <Link href="/admin/articles/new" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
+            <Link
+              href="/admin/articles/new"
+              className={navLinkClass}
+              onClick={() => setSidebarOpen(false)}
+            >
               <Plus className="h-5 w-5 shrink-0" />
               New Article
             </Link>
@@ -142,11 +151,19 @@ export default function AdminDashboard() {
               <p className="px-4 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted">
                 Media
               </p>
-              <Link href="/admin/featured-images" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
+              <Link
+                href="/admin/featured-images"
+                className={navLinkClass}
+                onClick={() => setSidebarOpen(false)}
+              >
                 <Images className="h-5 w-5 shrink-0" />
                 Featured Images
               </Link>
-              <Link href="/admin/featured-images/new" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
+              <Link
+                href="/admin/featured-images/new"
+                className={navLinkClass}
+                onClick={() => setSidebarOpen(false)}
+              >
                 <Plus className="h-5 w-5 shrink-0" />
                 New Slide
               </Link>
@@ -156,11 +173,19 @@ export default function AdminDashboard() {
               <p className="px-4 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted">
                 Advertising
               </p>
-              <Link href="/admin/advertisements" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
+              <Link
+                href="/admin/advertisements"
+                className={navLinkClass}
+                onClick={() => setSidebarOpen(false)}
+              >
                 <Megaphone className="h-5 w-5 shrink-0" />
                 Advertisements
               </Link>
-              <Link href="/admin/advertisements/new" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
+              <Link
+                href="/admin/advertisements/new"
+                className={navLinkClass}
+                onClick={() => setSidebarOpen(false)}
+              >
                 <Plus className="h-5 w-5 shrink-0" />
                 New Ad
               </Link>
@@ -177,9 +202,7 @@ export default function AdminDashboard() {
               <p className="truncate text-sm font-medium text-ink dark:text-gray-100">
                 {user?.fullName || user?.email}
               </p>
-              <p className="text-xs capitalize text-muted">
-                {user?.role}
-              </p>
+              <p className="text-xs capitalize text-muted">{user?.role}</p>
             </div>
           </div>
         </div>
@@ -213,7 +236,6 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main className="flex min-h-screen w-full flex-col lg:ml-64">
-
         {/* Mobile top bar */}
         <div className="sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-white px-4 py-3 dark:border-[#2a3832] dark:bg-[#1e2a26] lg:hidden">
           <button
@@ -223,12 +245,16 @@ export default function AdminDashboard() {
           >
             <Menu className="h-5 w-5" />
           </button>
-          <span className="text-sm font-semibold text-ink dark:text-gray-100">Admin Dashboard</span>
+          <span className="text-sm font-semibold text-ink dark:text-gray-100">
+            Admin Dashboard
+          </span>
         </div>
 
         <div className="flex-1 p-4 sm:p-6 lg:p-8">
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-xl font-bold text-ink dark:text-gray-100">Articles</h1>
+            <h1 className="text-xl font-bold text-ink dark:text-gray-100">
+              Articles
+            </h1>
             <Link
               href="/admin/articles/new"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark sm:px-4 sm:py-2.5"
@@ -295,8 +321,12 @@ export default function AdminDashboard() {
                         className="cursor-pointer hover:bg-gray-50 dark:hover:bg-[#22302a]"
                       >
                         <td className="px-4 py-4 sm:px-6">
-                          <div className="font-medium text-ink dark:text-gray-100 line-clamp-1">{article.title}</div>
-                          <div className="mt-0.5 text-xs text-muted line-clamp-1">{article.slug}</div>
+                          <div className="font-medium text-ink dark:text-gray-100 line-clamp-1">
+                            {article.title}
+                          </div>
+                          <div className="mt-0.5 text-xs text-muted line-clamp-1">
+                            {article.slug}
+                          </div>
                         </td>
                         <td className="px-4 py-4 text-sm text-muted sm:px-6">
                           {article.category?.name || "Uncategorized"}
@@ -338,7 +368,10 @@ export default function AdminDashboard() {
                               onClick={() =>
                                 handleDelete(article.id, article.title)
                               }
-                              disabled={deleteMutation.isPending && deleteMutation.variables === article.id}
+                              disabled={
+                                deleteMutation.isPending &&
+                                deleteMutation.variables === article.id
+                              }
                               className="rounded-lg border border-red-200 p-2 text-red-600 hover:bg-red-50 disabled:opacity-50 dark:border-red-900/50 dark:hover:bg-red-950/40"
                               title="Delete"
                             >

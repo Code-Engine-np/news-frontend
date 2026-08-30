@@ -157,7 +157,7 @@ export interface Advertisement {
   id: string;
   title: string;
   linkUrl: string;
-  position: "sidebar" | "footer" | "hero" | "inline";
+  position: "sidebar" | "footer" | "hero" | "inline" | "header";
   size: "small" | "medium" | "large" | "full-width";
 }
 
