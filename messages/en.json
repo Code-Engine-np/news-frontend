@@ -25,10 +25,7 @@
     "english": "English",
     "search": "Search",
     "toggleTheme": "Toggle theme",
-    "toggleMenu": "Toggle menu",
-    "adLabel": "Advertisement",
-    "advertiseHere": "ADVERTISE HERE",
-    "advertiseSubtitle": "Contact us to showcase your brand in the leading news portal."
+    "toggleMenu": "Toggle menu"
   },
   "MobileMenu": {
     "menu": "Menu",

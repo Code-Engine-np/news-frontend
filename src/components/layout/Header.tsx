@@ -8,11 +8,8 @@ import { Link } from "@/src/i18n/navigation";
 import MobileMenu from "./MobileMenu";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SearchBar from "./SearchBar";
-import type { ApiAdvertisement, Category } from "@/src/types";
+import type { Category } from "@/src/types";
 import { useTheme } from "@/src/app/context/ThemeContext";
-import AdBanner from "@/src/components/ui/AdBanner";
-import { useQuery } from "@tanstack/react-query";
-import { queryKeys, queryFns } from "@/src/lib/queries";
 
 interface HeaderProps {
   categories: Category[];
@@ -22,15 +19,6 @@ const Header = ({ categories }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggle } = useTheme();
   const t = useTranslations("Header");
-
-  const { data: bannerAds = [] } = useQuery<ApiAdvertisement[]>({
-    queryKey: queryKeys.advertisements("banner"),
-    queryFn: queryFns.advertisements("banner"),
-    staleTime: 5 * 60 * 1000,
-  });
-
-  const getAd = (index: number): ApiAdvertisement | undefined =>
-    bannerAds.length > 0 ? bannerAds[index % bannerAds.length] : undefined;
 
   return (
     <header className="bg-white dark:bg-[#1e2a26] dark:border-b dark:border-[#2a3832]">
@@ -61,23 +49,7 @@ const Header = ({ categories }: HeaderProps) => {
             />
           </div>
         </Link>
-        <div className="hidden lg:block lg:flex-1 lg:px-6">
-          {getAd(0) ? (
-            <AdBanner ad={getAd(0)!} />
-          ) : (
-            <div className="rounded-2xl border border-dashed border-line bg-white px-4 py-5 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">
-                {t("adLabel")}
-              </p>
-              <p className="mt-1 text-lg font-bold text-ink dark:text-gray-200">
-                {t("advertiseHere")}
-              </p>
-              <p className="mt-1 text-xs text-muted">
-                {t("advertiseSubtitle")}
-              </p>
-            </div>
-          )}
-        </div>
+
         <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
           <LanguageSwitcher />
 
