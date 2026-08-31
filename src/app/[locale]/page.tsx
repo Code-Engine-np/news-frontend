@@ -8,7 +8,6 @@ import FeaturedCarousel from "@/src/components/ui/FeaturedCarousel";
 import LatestNewsList from "@/src/components/ui/LatestNewsList";
 import CategoryNewsSection from "@/src/components/ui/CategoryNewsSection";
 import AdBanner from "@/src/components/ui/AdBanner";
-import NewsletterForm from "@/src/components/ui/NewsletterForm";
 import {
   getPublishedArticles,
   mapApiArticleToNewsArticle,
@@ -180,10 +179,6 @@ export default async function Home() {
             })}
           </div>
 
-          {/* Newsletter */}
-          <div className="mx-auto mt-6 max-w-xl">
-            <NewsletterForm />
-          </div>
         </div>
       </NewsShell>
     </HydrationBoundary>

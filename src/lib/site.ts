@@ -1,21 +1,57 @@
 import type { Advertisement, NewsArticle } from "@/src/types";
 
+export type NavChild = {
+  readonly key: string;
+  readonly href: string;
+  readonly label: string;
+};
+
+export type NavItem = {
+  readonly key: string;
+  readonly href: string;
+  readonly label: string;
+  readonly children?: readonly NavChild[];
+};
+
 /**
  * Main navigation. `key` maps to a key in the `Nav` message namespace
  * (see messages/*.json) so labels are localized at render time; `href` is the
  * locale-agnostic path (the locale prefix is added by next-intl's <Link>).
+ * `label` is the canonical English name used when creating backend categories.
  */
-export const MAIN_NAV_ITEMS = [
-  { key: "home", href: "/" },
-  { key: "currentAffairs", href: "/category/current-affairs" },
-  { key: "society", href: "/category/society" },
-  { key: "economy", href: "/category/economy" },
-  { key: "features", href: "/category/features" },
-  { key: "opinion", href: "/category/opinion" },
-  { key: "arts", href: "/category/arts" },
-  { key: "sports", href: "/category/sports" },
-  { key: "trending", href: "/trending" },
-] as const;
+export const MAIN_NAV_ITEMS: readonly NavItem[] = [
+  { key: "examplary-world", href: "/category/examplary-world", label: "Examplary World" },
+  {
+    key: "all-nepal",
+    href: "/category/all-nepal",
+    label: "All Nepal",
+    children: [
+      { key: "kathmandu-valley", href: "/category/kathmandu-valley", label: "Kathmandu Valley" },
+      { key: "current-politics", href: "/category/current-politics", label: "Current Politics" },
+      { key: "state-news", href: "/category/state-news", label: "State News" },
+      { key: "nepal-khabar", href: "/category/nepal-khabar", label: "Nepal Khabar" },
+    ],
+  },
+  {
+    key: "abroad-news",
+    href: "/category/abroad-news",
+    label: "Abroad News",
+    children: [
+      { key: "asia", href: "/category/asia", label: "Asia" },
+      { key: "europe", href: "/category/europe", label: "Europe" },
+      { key: "america", href: "/category/america", label: "America" },
+      { key: "canada", href: "/category/canada", label: "Canada" },
+      { key: "australia", href: "/category/australia", label: "Australia" },
+      { key: "others", href: "/category/others", label: "Others" },
+    ],
+  },
+  { key: "arts-literature-entertainment", href: "/category/arts-literature-entertainment", label: "Arts, Literature & Entertainment" },
+  { key: "tourism-ghumgham", href: "/category/tourism-ghumgham", label: "Tourism & Ghumgham" },
+  { key: "opinion", href: "/category/opinion", label: "Opinion" },
+  { key: "best-videos", href: "/category/best-videos", label: "Best Videos" },
+  { key: "english", href: "/category/english-news", label: "English News" },
+  { key: "old-site", href: "https://old.bestkhabar.com/", label: "Old Site" },
+];
 
 export const SOCIAL_LINKS = [
   {
@@ -57,7 +93,7 @@ export const FOOTER_LINK_GROUPS = [
     titleKey: "exploreTitle",
     links: [
       { labelKey: "linkTrending", href: "/trending" },
-      { labelKey: "linkPolitics", href: "/category/politics" },
+      // { labelKey: "linkPolitics", href: "/category/politics" },
       { labelKey: "linkBusiness", href: "/category/business" },
       { labelKey: "linkSports", href: "/category/sports" },
     ],

@@ -23,12 +23,15 @@ import {
   getCategoryBySlug,
   getFeaturedImages,
   getPublishedArticles,
+  getActivePopupNotice,
+  getAllPopupNotices,
 } from "@/src/lib/api";
 import type {
   ApiAdvertisement,
   ApiFeaturedImage,
   ApiArticle,
   ApiCategory,
+  ApiPopupNotice,
 } from "@/src/types";
 
 export const queryKeys = {
@@ -43,6 +46,8 @@ export const queryKeys = {
   allAdvertisements: () => ["advertisements", "all"] as const,
   featuredImages: () => ["featured-images"] as const,
   allFeaturedImages: () => ["featured-images", "all"] as const,
+  activePopupNotice: () => ["popup-notices", "active"] as const,
+  allPopupNotices: () => ["popup-notices", "all"] as const,
 } as const;
 
 export const queryFns = {
@@ -59,4 +64,6 @@ export const queryFns = {
   allAdvertisements: (): Promise<ApiAdvertisement[]> => getAllAdvertisements(),
   featuredImages: (): Promise<ApiFeaturedImage[]> => getFeaturedImages(),
   allFeaturedImages: (): Promise<ApiFeaturedImage[]> => getAllFeaturedImages(),
+  activePopupNotice: (): Promise<ApiPopupNotice | null> => getActivePopupNotice(),
+  allPopupNotices: (): Promise<ApiPopupNotice[]> => getAllPopupNotices(),
 };

@@ -8,17 +8,13 @@ import { Link } from "@/src/i18n/navigation";
 import MobileMenu from "./MobileMenu";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SearchBar from "./SearchBar";
-import type { ApiAdvertisement, Category } from "@/src/types";
+import type { ApiAdvertisement } from "@/src/types";
 import { useTheme } from "@/src/app/context/ThemeContext";
 import AdBanner from "@/src/components/ui/AdBanner";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys, queryFns } from "@/src/lib/queries";
 
-interface HeaderProps {
-  categories: Category[];
-}
-
-const Header = ({ categories }: HeaderProps) => {
+const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggle } = useTheme();
   const t = useTranslations("Header");
@@ -112,7 +108,6 @@ const Header = ({ categories }: HeaderProps) => {
       <MobileMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
-        categories={categories}
       />
     </header>
   );
