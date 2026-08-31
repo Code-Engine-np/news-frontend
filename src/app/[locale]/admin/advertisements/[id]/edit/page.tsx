@@ -11,8 +11,7 @@ import {
   getAdUploadSignature,
 } from "@/src/lib/api";
 import { queryKeys, queryFns } from "@/src/lib/queries";
-import { useAuth } from "@/src/app/context/AuthContext";
-import { ArrowLeft, Upload, X } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 const inputClass =
   "mt-1 w-full rounded-lg border border-line bg-white px-4 py-2.5 text-sm text-ink outline-none transition-colors focus:border-primary dark:bg-[#22302a] dark:text-gray-100";
@@ -24,14 +23,10 @@ const POSITIONS = [
 ] as const;
 
 export default function EditAdvertisementPage() {
-  const { isAuthenticated } = useAuth();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (!isAuthenticated) router.replace("/login");
-  }, [isAuthenticated, router]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formError, setFormError] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -124,31 +119,20 @@ export default function EditAdvertisementPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f9f9f9] dark:bg-[#141f1b]">
+      <div className="flex min-h-96 items-center justify-center">
         <p className="text-muted">Loading…</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9] dark:bg-[#141f1b]">
-      <header className="border-b border-line bg-white dark:bg-[#1e2a26]">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin/advertisements"
-              className="flex items-center gap-1 text-sm text-muted hover:text-primary"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Advertisements
-            </Link>
-            <span className="text-line">/</span>
-            <h1 className="text-xl font-bold text-ink">Edit Advertisement</h1>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 py-8">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-ink dark:text-gray-100">Edit Advertisement</h1>
+        <Link href="/admin/advertisements" className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]">
+          Cancel
+        </Link>
+      </div>
         {(formError || updateMutation.isError) && (
           <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
             {formError || "Failed to update advertisement."}
@@ -314,7 +298,6 @@ export default function EditAdvertisementPage() {
             </Link>
           </div>
         </form>
-      </main>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import {
   XIcon,
   YoutubeIcon,
 } from "@/src/constants/socialIcons";
+import FooterNewsletter from "@/src/components/ui/FooterNewsletter";
 
 const Footer = async () => {
   const t = await getTranslations("Footer");
@@ -108,6 +109,10 @@ const Footer = async () => {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="mt-6">
+          <FooterNewsletter />
         </div>
 
         <div className="mt-4 border-t border-white/30 py-4 text-center text-xs sm:text-sm">

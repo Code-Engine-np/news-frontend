@@ -465,3 +465,50 @@ export function mapApiArticleToNewsArticle(api: ApiArticle): NewsArticle {
     viewCount: 0,
   };
 }
+
+/* ------------------------------------------------------------------ */
+/*  Popup Notices                                                       */
+/* ------------------------------------------------------------------ */
+
+import type { ApiPopupNotice } from "@/src/types";
+
+/** GET /api/popup-notices/active (public) */
+export async function getActivePopupNotice(): Promise<ApiPopupNotice | null> {
+  return fetchJson<ApiPopupNotice | null>("/popup-notices/active");
+}
+
+/** GET /api/popup-notices (admin) */
+export async function getAllPopupNotices(): Promise<ApiPopupNotice[]> {
+  return fetchAuthed<ApiPopupNotice[]>("/popup-notices");
+}
+
+/** GET /api/popup-notices/:id (admin) */
+export async function getPopupNotice(id: string): Promise<ApiPopupNotice> {
+  return fetchAuthed<ApiPopupNotice>(`/popup-notices/${id}`);
+}
+
+/** POST /api/popup-notices (admin) */
+export async function createPopupNotice(
+  payload: Record<string, unknown>,
+): Promise<ApiPopupNotice> {
+  return fetchAuthed<ApiPopupNotice>("/popup-notices", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+/** PATCH /api/popup-notices/:id (admin) */
+export async function updatePopupNotice(
+  id: string,
+  payload: Record<string, unknown>,
+): Promise<ApiPopupNotice> {
+  return fetchAuthed<ApiPopupNotice>(`/popup-notices/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+/** DELETE /api/popup-notices/:id (admin) */
+export async function deletePopupNotice(id: string): Promise<void> {
+  return fetchAuthed<void>(`/popup-notices/${id}`, { method: "DELETE" });
+}

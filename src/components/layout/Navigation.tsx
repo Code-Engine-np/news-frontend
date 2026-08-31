@@ -1,48 +1,27 @@
 "use client";
 
-import { useState, useRef, useCallback, useSyncExternalStore } from "react";
+import { useState, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
 import { MAIN_NAV_ITEMS } from "@/src/lib/site";
-import type { Category } from "@/src/types";
 
-interface NavigationProps {
-  categories: Category[];
-}
-
-interface DropdownState {
-  slug: string;
-  top: number;
-  left: number;
-}
-
-const Navigation = ({ categories }: NavigationProps) => {
+const Navigation = () => {
   const t = useTranslations("Nav");
-  const [dropdown, setDropdown] = useState<DropdownState | null>(null);
+  const [dropdown, setDropdown] = useState<{ key: string; top: number; left: number } | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // false on the server, true on the client — avoids SSR mismatch for the portal
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
     () => false,
   );
 
-  const childrenOf = useCallback(
-    (slug: string) => {
-      const parent = categories.find((c) => c.slug === slug);
-      if (!parent) return [];
-      return categories.filter((c) => c.parentId === parent.id);
-    },
-    [categories],
-  );
-
-  const openMenu = (slug: string, trigger: HTMLElement) => {
+  const openMenu = (key: string, trigger: HTMLElement) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     const rect = trigger.getBoundingClientRect();
-    setDropdown({ slug, top: rect.bottom + window.scrollY, left: rect.left });
+    setDropdown({ key, top: rect.bottom + window.scrollY, left: rect.left });
   };
 
   const scheduleClose = () => {
@@ -65,29 +44,20 @@ const Navigation = ({ categories }: NavigationProps) => {
                 aria-label={t("homeAria")}
               >
                 <span className="sr-only">{t("homeAria")}</span>
-                <svg
-                  className="h-7 w-7"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
+                <svg className="h-7 w-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 3 2 11h3v10h6v-6h2v6h6V11h3L12 3z" />
                 </svg>
               </Link>
 
               {MAIN_NAV_ITEMS.map((item) => {
-                const slug = item.href.startsWith("/category/")
-                  ? item.href.replace("/category/", "")
-                  : null;
-                const subs = slug ? childrenOf(slug) : [];
-                const isOpen = slug !== null && dropdown?.slug === slug;
+                const subs = item.children ?? [];
+                const isOpen = dropdown?.key === item.key;
 
                 return (
                   <div
                     key={item.key}
                     onMouseEnter={(e) => {
-                      if (slug && subs.length > 0)
-                        openMenu(slug, e.currentTarget);
+                      if (subs.length > 0) openMenu(item.key, e.currentTarget);
                     }}
                     onMouseLeave={scheduleClose}
                   >
@@ -110,44 +80,35 @@ const Navigation = ({ categories }: NavigationProps) => {
         </div>
       </nav>
 
-      {/* Portal: renders outside overflow containers so the dropdown is never clipped */}
       {mounted &&
         dropdown &&
         (() => {
-          const slug = dropdown.slug;
-          const navItem = MAIN_NAV_ITEMS.find(
-            (i) => i.href === `/category/${slug}`,
-          );
-          const subs = childrenOf(slug);
-          if (!navItem || subs.length === 0) return null;
+          const item = MAIN_NAV_ITEMS.find((i) => i.key === dropdown.key);
+          const subs = item?.children ?? [];
+          if (!item || subs.length === 0) return null;
 
           return createPortal(
             <div
-              style={{
-                position: "absolute",
-                top: dropdown.top,
-                left: dropdown.left,
-                zIndex: 9999,
-              }}
+              style={{ position: "absolute", top: dropdown.top, left: dropdown.left, zIndex: 9999 }}
               onMouseEnter={cancelClose}
               onMouseLeave={scheduleClose}
             >
-              <div className="mt-1 min-w-[180px] overflow-hidden rounded-xl border border-white/20 bg-primary-bright shadow-xl">
+              <div className="mt-1 min-w-[200px] overflow-hidden rounded-xl border border-white/20 bg-primary-bright shadow-xl">
                 <Link
-                  href={navItem.href}
+                  href={item.href}
                   className="block border-b border-white/10 px-4 py-2.5 text-sm font-semibold text-white/70 hover:bg-white/10 hover:text-white"
                   onClick={() => setDropdown(null)}
                 >
                   {t("viewAll")}
                 </Link>
-                {subs.map((sub) => (
+                {subs.map((child) => (
                   <Link
-                    key={sub.id}
-                    href={`/category/${sub.slug}`}
+                    key={child.key}
+                    href={child.href}
                     className="block px-4 py-2.5 text-[15px] font-bold text-white hover:bg-white/10"
                     onClick={() => setDropdown(null)}
                   >
-                    {sub.name}
+                    {t(child.key)}
                   </Link>
                 ))}
               </div>

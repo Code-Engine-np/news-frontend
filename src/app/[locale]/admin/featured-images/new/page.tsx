@@ -7,23 +7,18 @@ import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFeaturedImage, getFeaturedImageUploadSignature } from "@/src/lib/api";
 import { queryKeys } from "@/src/lib/queries";
-import { useAuth } from "@/src/app/context/AuthContext";
-import { ArrowLeft, Upload, X } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 const inputClass =
   "mt-1 w-full rounded-lg border border-line bg-white px-4 py-2.5 text-sm text-ink outline-none transition-colors focus:border-primary dark:bg-[#22302a] dark:text-gray-100";
 
 export default function NewFeaturedImagePage() {
-  const { isAuthenticated } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [formError, setFormError] = useState("");
 
-  useEffect(() => {
-    if (!isAuthenticated) router.replace("/login");
-  }, [isAuthenticated, router]);
   const [preview, setPreview] = useState<{ url: string; publicId: string } | null>(null);
   const [form, setForm] = useState({ caption: "", linkUrl: "", order: 0, isActive: true });
 
@@ -78,18 +73,13 @@ export default function NewFeaturedImagePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9] dark:bg-[#141f1b]">
-      <header className="border-b border-line bg-white dark:bg-[#1e2a26]">
-        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4">
-          <Link href="/admin/featured-images" className="flex items-center gap-1 text-sm text-muted hover:text-primary">
-            <ArrowLeft className="h-4 w-4" /> Featured Images
-          </Link>
-          <span className="text-line">/</span>
-          <h1 className="text-xl font-bold text-ink">New Slide</h1>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 py-8">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-ink dark:text-gray-100">New Slide</h1>
+        <Link href="/admin/featured-images" className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]">
+          Cancel
+        </Link>
+      </div>
         {formError && (
           <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">{formError}</div>
         )}
@@ -196,7 +186,6 @@ export default function NewFeaturedImagePage() {
             </Link>
           </div>
         </form>
-      </main>
     </div>
   );
 }

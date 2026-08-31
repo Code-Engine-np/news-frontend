@@ -13,15 +13,12 @@ import { Link, usePathname, useRouter } from "@/src/i18n/navigation";
 import { routing, type Locale } from "@/src/i18n/routing";
 import { MAIN_NAV_ITEMS } from "@/src/lib/site";
 import { useTheme } from "@/src/app/context/ThemeContext";
-import type { Category } from "@/src/types";
-
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  categories: Category[];
 }
 
-const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const t = useTranslations("MobileMenu");
   const tNav = useTranslations("Nav");
   const tSearch = useTranslations("Search");
@@ -34,14 +31,6 @@ const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
   const [query, setQuery] = useState("");
 
   if (!isOpen) return null;
-
-  // Subcategories for a top-level nav item, derived by matching its slug to a
-  // parent category and collecting that category's children.
-  const childrenOfSlug = (slug: string) => {
-    const parent = categories.find((c) => c.slug === slug);
-    if (!parent) return [];
-    return categories.filter((c) => c.parentId === parent.id);
-  };
 
   const toggleExpanded = (slug: string) =>
     setExpanded((prev) => {
@@ -110,22 +99,19 @@ const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
             </button>
           </form>
 
-          {/* Primary navigation — single, fully-translated list. Category items
-              with subcategories expand to show their children. */}
+          {/* Primary navigation — static list from MAIN_NAV_ITEMS. Items with
+              children expand to show their sub-links. */}
           <ul className="space-y-0.5">
             {MAIN_NAV_ITEMS.map((item) => {
-              const slug = item.href.startsWith("/category/")
-                ? item.href.replace("/category/", "")
-                : null;
-              const subs = slug ? childrenOfSlug(slug) : [];
-              const isExpanded = slug ? expanded.has(slug) : false;
+              const subs = item.children ?? [];
+              const isExpanded = expanded.has(item.key);
 
-              if (subs.length > 0 && slug) {
+              if (subs.length > 0) {
                 return (
                   <li key={item.key}>
                     <button
                       type="button"
-                      onClick={() => toggleExpanded(slug)}
+                      onClick={() => toggleExpanded(item.key)}
                       className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-[#2a3832] hover:text-brand-600 rounded-lg transition-colors"
                       aria-expanded={isExpanded}
                     >
@@ -146,14 +132,14 @@ const MobileMenu = ({ isOpen, onClose, categories }: MobileMenuProps) => {
                             {t("viewAll")} →
                           </Link>
                         </li>
-                        {subs.map((sub) => (
-                          <li key={sub.id}>
+                        {subs.map((child) => (
+                          <li key={child.key}>
                             <Link
-                              href={`/category/${sub.slug}`}
+                              href={child.href}
                               className="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-brand-600 rounded-md transition-colors"
                               onClick={onClose}
                             >
-                              {sub.name}
+                              {tNav(child.key)}
                             </Link>
                           </li>
                         ))}

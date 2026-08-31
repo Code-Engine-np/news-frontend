@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Link } from "@/src/i18n/navigation";
-import { getTrendingArticles } from "@/src/lib/site";
+import { getTrendingArticles, MAIN_NAV_ITEMS } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import ArticleCard from "@/src/components/cards/ArticleCard";
 import Sidebar from "@/src/components/ui/Sidebar";
@@ -17,16 +17,28 @@ import {
 import { getQueryClient } from "@/src/lib/query-client";
 import { queryKeys, queryFns } from "@/src/lib/queries";
 
+// Flat list of every nav slug → English label (for fallback when backend lacks the category)
+const ALL_NAV_SLUGS: Record<string, string> = Object.fromEntries(
+  MAIN_NAV_ITEMS.flatMap((i) => [
+    [i.href.replace("/category/", ""), i.label],
+    ...(i.children?.map((c) => [c.href.replace("/category/", ""), c.label]) ?? []),
+  ]).filter(([slug]) => !slug.startsWith("http")),
+);
+
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
+  const navSlugs = Object.keys(ALL_NAV_SLUGS).map((slug) => ({ slug }));
   try {
     const categories = await getCategories();
-    return (categories ?? []).map((category) => ({ slug: category.slug }));
+    const backendSlugs = (categories ?? []).map((c) => ({ slug: c.slug }));
+    // Merge: nav slugs first, then any backend-only slugs not already covered
+    const seen = new Set(navSlugs.map((s) => s.slug));
+    return [...navSlugs, ...backendSlugs.filter((s) => !seen.has(s.slug))];
   } catch {
-    return [];
+    return navSlugs;
   }
 }
 
@@ -42,6 +54,8 @@ export async function generateMetadata({
       description: category.description || undefined,
     };
   } catch {
+    const navLabel = ALL_NAV_SLUGS[slug];
+    if (navLabel) return { title: `${navLabel} | Best Khabar` };
     return { title: "Category not found | Best Khabar" };
   }
 }
@@ -53,17 +67,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const t = await getTranslations("Category");
 
   let category;
-  let allArticles;
+  let allArticles: ReturnType<typeof mapApiArticleToNewsArticle>[] = [];
   try {
     await Promise.all([
       queryClient.prefetchQuery({
         queryKey: queryKeys.category(slug),
         queryFn: queryFns.category(slug),
-      }),
+      }).catch(() => undefined),
       queryClient.prefetchQuery({
         queryKey: queryKeys.publishedArticles(),
         queryFn: queryFns.publishedArticles,
-      }),
+      }).catch(() => undefined),
     ]);
 
     const apiCategory = queryClient.getQueryData<
@@ -73,11 +87,21 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       Awaited<ReturnType<typeof getPublishedArticles>>
     >(queryKeys.publishedArticles()) ?? [];
 
-    if (!apiCategory) notFound();
-    category = mapApiCategoryToCategory(apiCategory);
     allArticles = apiArticles.map(mapApiArticleToNewsArticle);
+
+    if (apiCategory) {
+      category = mapApiCategoryToCategory(apiCategory);
+    } else {
+      // Backend doesn't have this slug yet — fall back to static nav definition
+      const navLabel = ALL_NAV_SLUGS[slug];
+      if (!navLabel) notFound();
+      category = { id: slug, slug, name: navLabel, description: "" };
+    }
   } catch {
-    notFound();
+    // If articles fetch also failed, still show the nav-defined category with empty state
+    const navLabel = ALL_NAV_SLUGS[slug];
+    if (!navLabel) notFound();
+    category = { id: slug, slug, name: navLabel, description: "" };
   }
 
   const articles = allArticles.filter(

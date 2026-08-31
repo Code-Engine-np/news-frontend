@@ -219,3 +219,13 @@ export interface AuthResponse {
   AuthTokens: AuthTokens;
   user: UserProfile;
 }
+
+export interface ApiPopupNotice {
+  id: string;
+  title: string;
+  content: string;
+  buttonText: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
