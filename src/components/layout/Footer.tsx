@@ -41,7 +41,7 @@ const Footer = async () => {
                 <div className="flex items-center rounded-[18px] bg-white px-5 py-3 shadow-[0_10px_35px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_16px_40px_rgba(0,0,0,0.18)] sm:px-6 sm:py-3.5">
                   <div className="relative h-[50px] w-[205px] sm:h-[56px] sm:w-[240px] lg:h-[60px] lg:w-[265px]">
                     <Image
-                      src="/best-khabar-footer.png"
+                      src="/best-khabar-green1.png"
                       alt="Best Khabar Logo"
                       fill
                       priority
