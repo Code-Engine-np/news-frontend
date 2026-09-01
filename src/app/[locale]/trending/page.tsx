@@ -5,7 +5,6 @@ import { Link } from "@/src/i18n/navigation";
 import ArticleCard from "@/src/components/cards/ArticleCard";
 import NewsShell from "@/src/components/layout/NewsShell";
 import TrendingList from "@/src/components/ui/TrendingList";
-import Sidebar from "@/src/components/ui/Sidebar";
 import { getTrendingArticles } from "@/src/lib/site";
 import { mapApiArticleToNewsArticle } from "@/src/lib/api";
 import type { NewsArticle } from "@/src/types";
@@ -54,34 +53,30 @@ export default async function TrendingPage() {
             </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
-            <section className="space-y-6">
-              <TrendingList articles={trendingArticles} />
+          <div className="mt-8 space-y-6">
+            <TrendingList articles={trendingArticles} hideViewAll />
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {trendingArticles.map((article) => (
-                  <ArticleCard key={article.id} article={article} />
-                ))}
-              </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {trendingArticles.map((article) => (
+                <ArticleCard key={article.id} article={article} />
+              ))}
+            </div>
 
-              <div className="rounded-2xl border border-line bg-white p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                      {t("keepReading")}
-                    </p>
-                    <h2 className="mt-2 text-2xl font-bold text-ink">
-                      {t("jumpHome")}
-                    </h2>
-                  </div>
-                  <Link href="/" className="text-sm font-semibold text-primary">
-                    {t("home")}
-                  </Link>
+            <div className="rounded-2xl border border-line bg-white p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                    {t("keepReading")}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-bold text-ink">
+                    {t("jumpHome")}
+                  </h2>
                 </div>
+                <Link href="/" className="text-sm font-semibold text-primary">
+                  {t("home")}
+                </Link>
               </div>
-            </section>
-
-            <Sidebar articles={trendingArticles} />
+            </div>
           </div>
         </div>
       </NewsShell>

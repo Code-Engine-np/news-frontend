@@ -8,9 +8,10 @@ import ArticleCard from "@/src/components/cards/ArticleCard";
 
 interface TrendingListProps {
   articles: NewsArticle[];
+  hideViewAll?: boolean;
 }
 
-const TrendingList = ({ articles }: TrendingListProps) => {
+const TrendingList = ({ articles, hideViewAll = false }: TrendingListProps) => {
   const t = useTranslations("TrendingList");
   if (articles.length === 0) return null;
 
@@ -38,13 +39,15 @@ const TrendingList = ({ articles }: TrendingListProps) => {
         ))}
       </div>
 
-      <Link
-        href="/trending"
-        className="flex items-center justify-center mt-6 text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors"
-      >
-        {t("viewAllTrending")}
-        <ArrowRight className="h-4 w-4 ml-1" />
-      </Link>
+      {!hideViewAll && (
+        <Link
+          href="/trending"
+          className="flex items-center justify-center mt-6 text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors"
+        >
+          {t("viewAllTrending")}
+          <ArrowRight className="h-4 w-4 ml-1" />
+        </Link>
+      )}
     </div>
   );
 };
