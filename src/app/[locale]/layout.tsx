@@ -58,7 +58,7 @@ export const metadata: Metadata = {
       "Best Khabar brings you the latest news, breaking news, top headlines from India and around the world.",
     url: "https://bestkhabar.com",
     siteName: "Best Khabar",
-    locale: "en_IN",
+    locale: "ne_NP",
     type: "website",
   },
   robots: {

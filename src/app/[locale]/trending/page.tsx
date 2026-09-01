@@ -40,51 +40,51 @@ export default async function TrendingPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-    <NewsShell>
-      <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
-        <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            {t("livePopularity")}
-          </p>
-          <h1 className="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">
-            {t("title")}
-          </h1>
-          <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
-            {t("description")}
-          </p>
-        </div>
+      <NewsShell>
+        <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
+          <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              {t("livePopularity")}
+            </p>
+            <h1 className="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">
+              {t("title")}
+            </h1>
+            <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
+              {t("description")}
+            </p>
+          </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
-          <section className="space-y-6">
-            <TrendingList articles={trendingArticles} />
+          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
+            <section className="space-y-6">
+              <TrendingList articles={trendingArticles} />
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {trendingArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
-            </div>
-
-            <div className="rounded-2xl border border-line bg-white p-6">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                    {t("keepReading")}
-                  </p>
-                  <h2 className="mt-2 text-2xl font-bold text-ink">
-                    {t("jumpHome")}
-                  </h2>
-                </div>
-                <Link href="/" className="text-sm font-semibold text-primary">
-                  {t("home")}
-                </Link>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {trendingArticles.map((article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
               </div>
-            </div>
-          </section>
 
-          <Sidebar articles={trendingArticles} />
+              <div className="rounded-2xl border border-line bg-white p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                      {t("keepReading")}
+                    </p>
+                    <h2 className="mt-2 text-2xl font-bold text-ink">
+                      {t("jumpHome")}
+                    </h2>
+                  </div>
+                  <Link href="/" className="text-sm font-semibold text-primary">
+                    {t("home")}
+                  </Link>
+                </div>
+              </div>
+            </section>
+
+            <Sidebar articles={trendingArticles} />
+          </div>
         </div>
-      </div>
-    </NewsShell>
+      </NewsShell>
     </HydrationBoundary>
   );
 }

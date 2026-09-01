@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateArticle } from "@/src/lib/api";
 import { queryKeys, queryFns } from "@/src/lib/queries";
@@ -20,6 +21,7 @@ export default function EditArticlePage() {
   const params = useParams<{ id: string }>();
   const articleId = params.id;
   const queryClient = useQueryClient();
+  const tNav = useTranslations("Nav");
   const [formError, setFormError] = useState("");
   const [form, setForm] = useState({
     title: "",
@@ -166,20 +168,21 @@ export default function EditArticlePage() {
               <select value={form.categorySlug}
                 onChange={(e) => setForm({ ...form, categorySlug: e.target.value })}
                 className={inputClass}>
-                <option value="">Select a category</option>
+                <option value="">श्रेणी छान्नुहोस्</option>
                 {MAIN_NAV_ITEMS.filter((i) => i.href.startsWith("/category/")).map((item) => {
                   const slug = item.href.replace("/category/", "");
+                  const label = tNav(item.key);
                   if (item.children?.length) {
                     return (
-                      <optgroup key={item.key} label={item.label}>
-                        <option value={slug}>{item.label} (all)</option>
+                      <optgroup key={item.key} label={label}>
+                        <option value={slug}>{label} (सबै)</option>
                         {item.children.map((child) => (
-                          <option key={child.key} value={child.href.replace("/category/", "")}>{child.label}</option>
+                          <option key={child.key} value={child.href.replace("/category/", "")}>{tNav(child.key)}</option>
                         ))}
                       </optgroup>
                     );
                   }
-                  return <option key={item.key} value={slug}>{item.label}</option>;
+                  return <option key={item.key} value={slug}>{label}</option>;
                 })}
               </select>
             </div>
