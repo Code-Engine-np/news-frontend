@@ -14,7 +14,7 @@ const inputClass =
 
 const POSITIONS = [
   { value: "banner", label: "Banner (full-width above content)" },
-  { value: "sidebar", label: "Sidebar" },
+  { value: "header", label: "Header" },
   { value: "inline", label: "Inline (within article feed)" },
 ] as const;
 
@@ -24,12 +24,15 @@ export default function NewAdvertisementPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formError, setFormError] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [preview, setPreview] = useState<{ url: string; publicId: string } | null>(null);
+  const [preview, setPreview] = useState<{
+    url: string;
+    publicId: string;
+  } | null>(null);
 
   const [form, setForm] = useState({
     title: "",
     linkUrl: "",
-    position: "banner" as "banner" | "sidebar" | "inline",
+    position: "banner" as "banner" | "header" | "inline",
     isActive: true,
     order: 0,
     startDate: "",
@@ -54,7 +57,10 @@ export default function NewAdvertisementPage() {
         `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`,
         { method: "POST", body: fd },
       );
-      const data = (await res.json()) as { secure_url: string; public_id: string };
+      const data = (await res.json()) as {
+        secure_url: string;
+        public_id: string;
+      };
       setPreview({ url: data.secure_url, publicId: data.public_id });
     } catch {
       setFormError("Image upload failed. Please try again.");
@@ -67,7 +73,9 @@ export default function NewAdvertisementPage() {
     mutationFn: (payload: Record<string, unknown>) =>
       createAdvertisement(payload),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: queryKeys.allAdvertisements() });
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.allAdvertisements(),
+      });
       void queryClient.invalidateQueries({ queryKey: ["advertisements"] });
       router.push("/admin/advertisements");
     },
@@ -98,7 +106,9 @@ export default function NewAdvertisementPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-ink dark:text-gray-100">New Advertisement</h1>
+        <h1 className="text-xl font-bold text-ink dark:text-gray-100">
+          New Advertisement
+        </h1>
         <Link
           href="/admin/advertisements"
           className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]"
@@ -118,7 +128,9 @@ export default function NewAdvertisementPage() {
           <h2 className="mb-4 text-base font-semibold text-ink">Ad Details</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-ink">Title</label>
+              <label className="block text-sm font-medium text-ink">
+                Title
+              </label>
               <input
                 type="text"
                 value={form.title}
@@ -131,7 +143,8 @@ export default function NewAdvertisementPage() {
 
             <div>
               <label className="block text-sm font-medium text-ink">
-                Link URL <span className="text-muted font-normal">(optional)</span>
+                Link URL{" "}
+                <span className="text-muted font-normal">(optional)</span>
               </label>
               <input
                 type="url"
@@ -143,7 +156,9 @@ export default function NewAdvertisementPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-ink">Ad Image</label>
+              <label className="block text-sm font-medium text-ink">
+                Ad Image
+              </label>
               {preview ? (
                 <div className="mt-1 relative w-full overflow-hidden rounded-xl border border-line">
                   <Image
@@ -190,11 +205,16 @@ export default function NewAdvertisementPage() {
           <h2 className="mb-4 text-base font-semibold text-ink">Settings</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-ink">Position</label>
+              <label className="block text-sm font-medium text-ink">
+                Position
+              </label>
               <select
                 value={form.position}
                 onChange={(e) =>
-                  setForm({ ...form, position: e.target.value as typeof form.position })
+                  setForm({
+                    ...form,
+                    position: e.target.value as typeof form.position,
+                  })
                 }
                 className={inputClass}
               >
@@ -211,46 +231,63 @@ export default function NewAdvertisementPage() {
                 type="checkbox"
                 id="isActive"
                 checked={form.isActive}
-                onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+                onChange={(e) =>
+                  setForm({ ...form, isActive: e.target.checked })
+                }
                 className="h-4 w-4 rounded border-line accent-primary"
               />
-              <label htmlFor="isActive" className="text-sm font-medium text-ink">
+              <label
+                htmlFor="isActive"
+                className="text-sm font-medium text-ink"
+              >
                 Active (visible on site)
               </label>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-ink">Display Order</label>
+              <label className="block text-sm font-medium text-ink">
+                Display Order
+              </label>
               <input
                 type="number"
                 value={form.order}
-                onChange={(e) => setForm({ ...form, order: Number(e.target.value) })}
+                onChange={(e) =>
+                  setForm({ ...form, order: Number(e.target.value) })
+                }
                 className={inputClass}
                 min={0}
               />
-              <p className="mt-1 text-xs text-muted">Lower number = shown first.</p>
+              <p className="mt-1 text-xs text-muted">
+                Lower number = shown first.
+              </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-ink">
-                  Start Date <span className="text-muted font-normal">(optional)</span>
+                  Start Date{" "}
+                  <span className="text-muted font-normal">(optional)</span>
                 </label>
                 <input
                   type="datetime-local"
                   value={form.startDate}
-                  onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, startDate: e.target.value })
+                  }
                   className={inputClass}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-ink">
-                  End Date <span className="text-muted font-normal">(optional)</span>
+                  End Date{" "}
+                  <span className="text-muted font-normal">(optional)</span>
                 </label>
                 <input
                   type="datetime-local"
                   value={form.endDate}
-                  onChange={(e) => setForm({ ...form, endDate: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, endDate: e.target.value })
+                  }
                   className={inputClass}
                 />
               </div>

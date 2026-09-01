@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Image as ImageIcon, Share2 } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
+import ShareButtons from "@/src/components/ui/ShareButtons";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Link } from "@/src/i18n/navigation";
 import { getRelatedArticles, getTrendingArticles } from "@/src/lib/site";
@@ -20,7 +21,7 @@ import { getQueryClient } from "@/src/lib/query-client";
 import { queryKeys, queryFns } from "@/src/lib/queries";
 
 interface ArticlePageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export async function generateStaticParams() {
@@ -49,8 +50,11 @@ export async function generateMetadata({
   }
 }
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.bestkhabar.com";
+
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
 
   const queryClient = getQueryClient();
   const t = await getTranslations("Article");
@@ -85,6 +89,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const relatedArticles = getRelatedArticles(allArticles, article, 3);
   const sidebarArticles = getTrendingArticles(allArticles, 6);
+  const canonicalUrl = `${SITE_URL}/${locale}/article/${slug}`;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
@@ -156,14 +161,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 }}
               />
 
-              <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-[#e5ebe5] pt-6">
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#c9d5cd] px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-primary hover:text-primary"
-                >
-                  <Share2 className="h-4 w-4" />
-                  {t("share")}
-                </button>
+              <div className="mt-8 border-t border-[#e5ebe5] dark:border-[#2a3832] pt-6">
+                <p className="mb-3 text-sm font-semibold text-muted">{t("share")}</p>
+                <ShareButtons title={article.title} canonicalUrl={canonicalUrl} />
               </div>
             </div>
           </article>

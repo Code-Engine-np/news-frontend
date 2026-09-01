@@ -52,7 +52,7 @@ export interface ApiAdvertisement {
   linkUrl?: string | null;
   imageUrl: string;
   publicId?: string | null;
-  position: "banner" | "sidebar" | "inline";
+  position: "banner" | "header" | "inline";
   isActive: boolean;
   order: number;
   startDate?: string | null;

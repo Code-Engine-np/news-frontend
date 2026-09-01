@@ -58,7 +58,7 @@ export const queryFns = {
   categories: (): Promise<ApiCategory[] | null> => getCategories(),
   category: (slug: string) => () => getCategoryBySlug(slug),
   advertisements:
-    (position?: "banner" | "sidebar" | "inline") =>
+    (position?: "banner" | "header" | "inline") =>
     (): Promise<ApiAdvertisement[]> =>
       getAdvertisements(position),
   allAdvertisements: (): Promise<ApiAdvertisement[]> => getAllAdvertisements(),

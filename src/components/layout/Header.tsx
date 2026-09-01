@@ -20,10 +20,12 @@ const Header = () => {
   const t = useTranslations("Header");
 
   const { data: bannerAds = [] } = useQuery<ApiAdvertisement[]>({
-    queryKey: queryKeys.advertisements("banner"),
-    queryFn: queryFns.advertisements("banner"),
+    queryKey: queryKeys.advertisements("header"),
+    queryFn: queryFns.advertisements("header"),
     staleTime: 5 * 60 * 1000,
   });
+
+  console.log("bannerAds", bannerAds);
 
   const getAd = (index: number): ApiAdvertisement | undefined =>
     bannerAds.length > 0 ? bannerAds[index % bannerAds.length] : undefined;

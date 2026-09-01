@@ -14,7 +14,7 @@ import {
 } from "@/src/lib/api";
 import { getQueryClient } from "@/src/lib/query-client";
 import { queryKeys, queryFns } from "@/src/lib/queries";
-import { getLatestArticles } from "@/src/lib/site";
+import { getTrendingArticles } from "@/src/lib/site";
 import type { ApiAdvertisement, ApiFeaturedImage, NewsArticle } from "@/src/types";
 
 export default async function Home() {
@@ -70,7 +70,7 @@ export default async function Home() {
   }
   const categorySections = Array.from(categoryMap.values());
 
-  const latestArticles = getLatestArticles(displayArticles, 7);
+  const latestArticles = getTrendingArticles(displayArticles, 7);
 
   // Resolve ad by index; returns undefined if bannerAds is empty
   const getAd = (index: number): ApiAdvertisement | undefined =>
@@ -105,10 +105,10 @@ export default async function Home() {
             {featuredSlides.length > 0 ? (
               <FeaturedCarousel
                 slides={featuredSlides}
-                className="relative overflow-hidden rounded-2xl"
+                className="relative overflow-hidden rounded-xl"
               />
             ) : (
-              <div className="flex h-55 items-center justify-center rounded-2xl border border-dashed border-line bg-white dark:border-[#2a3832] dark:bg-[#1e2a26] sm:h-80 lg:h-105">
+              <div className="flex h-55 items-center justify-center rounded-xl border border-dashed border-line bg-white dark:border-[#2a3832] dark:bg-[#1e2a26] sm:h-80 lg:h-105">
                 <div className="px-4 text-center">
                   <p className="text-sm font-semibold text-ink dark:text-gray-200">
                     {t("featuredCarousel")}
@@ -128,7 +128,7 @@ export default async function Home() {
 
             {/* Latest news sidebar — desktop only */}
             <div className="hidden lg:block lg:h-105">
-              <LatestNewsList articles={latestArticles} title={t("latestNews")} />
+              <LatestNewsList articles={latestArticles} title={t("trendingNews")} />
             </div>
           </div>
 
@@ -137,7 +137,7 @@ export default async function Home() {
             {getAd(0) ? (
               <AdBanner ad={getAd(0)!} />
             ) : (
-              <div className="rounded-2xl border border-dashed border-line bg-white px-4 py-5 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
+              <div className="rounded-xl border border-dashed border-line bg-white px-4 py-5 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">{t("adLabel")}</p>
                 <p className="mt-1 text-lg font-bold text-ink dark:text-gray-200">{t("advertiseHere")}</p>
                 <p className="mt-1 text-xs text-muted">{t("advertiseSubtitle")}</p>
@@ -148,7 +148,7 @@ export default async function Home() {
           {/* ── CATEGORY SECTIONS ─────────────────────────────────────── */}
           <div className="mt-3 space-y-3">
             {displayArticles.length === 0 && !hasError && (
-              <div className="rounded-2xl border border-line bg-white p-8 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
+              <div className="rounded-xl border border-line bg-white p-8 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
                 <p className="text-sm text-muted">{t("noArticles")}</p>
               </div>
             )}
@@ -168,7 +168,7 @@ export default async function Home() {
                     ad ? (
                       <AdBanner ad={ad} />
                     ) : (
-                      <div className="rounded-2xl border border-dashed border-line bg-white px-4 py-4 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
+                      <div className="rounded-xl border border-dashed border-line bg-white px-4 py-4 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
                         <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">{t("adLabel")}</p>
                         <p className="mt-1 text-base font-bold text-ink dark:text-gray-200">{t("advertiseHere")}</p>
                       </div>

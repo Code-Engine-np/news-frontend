@@ -362,7 +362,7 @@ export async function getFeaturedImageUploadSignature() {
 
 /** GET /api/advertisements?position=banner (public, active only) */
 export async function getAdvertisements(
-  position?: "banner" | "sidebar" | "inline",
+  position?: "banner" | "header" | "inline",
 ): Promise<ApiAdvertisement[]> {
   const qs = position ? `?position=${position}` : "";
   return fetchJson<ApiAdvertisement[]>(`/advertisements${qs}`);

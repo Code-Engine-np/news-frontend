@@ -6,10 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  updateAdvertisement,
-  getAdUploadSignature,
-} from "@/src/lib/api";
+import { updateAdvertisement, getAdUploadSignature } from "@/src/lib/api";
 import { queryKeys, queryFns } from "@/src/lib/queries";
 import { Upload, X } from "lucide-react";
 
@@ -18,7 +15,7 @@ const inputClass =
 
 const POSITIONS = [
   { value: "banner", label: "Banner (full-width above content)" },
-  { value: "sidebar", label: "Sidebar" },
+  { value: "header", label: "Header" },
   { value: "inline", label: "Inline (within article feed)" },
 ] as const;
 
@@ -30,12 +27,15 @@ export default function EditAdvertisementPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formError, setFormError] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [preview, setPreview] = useState<{ url: string; publicId?: string | null } | null>(null);
+  const [preview, setPreview] = useState<{
+    url: string;
+    publicId?: string | null;
+  } | null>(null);
 
   const [form, setForm] = useState({
     title: "",
     linkUrl: "",
-    position: "banner" as "banner" | "sidebar" | "inline",
+    position: "banner" as "banner" | "header" | "inline",
     isActive: true,
     order: 0,
     startDate: "",
@@ -44,7 +44,8 @@ export default function EditAdvertisementPage() {
 
   const { data: ad, isLoading } = useQuery({
     queryKey: [...queryKeys.allAdvertisements(), id],
-    queryFn: () => queryFns.allAdvertisements().then((ads) => ads.find((a) => a.id === id)),
+    queryFn: () =>
+      queryFns.allAdvertisements().then((ads) => ads.find((a) => a.id === id)),
     enabled: Boolean(id),
   });
 
@@ -79,7 +80,10 @@ export default function EditAdvertisementPage() {
         `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`,
         { method: "POST", body: fd },
       );
-      const data = (await res.json()) as { secure_url: string; public_id: string };
+      const data = (await res.json()) as {
+        secure_url: string;
+        public_id: string;
+      };
       setPreview({ url: data.secure_url, publicId: data.public_id });
     } catch {
       setFormError("Image upload failed. Please try again.");
@@ -92,7 +96,9 @@ export default function EditAdvertisementPage() {
     mutationFn: (payload: Record<string, unknown>) =>
       updateAdvertisement(id, payload),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: queryKeys.allAdvertisements() });
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.allAdvertisements(),
+      });
       void queryClient.invalidateQueries({ queryKey: ["advertisements"] });
       router.push("/admin/advertisements");
     },
@@ -102,7 +108,10 @@ export default function EditAdvertisementPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
-    if (!preview) { setFormError("Please upload an image."); return; }
+    if (!preview) {
+      setFormError("Please upload an image.");
+      return;
+    }
     const payload: Record<string, unknown> = {
       title: form.title,
       imageUrl: preview.url,
@@ -128,176 +137,208 @@ export default function EditAdvertisementPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-ink dark:text-gray-100">Edit Advertisement</h1>
-        <Link href="/admin/advertisements" className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]">
+        <h1 className="text-xl font-bold text-ink dark:text-gray-100">
+          Edit Advertisement
+        </h1>
+        <Link
+          href="/admin/advertisements"
+          className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]"
+        >
           Cancel
         </Link>
       </div>
-        {(formError || updateMutation.isError) && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
-            {formError || "Failed to update advertisement."}
-          </div>
-        )}
+      {(formError || updateMutation.isError) && (
+        <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
+          {formError || "Failed to update advertisement."}
+        </div>
+      )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
-            <h2 className="mb-4 text-base font-semibold text-ink">Ad Details</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-ink">Title</label>
-                <input
-                  type="text"
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className={inputClass}
-                  required
-                />
-              </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
+          <h2 className="mb-4 text-base font-semibold text-ink">Ad Details</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-ink">
+                Title
+              </label>
+              <input
+                type="text"
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                className={inputClass}
+                required
+              />
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-ink">
-                  Link URL <span className="text-muted font-normal">(optional)</span>
-                </label>
-                <input
-                  type="url"
-                  value={form.linkUrl}
-                  onChange={(e) => setForm({ ...form, linkUrl: e.target.value })}
-                  className={inputClass}
-                  placeholder="https://example.com"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-ink">
+                Link URL{" "}
+                <span className="text-muted font-normal">(optional)</span>
+              </label>
+              <input
+                type="url"
+                value={form.linkUrl}
+                onChange={(e) => setForm({ ...form, linkUrl: e.target.value })}
+                className={inputClass}
+                placeholder="https://example.com"
+              />
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-ink">Ad Image</label>
-                {preview ? (
-                  <div className="mt-1 relative w-full overflow-hidden rounded-xl border border-line">
-                    <Image
-                      src={preview.url}
-                      alt="Ad preview"
-                      width={800}
-                      height={200}
-                      className="h-40 w-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setPreview(null)}
-                      className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
+            <div>
+              <label className="block text-sm font-medium text-ink">
+                Ad Image
+              </label>
+              {preview ? (
+                <div className="mt-1 relative w-full overflow-hidden rounded-xl border border-line">
+                  <Image
+                    src={preview.url}
+                    alt="Ad preview"
+                    width={800}
+                    height={200}
+                    className="h-40 w-full object-cover"
+                  />
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    className="mt-1 flex w-full cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-line px-6 py-8 text-center hover:border-primary disabled:opacity-50"
+                    onClick={() => setPreview(null)}
+                    className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
                   >
-                    <Upload className="h-8 w-8 text-muted" />
-                    <span className="text-sm font-medium text-ink">
-                      {uploading ? "Uploading…" : "Click to replace image"}
-                    </span>
+                    <X className="h-4 w-4" />
                   </button>
-                )}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleUpload}
-                />
-              </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="mt-1 flex w-full cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-line px-6 py-8 text-center hover:border-primary disabled:opacity-50"
+                >
+                  <Upload className="h-8 w-8 text-muted" />
+                  <span className="text-sm font-medium text-ink">
+                    {uploading ? "Uploading…" : "Click to replace image"}
+                  </span>
+                </button>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleUpload}
+              />
             </div>
           </div>
+        </div>
 
-          <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
-            <h2 className="mb-4 text-base font-semibold text-ink">Settings</h2>
-            <div className="space-y-4">
+        <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
+          <h2 className="mb-4 text-base font-semibold text-ink">Settings</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-ink">
+                Position
+              </label>
+              <select
+                value={form.position}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    position: e.target.value as typeof form.position,
+                  })
+                }
+                className={inputClass}
+              >
+                {POSITIONS.map((p) => (
+                  <option key={p.value} value={p.value}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                id="isActive"
+                checked={form.isActive}
+                onChange={(e) =>
+                  setForm({ ...form, isActive: e.target.checked })
+                }
+                className="h-4 w-4 rounded border-line accent-primary"
+              />
+              <label
+                htmlFor="isActive"
+                className="text-sm font-medium text-ink"
+              >
+                Active (visible on site)
+              </label>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-ink">
+                Display Order
+              </label>
+              <input
+                type="number"
+                value={form.order}
+                onChange={(e) =>
+                  setForm({ ...form, order: Number(e.target.value) })
+                }
+                className={inputClass}
+                min={0}
+              />
+              <p className="mt-1 text-xs text-muted">
+                Lower number = shown first.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-ink">Position</label>
-                <select
-                  value={form.position}
+                <label className="block text-sm font-medium text-ink">
+                  Start Date{" "}
+                  <span className="text-muted font-normal">(optional)</span>
+                </label>
+                <input
+                  type="datetime-local"
+                  value={form.startDate}
                   onChange={(e) =>
-                    setForm({ ...form, position: e.target.value as typeof form.position })
+                    setForm({ ...form, startDate: e.target.value })
                   }
                   className={inputClass}
-                >
-                  {POSITIONS.map((p) => (
-                    <option key={p.value} value={p.value}>
-                      {p.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  checked={form.isActive}
-                  onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-                  className="h-4 w-4 rounded border-line accent-primary"
                 />
-                <label htmlFor="isActive" className="text-sm font-medium text-ink">
-                  Active (visible on site)
-                </label>
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-ink">Display Order</label>
+                <label className="block text-sm font-medium text-ink">
+                  End Date{" "}
+                  <span className="text-muted font-normal">(optional)</span>
+                </label>
                 <input
-                  type="number"
-                  value={form.order}
-                  onChange={(e) => setForm({ ...form, order: Number(e.target.value) })}
+                  type="datetime-local"
+                  value={form.endDate}
+                  onChange={(e) =>
+                    setForm({ ...form, endDate: e.target.value })
+                  }
                   className={inputClass}
-                  min={0}
                 />
-                <p className="mt-1 text-xs text-muted">Lower number = shown first.</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-ink">
-                    Start Date <span className="text-muted font-normal">(optional)</span>
-                  </label>
-                  <input
-                    type="datetime-local"
-                    value={form.startDate}
-                    onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-ink">
-                    End Date <span className="text-muted font-normal">(optional)</span>
-                  </label>
-                  <input
-                    type="datetime-local"
-                    value={form.endDate}
-                    onChange={(e) => setForm({ ...form, endDate: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              type="submit"
-              disabled={updateMutation.isPending || uploading}
-              className="rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-50"
-            >
-              {updateMutation.isPending ? "Saving…" : "Save Changes"}
-            </button>
-            <Link
-              href="/admin/advertisements"
-              className="rounded-lg border border-line px-6 py-2.5 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]"
-            >
-              Cancel
-            </Link>
-          </div>
-        </form>
+        <div className="flex items-center gap-4">
+          <button
+            type="submit"
+            disabled={updateMutation.isPending || uploading}
+            className="rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-50"
+          >
+            {updateMutation.isPending ? "Saving…" : "Save Changes"}
+          </button>
+          <Link
+            href="/admin/advertisements"
+            className="rounded-lg border border-line px-6 py-2.5 text-sm font-medium text-muted hover:bg-gray-50 dark:hover:bg-[#22302a]"
+          >
+            Cancel
+          </Link>
+        </div>
+      </form>
     </div>
   );
 }
