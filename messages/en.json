@@ -64,9 +64,9 @@
     "language": "Language"
   },
   "Footer": {
-    "companyName": "Best Khabar Pvt. Ltd.",
-    "tagline": "A fast, Nepali-first news experience built around national and local coverage.",
-    "location": "Kathmandu, Nepal",
+    "companyName": "Pwaves Vision Corner Pvt. Ltd.",
+    "tagline": "'BestKhabar.com' is an online news portal established with the goal of delivering distinct and excellent news in the field of journalism. We are striving to advance Best Khabar as a news portal that provides unique and trustworthy news to our respected readers.",
+    "location": "Tarkeshwor Municipality-11, Kathmandu, Nepal",
     "followUs": "Follow Us",
     "copyright": "© Copyright {year} Best Khabar. All Rights Reserved.",
     "exploreTitle": "Explore",
@@ -78,11 +78,16 @@
     "linkAbout": "About Us",
     "linkAdvertise": "Advertise",
     "linkContact": "Contact Us",
-    "linkPrivacy": "Privacy Policy"
+    "linkPrivacy": "Privacy Policy",
+    "contactTitle": "Contact",
+    "officeLabel": "Office",
+    "europeContact": "Europe Contact",
+    "emailLabel": "Email"
   },
   "Home": {
     "topStory": "Top Story",
     "latestNews": "Latest News",
+    "trendingNews": "Trending News",
     "politics": "Politics",
     "viewAll": "View all",
     "breakingNews": "Breaking News",
@@ -211,6 +216,10 @@
   "Article": {
     "home": "Home",
     "share": "Share",
+    "shareOnFacebook": "Share on Facebook",
+    "shareOnWhatsApp": "Share on WhatsApp",
+    "copyLink": "Copy link",
+    "linkCopied": "Copied!",
     "relatedCoverage": "Related coverage",
     "moreFrom": "More from {category}",
     "viewCategory": "View category"

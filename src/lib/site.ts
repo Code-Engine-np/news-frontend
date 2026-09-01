@@ -20,16 +20,32 @@ export type NavItem = {
  * `label` is the canonical English name used when creating backend categories.
  */
 export const MAIN_NAV_ITEMS: readonly NavItem[] = [
-  { key: "examplary-world", href: "/category/examplary-world", label: "Examplary World" },
+  {
+    key: "examplary-world",
+    href: "/category/examplary-world",
+    label: "Examplary World",
+  },
   {
     key: "all-nepal",
     href: "/category/all-nepal",
     label: "All Nepal",
     children: [
-      { key: "kathmandu-valley", href: "/category/kathmandu-valley", label: "Kathmandu Valley" },
-      { key: "current-politics", href: "/category/current-politics", label: "Current Politics" },
+      {
+        key: "kathmandu-valley",
+        href: "/category/kathmandu-valley",
+        label: "Kathmandu Valley",
+      },
+      {
+        key: "current-politics",
+        href: "/category/current-politics",
+        label: "Current Politics",
+      },
       { key: "state-news", href: "/category/state-news", label: "State News" },
-      { key: "nepal-khabar", href: "/category/nepal-khabar", label: "Nepal Khabar" },
+      {
+        key: "nepal-khabar",
+        href: "/category/nepal-khabar",
+        label: "Nepal Khabar",
+      },
     ],
   },
   {
@@ -45,10 +61,22 @@ export const MAIN_NAV_ITEMS: readonly NavItem[] = [
       { key: "others", href: "/category/others", label: "Others" },
     ],
   },
-  { key: "arts-literature-entertainment", href: "/category/arts-literature-entertainment", label: "Arts, Literature & Entertainment" },
-  { key: "tourism-ghumgham", href: "/category/tourism-ghumgham", label: "Tourism & Ghumgham" },
+  {
+    key: "arts-literature-entertainment",
+    href: "/category/arts-literature-entertainment",
+    label: "Arts, Literature & Entertainment",
+  },
+  {
+    key: "tourism-ghumgham",
+    href: "/category/tourism-ghumgham",
+    label: "Tourism & Ghumgham",
+  },
   { key: "opinion", href: "/category/opinion", label: "Opinion" },
-  { key: "best-videos", href: "/category/best-videos", label: "Best Videos" },
+  {
+    key: "features",
+    href: "/category/features",
+    label: "Features",
+  },
   { key: "english", href: "/category/english-news", label: "English News" },
   { key: "old-site", href: "https://old.bestkhabar.com/", label: "Old Site" },
 ];

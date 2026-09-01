@@ -10,7 +10,7 @@ import type { ApiAdvertisement } from "@/src/types";
 
 const POSITION_LABELS: Record<string, string> = {
   banner: "Banner",
-  sidebar: "Sidebar",
+  header: "Header",
   inline: "Inline",
 };
 

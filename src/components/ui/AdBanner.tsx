@@ -25,6 +25,8 @@ export default function AdBanner({ ad }: AdBannerProps) {
       {img}
     </a>
   ) : (
-    <div className="overflow-hidden rounded-xl border border-line dark:border-[#2a3832]">{img}</div>
+    <div className="overflow-hidden rounded-xl border border-line dark:border-[#2a3832]">
+      {img}
+    </div>
   );
 }

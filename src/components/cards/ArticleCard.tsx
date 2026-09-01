@@ -132,7 +132,7 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
   if (variant === "featured") {
     if (featuredVideoId) {
       return (
-        <article className="overflow-hidden rounded-2xl bg-white dark:bg-[#1e2a26] shadow-sm">
+        <article className="overflow-hidden rounded-xl bg-white dark:bg-[#1e2a26] shadow-sm">
           <div className="relative aspect-video bg-black">
             <iframe
               src={getYouTubeEmbedUrl(featuredVideoId)}
@@ -167,7 +167,7 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
 
     return (
       <Link href={`/article/${slug}`} className="group block h-full">
-        <article className="relative h-full min-h-[300px] overflow-hidden rounded-2xl sm:min-h-[400px]">
+        <article className="relative h-full min-h-[300px] overflow-hidden rounded-xl sm:min-h-[400px]">
           {renderThumbnail(
             "object-cover transition-transform duration-500 group-hover:scale-105",
             "(max-width: 768px) 100vw, 800px",
@@ -201,7 +201,7 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
   // text content below navigates to the article (iframe captures its own events).
   return (
     <Link href={`/article/${slug}`} className="group block h-full">
-      <article className="flex h-full flex-col overflow-hidden rounded-2xl bg-white dark:bg-[#1e2a26] shadow-sm transition-shadow duration-300 hover:shadow-md">
+      <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2a26] shadow-sm transition-shadow duration-300 hover:shadow-md">
         <div className="relative aspect-video overflow-hidden bg-black">
           {featuredVideoId ? (
             <iframe

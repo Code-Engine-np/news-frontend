@@ -4,52 +4,29 @@ import TrendingList from "./TrendingList";
 import AdvertisementBanner from "./AdvertisementBanner";
 import NewsletterForm from "./NewsletterForm";
 import { NewsArticle } from "@/src/types";
-import { ADVERTISEMENTS } from "@/src/lib/site";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys, queryFns } from "@/src/lib/queries";
+import type { ApiAdvertisement } from "@/src/types";
 
 interface SidebarProps {
   articles: NewsArticle[];
 }
 
 const Sidebar = ({ articles }: SidebarProps) => {
-  const sidebarAds = ADVERTISEMENTS.filter((ad) => ad.position === "sidebar");
+  const { data: bannerAds = [] } = useQuery<ApiAdvertisement[]>({
+    queryKey: queryKeys.advertisements("banner"),
+    queryFn: queryFns.advertisements("banner"),
+    staleTime: 5 * 60 * 1000,
+  });
 
   return (
     <aside className="space-y-6" aria-label="Sidebar">
-      {/* Latest News (Compact) */}
-      {/* <div className="bg-white dark:bg-[#1e2a26] rounded-2xl shadow-sm border border-gray-200 dark:border-[#2a3832] p-6">
-        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-          Latest News
-        </h3>
-        <div className="space-y-4">
-          {articles.slice(0, 4).map((article) => (
-            <Link
-              key={article.id}
-              href={`/article/${article.slug}`}
-              className="group block"
-            >
-              <div className="text-sm">
-                <span
-                  className={`inline-block bg-primary-bright text-white text-xs px-2 py-0.5 rounded-full mb-1`}
-                >
-                  {article.category.name}
-                </span>
-                <p className="font-medium text-gray-900 dark:text-gray-200 group-hover:text-brand-600 transition-colors line-clamp-2">
-                  {article.title}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div> */}
-      {/* Trending List */}
       <TrendingList articles={articles} />
 
-      {/* Advertisement */}
-      {sidebarAds.map((ad) => (
+      {bannerAds.map((ad) => (
         <AdvertisementBanner key={ad.id} advertisement={ad} />
       ))}
 
-      {/* Newsletter */}
       <NewsletterForm />
     </aside>
   );
