@@ -15,7 +15,11 @@ import {
 import { getQueryClient } from "@/src/lib/query-client";
 import { queryKeys, queryFns } from "@/src/lib/queries";
 import { getTrendingArticles } from "@/src/lib/site";
-import type { ApiAdvertisement, ApiFeaturedImage, NewsArticle } from "@/src/types";
+import type {
+  ApiAdvertisement,
+  ApiFeaturedImage,
+  NewsArticle,
+} from "@/src/types";
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -52,20 +56,27 @@ export default async function Home() {
   const displayArticles = apiArticles.map(mapApiArticleToNewsArticle);
 
   const featuredSlides =
-    queryClient.getQueryData<ApiFeaturedImage[]>(queryKeys.featuredImages()) ?? [];
+    queryClient.getQueryData<ApiFeaturedImage[]>(queryKeys.featuredImages()) ??
+    [];
 
   const bannerAds =
-    queryClient.getQueryData<ApiAdvertisement[]>(queryKeys.advertisements("banner")) ?? [];
+    queryClient.getQueryData<ApiAdvertisement[]>(
+      queryKeys.advertisements("banner"),
+    ) ?? [];
 
   const breakingNews = displayArticles
     .filter((a) => a.isBreaking)
     .map((a) => a.title);
 
   // Group articles by category in first-appearance order
-  const categoryMap = new Map<string, { name: string; slug: string; articles: NewsArticle[] }>();
+  const categoryMap = new Map<
+    string,
+    { name: string; slug: string; articles: NewsArticle[] }
+  >();
   for (const article of displayArticles) {
     const { slug, name } = article.category;
-    if (!categoryMap.has(slug)) categoryMap.set(slug, { name, slug, articles: [] });
+    if (!categoryMap.has(slug))
+      categoryMap.set(slug, { name, slug, articles: [] });
     categoryMap.get(slug)!.articles.push(article);
   }
   const categorySections = Array.from(categoryMap.values());
@@ -80,7 +91,6 @@ export default async function Home() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <NewsShell>
         <div className="mx-auto w-full max-w-7xl px-3 pb-10 pt-3 sm:px-4 lg:px-6">
-
           {/* Error banner */}
           {hasError && (
             <div className="mb-3 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">
@@ -116,7 +126,10 @@ export default async function Home() {
                   <p className="mt-1 text-xs text-muted">
                     {t.rich("noSlides", {
                       link: (chunks) => (
-                        <Link href="/admin/featured-images/new" className="text-primary underline">
+                        <Link
+                          href="/admin/featured-images/new"
+                          className="text-primary underline"
+                        >
                           {chunks}
                         </Link>
                       ),
@@ -128,7 +141,10 @@ export default async function Home() {
 
             {/* Latest news sidebar — desktop only */}
             <div className="hidden lg:block lg:h-105">
-              <LatestNewsList articles={latestArticles} title={t("trendingNews")} />
+              <LatestNewsList
+                articles={latestArticles}
+                title={t("trendingNews")}
+              />
             </div>
           </div>
 
@@ -138,9 +154,15 @@ export default async function Home() {
               <AdBanner ad={getAd(0)!} />
             ) : (
               <div className="rounded-xl border border-dashed border-line bg-white px-4 py-5 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">{t("adLabel")}</p>
-                <p className="mt-1 text-lg font-bold text-ink dark:text-gray-200">{t("advertiseHere")}</p>
-                <p className="mt-1 text-xs text-muted">{t("advertiseSubtitle")}</p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">
+                  {t("adLabel")}
+                </p>
+                <p className="mt-1 text-lg font-bold text-ink dark:text-gray-200">
+                  {t("advertiseHere")}
+                </p>
+                <p className="mt-1 text-xs text-muted">
+                  {t("advertiseSubtitle")}
+                </p>
               </div>
             )}
           </div>
@@ -148,7 +170,7 @@ export default async function Home() {
           {/* ── CATEGORY SECTIONS ─────────────────────────────────────── */}
           <div className="mt-3 space-y-3">
             {displayArticles.length === 0 && !hasError && (
-              <div className="rounded-xl border border-line bg-white p-8 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
+              <div className="rounded border border-line bg-white p-8 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
                 <p className="text-sm text-muted">{t("noArticles")}</p>
               </div>
             )}
@@ -164,21 +186,23 @@ export default async function Home() {
                     articles={cat.articles}
                     viewAllLabel={t("viewAll")}
                   />
-                  {showAd && (
-                    ad ? (
+                  {showAd &&
+                    (ad ? (
                       <AdBanner ad={ad} />
                     ) : (
                       <div className="rounded-xl border border-dashed border-line bg-white px-4 py-4 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
-                        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">{t("adLabel")}</p>
-                        <p className="mt-1 text-base font-bold text-ink dark:text-gray-200">{t("advertiseHere")}</p>
+                        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">
+                          {t("adLabel")}
+                        </p>
+                        <p className="mt-1 text-base font-bold text-ink dark:text-gray-200">
+                          {t("advertiseHere")}
+                        </p>
                       </div>
-                    )
-                  )}
+                    ))}
                 </React.Fragment>
               );
             })}
           </div>
-
         </div>
       </NewsShell>
     </HydrationBoundary>

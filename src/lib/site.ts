@@ -26,9 +26,9 @@ export const MAIN_NAV_ITEMS: readonly NavItem[] = [
     label: "Examplary World",
   },
   {
-    key: "all-nepal",
-    href: "/category/all-nepal",
-    label: "All Nepal",
+    key: "nepal-khabar",
+    href: "/category/nepal-khabar",
+    label: "Nepal Khabar",
     children: [
       {
         key: "kathmandu-valley",
@@ -36,15 +36,15 @@ export const MAIN_NAV_ITEMS: readonly NavItem[] = [
         label: "Kathmandu Valley",
       },
       {
-        key: "current-politics",
-        href: "/category/current-politics",
-        label: "Current Politics",
+        key: "current",
+        href: "/category/current",
+        label: "Current",
       },
-      { key: "state-news", href: "/category/state-news", label: "State News" },
+      // { key: "state-news", href: "/category/state-news", label: "State News" },
       {
-        key: "nepal-khabar",
-        href: "/category/nepal-khabar",
-        label: "Nepal Khabar",
+        key: "all-nepal",
+        href: "/category/all-nepal",
+        label: "All Nepal",
       },
     ],
   },
@@ -62,9 +62,9 @@ export const MAIN_NAV_ITEMS: readonly NavItem[] = [
     ],
   },
   {
-    key: "arts-literature-entertainment",
-    href: "/category/arts-literature-entertainment",
-    label: "Arts, Literature & Entertainment",
+    key: "arts-culture-literature-entertainment",
+    href: "/category/arts-culture-literature-entertainment",
+    label: "Arts/Culture/Literature/Entertainment",
   },
   {
     key: "tourism-ghumgham",
@@ -78,7 +78,11 @@ export const MAIN_NAV_ITEMS: readonly NavItem[] = [
     label: "Features",
   },
   { key: "english", href: "/category/english-news", label: "English News" },
-  { key: "old-site", href: "https://old.bestkhabar.com/", label: "Old Site" },
+  {
+    key: "old-site",
+    href: "https://old.bestkhabar.com/",
+    label: "Best Khabar Archive",
+  },
 ];
 
 export const SOCIAL_LINKS = [

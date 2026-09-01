@@ -23,14 +23,14 @@ export default function CategoryNewsSection({
 
   return (
     <section
-      className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm dark:border-[#2a3832] dark:bg-[#1e2a26]"
+      className="overflow-hidden rounded-xl border border-line bg-white shadow-sm dark:border-[#2a3832] dark:bg-[#1e2a26]"
       aria-label={title}
     >
       {/* Green category header */}
       <div className="flex items-center justify-between bg-primary px-4 py-2">
         <Link
           href={`/category/${slug}`}
-          className="text-sm font-bold uppercase tracking-wide text-white hover:text-white/80"
+          className="text-lg font-bold uppercase tracking-wide text-white hover:text-white/80"
         >
           {title}
         </Link>

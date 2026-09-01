@@ -1,10 +1,10 @@
 {
   "Nav": {
     "home": "गृहपृष्ठ",
-    "examplary-world": "    अनुकरणीय दुनिया",
+    "examplary-world": "अनुकरणीय दुनिया",
     "all-nepal": "नेपाल विविध",
     "kathmandu-valley": "काठमाडौं उपत्यका",
-    "current-politics": "समसामयिक राजनीति",
+    "current": "समसामयिक ",
     "state-news": "प्रदेश समाचार",
     "nepal-khabar": "नेपाल खबर",
     "abroad-news": "प्रवास खबर",
@@ -14,7 +14,7 @@
     "canada": "क्यानाडा",
     "australia": "अस्ट्रेलिया",
     "others": "अन्य",
-    "arts-literature-entertainment": "कला/संस्कृति/साहित्य/मनोरञ्जन",
+    "arts-culture-literature-entertainment": "कला/संस्कृति/साहित्य/मनोरञ्जन",
     "tourism-ghumgham": "पर्यटन तथा घुमघाम",
     "opinion": "दृष्टिकोण",
     "best-videos": "उत्कृष्ट भिडियो",

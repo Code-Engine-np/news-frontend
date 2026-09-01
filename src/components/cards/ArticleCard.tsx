@@ -197,39 +197,22 @@ const ArticleCard = ({ article, variant = "default" }: ArticleCardProps) => {
   }
 
   // ── Default variant (vertical card) ──────────────────────────────────────
-  // YouTube articles show an embedded player in the card; clicking the
-  // text content below navigates to the article (iframe captures its own events).
   return (
     <Link href={`/article/${slug}`} className="group block h-full">
       <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2a26] shadow-sm transition-shadow duration-300 hover:shadow-md">
         <div className="relative aspect-video overflow-hidden bg-black">
-          {featuredVideoId ? (
-            <iframe
-              src={getYouTubeEmbedUrl(featuredVideoId)}
-              title={title}
-              className="absolute inset-0 h-full w-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <>
-              {renderThumbnail(
-                "object-cover transition-transform duration-300 group-hover:scale-105",
-                "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
-              )}
-              <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-medium text-white ${category.color}`}>
-                {category.name}
-              </span>
-            </>
-          )}
-        </div>
-        <div className="flex-1 p-4">
-          {featuredVideoId && (
-            <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium text-white ${category.color}`}>
+          <>
+            {renderThumbnail(
+              "object-cover transition-transform duration-300 group-hover:scale-105",
+              "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
+            )}
+            <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-medium text-white ${category.color}`}>
               {category.name}
             </span>
-          )}
-          <h3 className="mt-1 line-clamp-2 text-base font-semibold text-gray-900 dark:text-gray-100 transition-colors group-hover:text-brand-600">
+          </>
+        </div>
+        <div className="flex-1 p-4">
+          <h3 className="mt-1 line-clamp-2 text-lg font-semibold text-gray-900 dark:text-gray-100 transition-colors group-hover:text-brand-600">
             {title}
           </h3>
           <p className="mt-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">{excerpt}</p>
