@@ -56,7 +56,7 @@ export default async function TrendingPage() {
 
           <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
             <section className="space-y-6">
-              <TrendingList articles={trendingArticles} />
+              {/* <TrendingList articles={trendingArticles} /> */}
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {trendingArticles.map((article) => (
