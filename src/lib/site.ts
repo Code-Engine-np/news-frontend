@@ -14,6 +14,18 @@ export type NavItem = {
 };
 
 /**
+ * Maps backend DB category slugs → nav key when the two don't match exactly and
+ * normalization (removing hyphens/spaces) can't bridge the gap automatically.
+ * Extend this whenever a new category is created in the DB with a slug that
+ * differs from the corresponding nav href slug.
+ */
+export const DB_SLUG_TO_NAV_KEY: Record<string, string> = {
+  "current-affairs": "current",
+  "kathmandu": "kathmandu-valley",
+  "nepal bibidh": "all-nepal",
+};
+
+/**
  * Main navigation. `key` maps to a key in the `Nav` message namespace
  * (see messages/*.json) so labels are localized at render time; `href` is the
  * locale-agnostic path (the locale prefix is added by next-intl's <Link>).

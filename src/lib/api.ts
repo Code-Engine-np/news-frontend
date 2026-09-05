@@ -111,13 +111,15 @@ export async function fetchAuthed<T>(
 
 export async function fetchJson<T>(
   path: string,
-  init?: RequestInit,
+  init?: RequestInit & { next?: { revalidate?: number; tags?: string[] } },
 ): Promise<T> {
+  const { next, ...restInit } = init ?? {};
   const res = await fetch(`${API_BASE_URL}${path}`, {
-    ...init,
+    ...restInit,
+    ...(next ? { next } : {}),
     headers: {
       "Content-Type": "application/json",
-      ...init?.headers,
+      ...restInit?.headers,
     } as HeadersInit,
   });
 
@@ -227,7 +229,7 @@ export async function deleteArticle(id: string, token: string): Promise<void> {
 
 /** GET /api/articles/published  -  list published articles */
 export async function getPublishedArticles(): Promise<ApiArticle[]> {
-  return fetchJson<ApiArticle[]>("/articles/published");
+  return fetchJson<ApiArticle[]>("/articles/published", { next: { revalidate: 60 } });
 }
 
 /** GET /api/articles  -  list all articles (auth required) */
@@ -246,7 +248,7 @@ export async function getArticle(id: string): Promise<ApiArticle> {
 
 /** GET /api/articles/slug/:slug  -  single article by slug */
 export async function getArticleBySlug(slug: string): Promise<ApiArticle> {
-  return fetchJson<ApiArticle>(`/articles/slug/${slug}`);
+  return fetchJson<ApiArticle>(`/articles/slug/${slug}`, { next: { revalidate: 60 } });
 }
 
 /** GET /api/news-articles/:id  -  single news article */
@@ -260,17 +262,17 @@ export async function getNewsArticle(id: string): Promise<ApiArticle> {
 
 /** GET /api/categories */
 export async function getCategories(): Promise<ApiCategory[] | null> {
-  return fetchJson<ApiCategory[]>("/categories");
+  return fetchJson<ApiCategory[]>("/categories", { next: { revalidate: 300 } });
 }
 
 /** GET /api/categories/:id */
 export async function getCategory(id: string): Promise<ApiCategory> {
-  return fetchJson<ApiCategory>(`/categories/${id}`);
+  return fetchJson<ApiCategory>(`/categories/${id}`, { next: { revalidate: 300 } });
 }
 
 /** GET /api/categories/slug/:slug */
 export async function getCategoryBySlug(slug: string): Promise<ApiCategory> {
-  return fetchJson<ApiCategory>(`/categories/slug/${slug}`);
+  return fetchJson<ApiCategory>(`/categories/slug/${slug}`, { next: { revalidate: 300 } });
 }
 
 /* ------------------------------------------------------------------ */
@@ -316,7 +318,7 @@ export async function unsubscribeNewsletter(email: string): Promise<void> {
 /* ------------------------------------------------------------------ */
 
 export async function getFeaturedImages(): Promise<ApiFeaturedImage[]> {
-  return fetchJson<ApiFeaturedImage[]>("/featured-images");
+  return fetchJson<ApiFeaturedImage[]>("/featured-images", { next: { revalidate: 120 } });
 }
 
 export async function getAllFeaturedImages(): Promise<ApiFeaturedImage[]> {
@@ -365,7 +367,7 @@ export async function getAdvertisements(
   position?: "banner" | "header" | "inline",
 ): Promise<ApiAdvertisement[]> {
   const qs = position ? `?position=${position}` : "";
-  return fetchJson<ApiAdvertisement[]>(`/advertisements${qs}`);
+  return fetchJson<ApiAdvertisement[]>(`/advertisements${qs}`, { next: { revalidate: 300 } });
 }
 
 /** GET /api/advertisements/admin/all (admin) */
@@ -474,7 +476,7 @@ import type { ApiPopupNotice } from "@/src/types";
 
 /** GET /api/popup-notices/active (public) */
 export async function getActivePopupNotice(): Promise<ApiPopupNotice | null> {
-  return fetchJson<ApiPopupNotice | null>("/popup-notices/active");
+  return fetchJson<ApiPopupNotice | null>("/popup-notices/active", { next: { revalidate: 60 } });
 }
 
 /** GET /api/popup-notices (admin) */
