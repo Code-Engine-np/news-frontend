@@ -6,9 +6,11 @@ import type { NewsArticle } from "@/src/types";
 interface LatestNewsListProps {
   articles: NewsArticle[];
   title: string;
+  viewAllHref?: string;
+  viewAllLabel?: string;
 }
 
-export default function LatestNewsList({ articles, title }: LatestNewsListProps) {
+export default function LatestNewsList({ articles, title, viewAllHref, viewAllLabel }: LatestNewsListProps) {
   if (articles.length === 0) return null;
 
   return (
@@ -49,6 +51,14 @@ export default function LatestNewsList({ articles, title }: LatestNewsListProps)
           </Link>
         ))}
       </div>
+      {viewAllHref && (
+        <Link
+          href={viewAllHref}
+          className="shrink-0 border-t border-line py-2.5 text-center text-xs font-semibold text-primary hover:bg-gray-50 dark:border-[#2a3832] dark:hover:bg-[#22302a]"
+        >
+          {viewAllLabel ?? "View All"} →
+        </Link>
+      )}
     </div>
   );
 }

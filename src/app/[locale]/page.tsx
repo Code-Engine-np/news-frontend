@@ -14,16 +14,13 @@ import {
 } from "@/src/lib/api";
 import { getQueryClient } from "@/src/lib/query-client";
 import { queryKeys, queryFns } from "@/src/lib/queries";
-import { getTrendingArticles } from "@/src/lib/site";
-import type {
-  ApiAdvertisement,
-  ApiFeaturedImage,
-  NewsArticle,
-} from "@/src/types";
+import { MAIN_NAV_ITEMS, getTrendingArticles } from "@/src/lib/site";
+import type { ApiAdvertisement, ApiFeaturedImage, NewsArticle } from "@/src/types";
 
 export default async function Home() {
   const queryClient = getQueryClient();
   const t = await getTranslations("Home");
+  const tNav = await getTranslations("Nav");
 
   let hasError = false;
   try {
@@ -56,41 +53,90 @@ export default async function Home() {
   const displayArticles = apiArticles.map(mapApiArticleToNewsArticle);
 
   const featuredSlides =
-    queryClient.getQueryData<ApiFeaturedImage[]>(queryKeys.featuredImages()) ??
-    [];
+    queryClient.getQueryData<ApiFeaturedImage[]>(queryKeys.featuredImages()) ?? [];
 
   const bannerAds =
-    queryClient.getQueryData<ApiAdvertisement[]>(
-      queryKeys.advertisements("banner"),
-    ) ?? [];
+    queryClient.getQueryData<ApiAdvertisement[]>(queryKeys.advertisements("banner")) ?? [];
 
   const breakingNews = displayArticles
     .filter((a) => a.isBreaking)
     .map((a) => a.title);
 
-  // Group articles by category in first-appearance order
-  const categoryMap = new Map<
-    string,
-    { name: string; slug: string; articles: NewsArticle[] }
-  >();
-  for (const article of displayArticles) {
-    const { slug, name } = article.category;
-    if (!categoryMap.has(slug))
-      categoryMap.set(slug, { name, slug, articles: [] });
-    categoryMap.get(slug)!.articles.push(article);
-  }
-  const categorySections = Array.from(categoryMap.values());
+  // Build flat ordered slug list from nav (parent then children, no external links)
+  const navOrderedSlugs = MAIN_NAV_ITEMS.filter((i) =>
+    i.href.startsWith("/category/"),
+  ).flatMap((i) => [
+    { slug: i.href.replace("/category/", ""), key: i.key },
+    ...(i.children?.map((c) => ({
+      slug: c.href.replace("/category/", ""),
+      key: c.key,
+    })) ?? []),
+  ]);
 
-  const latestArticles = getTrendingArticles(displayArticles, 7);
+  // Group all articles by category slug
+  const articlesBySlug = new Map<string, NewsArticle[]>();
+  for (const article of displayArticles) {
+    const s = article.category.slug;
+    if (!articlesBySlug.has(s)) articlesBySlug.set(s, []);
+    articlesBySlug.get(s)!.push(article);
+  }
+
+  // Build sections in nav order with localized titles
+  const seenSlugs = new Set<string>();
+  const categorySections: { slug: string; title: string; articles: NewsArticle[] }[] = [];
+
+  for (const { slug, key } of navOrderedSlugs) {
+    if (seenSlugs.has(slug)) continue;
+    seenSlugs.add(slug);
+    const articles = articlesBySlug.get(slug);
+    if (articles?.length) {
+      categorySections.push({ slug, title: tNav(key), articles });
+    }
+  }
+
+  // Append any categories not in the nav (use backend name as fallback)
+  for (const [slug, articles] of articlesBySlug) {
+    if (!seenSlugs.has(slug) && articles.length > 0) {
+      categorySections.push({ slug, title: articles[0].category.name, articles });
+    }
+  }
+
+  // Top 4 trending articles for the sidebar
+  const latestArticles = getTrendingArticles(displayArticles, 4);
 
   // Resolve ad by index; returns undefined if bannerAds is empty
   const getAd = (index: number): ApiAdvertisement | undefined =>
     bannerAds.length > 0 ? bannerAds[index % bannerAds.length] : undefined;
 
+  const carouselEl = featuredSlides.length > 0 ? (
+    <FeaturedCarousel
+      slides={featuredSlides}
+      className="relative overflow-hidden rounded-xl"
+    />
+  ) : (
+    <div className="flex h-55 items-center justify-center rounded-xl border border-dashed border-line bg-white dark:border-[#2a3832] dark:bg-[#1e2a26] sm:h-80 lg:h-105">
+      <div className="px-4 text-center">
+        <p className="text-sm font-semibold text-ink dark:text-gray-200">
+          {t("featuredCarousel")}
+        </p>
+        <p className="mt-1 text-xs text-muted">
+          {t.rich("noSlides", {
+            link: (chunks) => (
+              <Link href="/admin/featured-images/new" className="text-primary underline">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </p>
+      </div>
+    </div>
+  );
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <NewsShell>
         <div className="mx-auto w-full max-w-7xl px-3 pb-10 pt-3 sm:px-4 lg:px-6">
+
           {/* Error banner */}
           {hasError && (
             <div className="mb-3 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">
@@ -110,40 +156,15 @@ export default async function Home() {
             </div>
           )}
 
-          {/* ── HERO: Carousel (left) + Latest News sidebar (right) ──── */}
+          {/* ── HERO: Carousel (left) + Trending sidebar (right, desktop only) ── */}
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-[3fr_2fr] lg:items-stretch">
-            {featuredSlides.length > 0 ? (
-              <FeaturedCarousel
-                slides={featuredSlides}
-                className="relative overflow-hidden rounded-xl"
-              />
-            ) : (
-              <div className="flex h-55 items-center justify-center rounded-xl border border-dashed border-line bg-white dark:border-[#2a3832] dark:bg-[#1e2a26] sm:h-80 lg:h-105">
-                <div className="px-4 text-center">
-                  <p className="text-sm font-semibold text-ink dark:text-gray-200">
-                    {t("featuredCarousel")}
-                  </p>
-                  <p className="mt-1 text-xs text-muted">
-                    {t.rich("noSlides", {
-                      link: (chunks) => (
-                        <Link
-                          href="/admin/featured-images/new"
-                          className="text-primary underline"
-                        >
-                          {chunks}
-                        </Link>
-                      ),
-                    })}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Latest news sidebar — desktop only */}
+            {carouselEl}
             <div className="hidden lg:block lg:h-105">
               <LatestNewsList
                 articles={latestArticles}
                 title={t("trendingNews")}
+                viewAllHref="/trending"
+                viewAllLabel={t("viewAll")}
               />
             </div>
           </div>
@@ -154,23 +175,17 @@ export default async function Home() {
               <AdBanner ad={getAd(0)!} />
             ) : (
               <div className="rounded-xl border border-dashed border-line bg-white px-4 py-5 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">
-                  {t("adLabel")}
-                </p>
-                <p className="mt-1 text-lg font-bold text-ink dark:text-gray-200">
-                  {t("advertiseHere")}
-                </p>
-                <p className="mt-1 text-xs text-muted">
-                  {t("advertiseSubtitle")}
-                </p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">{t("adLabel")}</p>
+                <p className="mt-1 text-lg font-bold text-ink dark:text-gray-200">{t("advertiseHere")}</p>
+                <p className="mt-1 text-xs text-muted">{t("advertiseSubtitle")}</p>
               </div>
             )}
           </div>
 
-          {/* ── CATEGORY SECTIONS ─────────────────────────────────────── */}
+          {/* ── CATEGORY SECTIONS (nav order, all parent + sub categories) ── */}
           <div className="mt-3 space-y-3">
             {displayArticles.length === 0 && !hasError && (
-              <div className="rounded border border-line bg-white p-8 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
+              <div className="rounded-xl border border-line bg-white p-8 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
                 <p className="text-sm text-muted">{t("noArticles")}</p>
               </div>
             )}
@@ -181,28 +196,38 @@ export default async function Home() {
               return (
                 <React.Fragment key={cat.slug}>
                   <CategoryNewsSection
-                    title={cat.name}
+                    title={cat.title}
                     slug={cat.slug}
                     articles={cat.articles}
                     viewAllLabel={t("viewAll")}
                   />
-                  {showAd &&
-                    (ad ? (
+                  {showAd && (
+                    ad ? (
                       <AdBanner ad={ad} />
                     ) : (
                       <div className="rounded-xl border border-dashed border-line bg-white px-4 py-4 text-center dark:border-[#2a3832] dark:bg-[#1e2a26]">
-                        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">
-                          {t("adLabel")}
-                        </p>
-                        <p className="mt-1 text-base font-bold text-ink dark:text-gray-200">
-                          {t("advertiseHere")}
-                        </p>
+                        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted">{t("adLabel")}</p>
+                        <p className="mt-1 text-base font-bold text-ink dark:text-gray-200">{t("advertiseHere")}</p>
                       </div>
-                    ))}
+                    )
+                  )}
                 </React.Fragment>
               );
             })}
           </div>
+
+          {/* ── TRENDING NEWS — mobile only, above footer ─────────────── */}
+          {latestArticles.length > 0 && (
+            <div className="mt-3 lg:hidden">
+              <LatestNewsList
+                articles={latestArticles}
+                title={t("trendingNews")}
+                viewAllHref="/trending"
+                viewAllLabel={t("viewAll")}
+              />
+            </div>
+          )}
+
         </div>
       </NewsShell>
     </HydrationBoundary>
