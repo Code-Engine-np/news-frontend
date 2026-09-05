@@ -10,6 +10,7 @@ import { getRelatedArticles, getTrendingArticles } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import Sidebar from "@/src/components/ui/Sidebar";
 import ArticleCard from "@/src/components/cards/ArticleCard";
+import AdBanner from "@/src/components/ui/AdBanner";
 import {
   mapApiArticleToNewsArticle,
   getArticleBySlug,
@@ -19,6 +20,7 @@ import { sanitizeArticleHtml } from "@/src/lib/sanitize";
 import { getYouTubeEmbedUrl } from "@/src/lib/youtube";
 import { getQueryClient } from "@/src/lib/query-client";
 import { queryKeys, queryFns } from "@/src/lib/queries";
+import type { ApiAdvertisement } from "@/src/types";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string; locale: string }>;
@@ -71,6 +73,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         queryKey: queryKeys.publishedArticles(),
         queryFn: queryFns.publishedArticles,
       }),
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.advertisements("banner"),
+        queryFn: queryFns.advertisements("banner"),
+      }),
     ]);
 
     const apiArticle = queryClient.getQueryData<
@@ -90,6 +96,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const relatedArticles = getRelatedArticles(allArticles, article, 3);
   const sidebarArticles = getTrendingArticles(allArticles, 6);
   const canonicalUrl = `${SITE_URL}/${locale}/article/${slug}`;
+
+  const bannerAds =
+    queryClient.getQueryData<ApiAdvertisement[]>(queryKeys.advertisements("banner")) ?? [];
+  const inlineAd = bannerAds[0] ?? null;
+
+  // Split HTML after the first closing </p> so we can inject the ad inline
+  const sanitizedHtml = sanitizeArticleHtml(article.content);
+  const splitIdx = sanitizedHtml.indexOf("</p>");
+  const htmlBefore = splitIdx !== -1 ? sanitizedHtml.slice(0, splitIdx + 4) : "";
+  const htmlAfter = splitIdx !== -1 ? sanitizedHtml.slice(splitIdx + 4) : sanitizedHtml;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
@@ -154,12 +170,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <span>{article.author.fullName}</span>
               </div>
 
-              <div
-                className="prose prose-slate mt-6 max-w-none prose-headings:text-ink prose-p:text-[#4d5c56]"
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeArticleHtml(article.content),
-                }}
-              />
+              <div className="prose prose-slate mt-6 max-w-none prose-headings:text-ink prose-p:text-[#4d5c56]">
+                {htmlBefore && (
+                  <div dangerouslySetInnerHTML={{ __html: htmlBefore }} />
+                )}
+                {inlineAd && (
+                  <div className="not-prose my-6">
+                    <AdBanner ad={inlineAd} />
+                  </div>
+                )}
+                {htmlAfter && (
+                  <div dangerouslySetInnerHTML={{ __html: htmlAfter }} />
+                )}
+              </div>
 
               <div className="mt-8 border-t border-[#e5ebe5] dark:border-[#2a3832] pt-6">
                 <p className="mb-3 text-sm font-semibold text-muted">{t("share")}</p>
