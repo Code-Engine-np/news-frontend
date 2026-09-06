@@ -459,7 +459,7 @@ export default function AboutPage() {
                       </p>
 
                       <p className="mt-2 text-base font-bold leading-7 text-ink dark:text-gray-100">
-                        +32 465 508 473
+                        +352 661 673 043
                         <span className="mx-1.5 text-muted dark:text-gray-500">
                           |
                         </span>
