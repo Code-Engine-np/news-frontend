@@ -21,7 +21,7 @@ export type NavItem = {
  */
 export const DB_SLUG_TO_NAV_KEY: Record<string, string> = {
   "current-affairs": "current",
-  "kathmandu": "kathmandu-valley",
+  kathmandu: "kathmandu-valley",
   "nepal bibidh": "all-nepal",
 };
 
@@ -49,7 +49,7 @@ export const MAIN_NAV_ITEMS: readonly NavItem[] = [
       },
       {
         key: "current",
-        href: "/category/current",
+        href: "/category/current-affairs",
         label: "Current",
       },
       // { key: "state-news", href: "/category/state-news", label: "State News" },

@@ -3,6 +3,14 @@
  * Aligned with the NestJS backend TypeORM entities.
  */
 
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 /**
  * Backend Article (matches NewsArticle entity)
  * GET /api/articles/:id

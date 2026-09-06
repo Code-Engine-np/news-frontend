@@ -17,6 +17,7 @@ import {
   LoginDto,
   AuthResponse,
   RefreshTokenDto,
+  PaginatedResponse,
 } from "@/src/types";
 import {
   CloudinaryDeleteSignature,
@@ -227,15 +228,41 @@ export async function deleteArticle(id: string, token: string): Promise<void> {
 /*  Articles (published)                                               */
 /* ------------------------------------------------------------------ */
 
-/** GET /api/articles/published  -  list published articles */
+/** GET /api/articles/published  -  list published articles (all, for home page) */
 export async function getPublishedArticles(): Promise<ApiArticle[]> {
   return fetchJson<ApiArticle[]>("/articles/published", { next: { revalidate: 60 } });
+}
+
+/** GET /api/articles/published?page=N&limit=N&categorySlug=X  -  paginated, for category page */
+export async function getPublishedArticlesPaginated(params: {
+  page: number;
+  limit?: number;
+  categorySlug?: string;
+}): Promise<PaginatedResponse<ApiArticle>> {
+  const qs = new URLSearchParams({ page: String(params.page), limit: String(params.limit ?? 10) });
+  if (params.categorySlug) qs.set("categorySlug", params.categorySlug);
+  return fetchJson<PaginatedResponse<ApiArticle>>(`/articles/published?${qs}`, {
+    next: { revalidate: 60 },
+  });
 }
 
 /** GET /api/articles  -  list all articles (auth required) */
 export async function getAllArticles(): Promise<ApiArticle[]> {
   const accessToken = localStorage.getItem("best_khabar_access_token");
   return fetchAuthed<ApiArticle[]>("/articles", {
+    method: "GET",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+}
+
+/** GET /api/articles?page=N&limit=N  -  paginated, for admin panel */
+export async function getAllArticlesPaginated(params: {
+  page: number;
+  limit?: number;
+}): Promise<PaginatedResponse<ApiArticle>> {
+  const accessToken = localStorage.getItem("best_khabar_access_token");
+  const qs = new URLSearchParams({ page: String(params.page), limit: String(params.limit ?? 10) });
+  return fetchAuthed<PaginatedResponse<ApiArticle>>(`/articles?${qs}`, {
     method: "GET",
     headers: { Authorization: `Bearer ${accessToken}` },
   });
