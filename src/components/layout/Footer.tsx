@@ -227,7 +227,7 @@ const Footer = async () => {
                   </p>
 
                   <p className="mt-2 text-[15px] font-bold leading-7 text-white">
-                    +32 465 508 473
+                    +352 661 673 043
                     <span className="mx-1.5 text-white/45">|</span>
                     +351 920 552 576
                   </p>
