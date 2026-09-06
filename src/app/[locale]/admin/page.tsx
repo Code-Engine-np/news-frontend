@@ -1,31 +1,43 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteArticle } from "@/src/lib/api";
 import { queryKeys, queryFns } from "@/src/lib/queries";
-import type { ApiArticle } from "@/src/types";
+import type { ApiArticle, PaginatedResponse } from "@/src/types";
 import { Plus, Eye, Pencil, Trash2 } from "lucide-react";
 import { useAuth } from "@/src/app/context/AuthContext";
+import Pagination from "@/src/components/ui/Pagination";
+
+const PAGE_SIZE = 10;
 
 export default function AdminDashboard() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
 
-  const { data: articles = [], isLoading, error } = useQuery<ApiArticle[]>({
-    queryKey: queryKeys.allArticles(),
-    queryFn: queryFns.allArticles,
+  const { data, isLoading, error } = useQuery<PaginatedResponse<ApiArticle>>({
+    queryKey: queryKeys.allArticlesPaginated(page, PAGE_SIZE),
+    queryFn: queryFns.allArticlesPaginated(page, PAGE_SIZE),
     enabled: isAuthenticated,
+    placeholderData: (prev) => prev, // keep previous page visible while next loads
   });
+
+  const articles = data?.data ?? [];
+  const totalPages = data?.totalPages ?? 1;
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => {
       const token = localStorage.getItem("best_khabar_access_token") ?? "";
       return deleteArticle(id, token);
     },
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: queryKeys.allArticles() }),
+    onSuccess: () => {
+      // Invalidate the current page and adjacent pages
+      void queryClient.invalidateQueries({ queryKey: ["articles", "all"] });
+    },
   });
 
   const handleDelete = (id: string, title: string) => {
@@ -36,7 +48,14 @@ export default function AdminDashboard() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-ink dark:text-gray-100">Articles</h1>
+        <div>
+          <h1 className="text-xl font-bold text-ink dark:text-gray-100">Articles</h1>
+          {data && (
+            <p className="mt-0.5 text-xs text-muted">
+              {data.total} total · page {data.page} of {data.totalPages}
+            </p>
+          )}
+        </div>
         <Link
           href="/admin/articles/new"
           className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark sm:px-4 sm:py-2.5"
@@ -130,6 +149,15 @@ export default function AdminDashboard() {
               </tbody>
             </table>
           </div>
+          {totalPages > 1 && (
+            <div className="border-t border-line dark:border-[#2a3832]">
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={(p) => setPage(p)}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

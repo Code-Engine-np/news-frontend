@@ -7,6 +7,7 @@ import { getTrendingArticles, MAIN_NAV_ITEMS } from "@/src/lib/site";
 import NewsShell from "@/src/components/layout/NewsShell";
 import ArticleCard from "@/src/components/cards/ArticleCard";
 import Sidebar from "@/src/components/ui/Sidebar";
+import Pagination from "@/src/components/ui/Pagination";
 import {
   getCategories,
   getCategoryBySlug,
@@ -16,6 +17,9 @@ import {
 } from "@/src/lib/api";
 import { getQueryClient } from "@/src/lib/query-client";
 import { queryKeys, queryFns } from "@/src/lib/queries";
+import type { PaginatedResponse, ApiArticle } from "@/src/types";
+
+const PAGE_SIZE = 10;
 
 // Flat list of every nav slug → English label (for fallback when backend lacks the category)
 const ALL_NAV_SLUGS: Record<string, string> = Object.fromEntries(
@@ -27,6 +31,7 @@ const ALL_NAV_SLUGS: Record<string, string> = Object.fromEntries(
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string }>;
 }
 
 export async function generateStaticParams() {
@@ -34,7 +39,6 @@ export async function generateStaticParams() {
   try {
     const categories = await getCategories();
     const backendSlugs = (categories ?? []).map((c) => ({ slug: c.slug }));
-    // Merge: nav slugs first, then any backend-only slugs not already covered
     const seen = new Set(navSlugs.map((s) => s.slug));
     return [...navSlugs, ...backendSlugs.filter((s) => !seen.has(s.slug))];
   } catch {
@@ -46,7 +50,6 @@ export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-
   try {
     const category = await getCategoryBySlug(slug);
     return {
@@ -60,57 +63,59 @@ export async function generateMetadata({
   }
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = await params;
+  const { page: pageParam } = await searchParams;
+  const currentPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
 
   const queryClient = getQueryClient();
   const t = await getTranslations("Category");
 
-  let category;
-  let allArticles: ReturnType<typeof mapApiArticleToNewsArticle>[] = [];
-  try {
-    await Promise.all([
-      queryClient.prefetchQuery({
-        queryKey: queryKeys.category(slug),
-        queryFn: queryFns.category(slug),
-      }).catch(() => undefined),
-      queryClient.prefetchQuery({
-        queryKey: queryKeys.publishedArticles(),
-        queryFn: queryFns.publishedArticles,
-      }).catch(() => undefined),
-    ]);
+  // Prefetch paginated category articles (main content) + all articles (sidebar) + category meta
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.categoryArticles(slug, currentPage, PAGE_SIZE),
+      queryFn: queryFns.categoryArticles(slug, currentPage, PAGE_SIZE),
+    }).catch(() => undefined),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.publishedArticles(),
+      queryFn: queryFns.publishedArticles,
+    }).catch(() => undefined),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.category(slug),
+      queryFn: queryFns.category(slug),
+    }).catch(() => undefined),
+  ]);
 
-    const apiCategory = queryClient.getQueryData<
-      Awaited<ReturnType<typeof getCategoryBySlug>>
-    >(queryKeys.category(slug));
-    const apiArticles = queryClient.getQueryData<
-      Awaited<ReturnType<typeof getPublishedArticles>>
-    >(queryKeys.publishedArticles()) ?? [];
+  // Main content: paginated articles for this category
+  const paginatedResult = queryClient.getQueryData<PaginatedResponse<ApiArticle>>(
+    queryKeys.categoryArticles(slug, currentPage, PAGE_SIZE),
+  );
+  const pageArticles = (paginatedResult?.data ?? []).map(mapApiArticleToNewsArticle);
+  const totalPages = paginatedResult?.totalPages ?? 1;
+  const safePage = Math.min(currentPage, totalPages);
 
-    allArticles = apiArticles.map(mapApiArticleToNewsArticle);
+  // Sidebar: trending across all categories
+  const allApiArticles = queryClient.getQueryData<ApiArticle[]>(queryKeys.publishedArticles()) ?? [];
+  const allArticles = allApiArticles.map(mapApiArticleToNewsArticle);
+  const sidebarArticles = getTrendingArticles(allArticles, 6);
 
-    if (apiCategory) {
-      category = mapApiCategoryToCategory(apiCategory);
-    } else {
-      // Backend doesn't have this slug yet — fall back to static nav definition
-      const navLabel = ALL_NAV_SLUGS[slug];
-      if (!navLabel) notFound();
-      category = { id: slug, slug, name: navLabel, description: "" };
-    }
-  } catch {
-    // If articles fetch also failed, still show the nav-defined category with empty state
+  // Category metadata
+  const apiCategory = queryClient.getQueryData<Awaited<ReturnType<typeof getCategoryBySlug>>>(
+    queryKeys.category(slug),
+  );
+  let category: { id: string; slug: string; name: string; description?: string };
+  if (apiCategory) {
+    const mapped = mapApiCategoryToCategory(apiCategory);
+    category = { id: mapped.id, slug: mapped.slug, name: mapped.name, description: mapped.description };
+  } else {
     const navLabel = ALL_NAV_SLUGS[slug];
     if (!navLabel) notFound();
     category = { id: slug, slug, name: navLabel, description: "" };
   }
 
-  const articles = allArticles.filter(
-    (article) => article.category.slug === slug,
-  );
-
-  const featuredArticle = articles[0] ?? null;
-  const gridArticles = articles.slice(1);
-  const sidebarArticles = getTrendingArticles(allArticles, 6);
+  const featuredArticle = safePage === 1 ? (pageArticles[0] ?? null) : null;
+  const gridArticles = safePage === 1 ? pageArticles.slice(1) : pageArticles;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
@@ -130,7 +135,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           )}
         </div>
 
-        {articles.length === 0 ? (
+        {pageArticles.length === 0 ? (
           <div className="mt-8 flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-line dark:border-[#2a3832] bg-white dark:bg-[#1e2a26] p-12 shadow-sm text-center">
             <p className="text-2xl font-bold text-ink">{t("noArticles")}</p>
             <p className="mt-2 text-muted">
@@ -156,6 +161,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     <ArticleCard key={article.id} article={article} />
                   ))}
                 </div>
+              )}
+
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={safePage}
+                  totalPages={totalPages}
+                  buildHref={(p) => `/category/${slug}?page=${p}`}
+                />
               )}
             </section>
 

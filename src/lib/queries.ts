@@ -15,6 +15,7 @@
 import {
   getAllAdvertisements,
   getAllArticles,
+  getAllArticlesPaginated,
   getAllFeaturedImages,
   getAdvertisements,
   getArticle,
@@ -23,6 +24,7 @@ import {
   getCategoryBySlug,
   getFeaturedImages,
   getPublishedArticles,
+  getPublishedArticlesPaginated,
   getActivePopupNotice,
   getAllPopupNotices,
 } from "@/src/lib/api";
@@ -32,11 +34,16 @@ import type {
   ApiArticle,
   ApiCategory,
   ApiPopupNotice,
+  PaginatedResponse,
 } from "@/src/types";
 
 export const queryKeys = {
   publishedArticles: () => ["articles", "published"] as const,
+  categoryArticles: (slug: string, page: number, limit = 10) =>
+    ["articles", "published", "category", slug, page, limit] as const,
   allArticles: () => ["articles", "all"] as const,
+  allArticlesPaginated: (page: number, limit = 10) =>
+    ["articles", "all", "paginated", page, limit] as const,
   article: (slug: string) => ["article", "slug", slug] as const,
   articleById: (id: string) => ["article", "id", id] as const,
   categories: () => ["categories"] as const,
@@ -52,7 +59,15 @@ export const queryKeys = {
 
 export const queryFns = {
   publishedArticles: (): Promise<ApiArticle[]> => getPublishedArticles(),
+  categoryArticles:
+    (slug: string, page: number, limit = 10) =>
+    (): Promise<PaginatedResponse<ApiArticle>> =>
+      getPublishedArticlesPaginated({ page, limit, categorySlug: slug }),
   allArticles: (): Promise<ApiArticle[]> => getAllArticles(),
+  allArticlesPaginated:
+    (page: number, limit = 10) =>
+    (): Promise<PaginatedResponse<ApiArticle>> =>
+      getAllArticlesPaginated({ page, limit }),
   article: (slug: string) => () => getArticleBySlug(slug),
   articleById: (id: string) => () => getArticle(id),
   categories: (): Promise<ApiCategory[] | null> => getCategories(),
