@@ -19,6 +19,24 @@ const POSITIONS = [
   { value: "inline", label: "Inline (within article feed)" },
 ] as const;
 
+const POSITION_SPECS: Record<string, { size: string; ratio: string; note: string }> = {
+  banner: {
+    size: "1200 × 90 px",
+    ratio: "Leaderboard (13.3 : 1)",
+    note: "Full-width strip placed between content sections on the home page.",
+  },
+  header: {
+    size: "728 × 90 px",
+    ratio: "Standard leaderboard (8 : 1)",
+    note: "Placed at the top of the page, above the navigation area.",
+  },
+  inline: {
+    size: "350 × 300 px",
+    ratio: "Medium rectangle (7 : 6)",
+    note: "Placed in the article sidebar below the trending list.",
+  },
+};
+
 export default function EditAdvertisementPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -252,6 +270,22 @@ export default function EditAdvertisementPage() {
                   </option>
                 ))}
               </select>
+              {POSITION_SPECS[form.position] && (
+                <div className="mt-2 flex items-start gap-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2.5 dark:border-blue-800/50 dark:bg-blue-950/30">
+                  <svg className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 110 20A10 10 0 0112 2z" />
+                  </svg>
+                  <div>
+                    <p className="text-xs font-semibold text-blue-700 dark:text-blue-300">
+                      Recommended size: {POSITION_SPECS[form.position].size}
+                      <span className="ml-2 font-normal opacity-75">{POSITION_SPECS[form.position].ratio}</span>
+                    </p>
+                    <p className="mt-0.5 text-xs text-blue-600/80 dark:text-blue-400/80">
+                      {POSITION_SPECS[form.position].note}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-3">
