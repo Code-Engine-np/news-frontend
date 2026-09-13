@@ -1,8 +1,10 @@
+
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
 import { Editor } from "@tiptap/react";
+
 import {
   Heading1,
   Heading2,
@@ -16,7 +18,10 @@ import {
   List,
   ListOrdered,
   ImageIcon,
+  Loader2,
 } from "lucide-react";
+
+import { uploadImageToCloudinary } from "@/src/lib/cloudinary";
 
 type MenuBarProps = {
   editor: Editor | null;
@@ -24,72 +29,120 @@ type MenuBarProps = {
 
 export default function MenuBar({ editor }: MenuBarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   if (!editor) {
     return null;
   }
 
-  // Open image file picker
+  /**
+   * Open image picker
+   */
   const addImage = () => {
+    if (uploading) {
+      return;
+    }
+
     fileInputRef.current?.click();
   };
 
-  // Handle selected image
-  const handleImageUpload = (
-    event: React.ChangeEvent<HTMLInputElement>
+  /**
+   * Upload image to Cloudinary
+   * using the existing project helper.
+   */
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
+
+    /**
+     * Reset input so the same image
+     * can be selected again later.
+     */
+    event.target.value = "";
 
     if (!file) {
       return;
     }
 
-    // Check file type
+    /**
+     * Validate image
+     */
     if (!file.type.startsWith("image/")) {
       alert("Please select a valid image.");
-      event.target.value = "";
       return;
     }
 
-    // Check file size - 5MB
-    const maxSize = 5 * 1024 * 1024;
-
-    if (file.size > maxSize) {
+    /**
+     * Maximum 5MB
+     */
+    if (file.size > 5 * 1024 * 1024) {
       alert("Image size must be less than 5MB.");
-      event.target.value = "";
       return;
     }
 
-    // Convert image to Base64
-    const reader = new FileReader();
+    try {
+      setUploading(true);
 
-    reader.onload = () => {
-      const src = reader.result as string;
+      /**
+       * Existing Cloudinary helper handles:
+       *
+       * 1. JWT authentication
+       * 2. Getting Cloudinary signature
+       * 3. Uploading image
+       * 4. Returning secure_url
+       */
+      const imageResponse =
+        await uploadImageToCloudinary(file);
 
-      if (!src) {
-        return;
+      if (!imageResponse.secure_url) {
+        throw new Error(
+          "Cloudinary did not return an image URL.",
+        );
       }
 
+      console.log(
+        "Image uploaded:",
+        imageResponse,
+      );
+
+      /**
+       * Insert only the Cloudinary URL
+       * into Tiptap.
+       *
+       * No base64 data is stored.
+       */
       editor
         .chain()
         .focus()
         .setImage({
-          src: src,
+          src: imageResponse.secure_url,
           alt: file.name,
         })
         .run();
-    };
 
-    reader.onerror = () => {
-      alert("Failed to read the image.");
-    };
+      console.log(
+        "Image inserted into editor.",
+      );
+    } catch (error) {
+      console.error(
+        "Image upload error:",
+        error,
+      );
 
-    reader.readAsDataURL(file);
-
-    // Allow selecting the same image again
-    event.target.value = "";
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Failed to upload image.",
+      );
+    } finally {
+      setUploading(false);
+    }
   };
 
+  /**
+   * Toolbar options
+   */
   const Options = [
     {
       icon: <Heading1 className="size-4" />,
@@ -99,7 +152,9 @@ export default function MenuBar({ editor }: MenuBarProps) {
           .focus()
           .toggleHeading({ level: 1 })
           .run(),
-      pressed: editor.isActive("heading", { level: 1 }),
+      pressed: editor.isActive("heading", {
+        level: 1,
+      }),
       label: "Heading 1",
     },
 
@@ -111,7 +166,9 @@ export default function MenuBar({ editor }: MenuBarProps) {
           .focus()
           .toggleHeading({ level: 2 })
           .run(),
-      pressed: editor.isActive("heading", { level: 2 }),
+      pressed: editor.isActive("heading", {
+        level: 2,
+      }),
       label: "Heading 2",
     },
 
@@ -123,7 +180,9 @@ export default function MenuBar({ editor }: MenuBarProps) {
           .focus()
           .toggleHeading({ level: 3 })
           .run(),
-      pressed: editor.isActive("heading", { level: 3 }),
+      pressed: editor.isActive("heading", {
+        level: 3,
+      }),
       label: "Heading 3",
     },
 
@@ -171,7 +230,9 @@ export default function MenuBar({ editor }: MenuBarProps) {
           .focus()
           .setTextAlign("left")
           .run(),
-      pressed: editor.isActive({ textAlign: "left" }),
+      pressed: editor.isActive({
+        textAlign: "left",
+      }),
       label: "Align left",
     },
 
@@ -183,7 +244,9 @@ export default function MenuBar({ editor }: MenuBarProps) {
           .focus()
           .setTextAlign("center")
           .run(),
-      pressed: editor.isActive({ textAlign: "center" }),
+      pressed: editor.isActive({
+        textAlign: "center",
+      }),
       label: "Align center",
     },
 
@@ -195,7 +258,9 @@ export default function MenuBar({ editor }: MenuBarProps) {
           .focus()
           .setTextAlign("right")
           .run(),
-      pressed: editor.isActive({ textAlign: "right" }),
+      pressed: editor.isActive({
+        textAlign: "right",
+      }),
       label: "Align right",
     },
 
@@ -226,8 +291,7 @@ export default function MenuBar({ editor }: MenuBarProps) {
 
   return (
     <div className="flex flex-wrap gap-2 border-b p-2">
-
-      {/* Text formatting buttons */}
+      {/* Formatting buttons */}
       {Options.map((option, index) => (
         <Toggle
           key={index}
@@ -241,24 +305,34 @@ export default function MenuBar({ editor }: MenuBarProps) {
         </Toggle>
       ))}
 
-      {/* Image button */}
+      {/* Image upload */}
       <Toggle
         type="button"
         pressed={false}
         onPressedChange={addImage}
+        disabled={uploading}
         aria-label="Add image"
-        title="Add image"
+        title={
+          uploading
+            ? "Uploading image..."
+            : "Add image"
+        }
       >
-        <ImageIcon className="size-4" />
+        {uploading ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : (
+          <ImageIcon className="size-4" />
+        )}
       </Toggle>
 
-      {/* Hidden image file input */}
+      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
         accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
         className="hidden"
         onChange={handleImageUpload}
+        disabled={uploading}
       />
     </div>
   );

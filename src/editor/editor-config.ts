@@ -26,7 +26,7 @@ export const editorExtensions = [
 
   Image.configure({
     inline: false,
-    allowBase64: true,
+    allowBase64: false,
     HTMLAttributes: {
       class: "max-w-full rounded-xl border border-line",
     },
