@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Image as ImageIcon } from "lucide-react";
 import ShareButtons from "@/src/components/ui/ShareButtons";
+import UrlDecoder from "@/src/components/ui/UrlDecoder";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Link } from "@/src/i18n/navigation";
 import { getRelatedArticles, getTrendingArticles } from "@/src/lib/site";
@@ -34,24 +35,44 @@ export async function generateStaticParams() {
   }
 }
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.bestkhabar.com";
+
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+  const articleUrl = `${SITE_URL}/${locale}/article/${decodedSlug}`;
 
   try {
     const article = await getArticleBySlug(slug);
+    const featuredImage = article.images?.[0]?.secureUrl;
     return {
       title: `${article.title} | Best Khabar`,
       description: article.summary,
+      alternates: {
+        canonical: articleUrl,
+      },
+      openGraph: {
+        title: article.title,
+        description: article.summary,
+        url: articleUrl,
+        type: "article",
+        siteName: "Best Khabar",
+        ...(featuredImage ? { images: [{ url: featuredImage }] } : {}),
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: article.title,
+        description: article.summary,
+        ...(featuredImage ? { images: [featuredImage] } : {}),
+      },
     };
   } catch {
     return { title: "Article not found | Best Khabar" };
   }
 }
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://www.bestkhabar.com";
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug, locale } = await params;
@@ -93,6 +114,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+    <UrlDecoder />
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
         <nav className="text-sm text-[#5f6b66]">

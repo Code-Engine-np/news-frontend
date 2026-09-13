@@ -25,6 +25,7 @@ export default function EditArticlePage() {
   const [formError, setFormError] = useState("");
   const [form, setForm] = useState({
     title: "",
+    slug: "",
     images: [] as CloudinaryUploadResponse[],
     summary: "",
     content: "",
@@ -60,6 +61,7 @@ export default function EditArticlePage() {
     setForm((current) => ({
       ...current,
       title: article.title,
+      slug: article.slug ?? "",
       summary: article.summary,
       content: article.content,
       categorySlug: article.category?.slug ?? "",
@@ -103,6 +105,7 @@ export default function EditArticlePage() {
       content: form.content,
       status: form.status,
     };
+    if (form.slug.trim()) payload.slug = form.slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     const id = slugToId[slug];
     if (id) payload.categoryId = id;
     else payload.category = allNavCats.find((c) => c.slug === slug)?.label ?? slug;
@@ -163,6 +166,19 @@ export default function EditArticlePage() {
         <div className="rounded-2xl border border-line bg-white p-6 dark:bg-[#1e2a26]">
           <h2 className="mb-4 text-lg font-semibold text-ink">Meta</h2>
           <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-ink">
+                Slug <span className="text-xs font-normal text-muted">(edit to override the URL slug)</span>
+              </label>
+              <input
+                type="text"
+                value={form.slug}
+                onChange={(e) => setForm({ ...form, slug: e.target.value })}
+                placeholder="e.g. dashai-aghi-samachar"
+                className={inputClass}
+              />
+              <p className="mt-1 text-xs text-muted">Lowercase letters, numbers, and hyphens only. Leave blank to keep the current slug.</p>
+            </div>
             <div>
               <label className="block text-sm font-medium text-ink">Category</label>
               <select value={form.categorySlug}
