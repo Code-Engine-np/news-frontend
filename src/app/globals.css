@@ -194,3 +194,32 @@ body {
     @apply font-sans;
   }
 }
+.aboutimage {
+    position: relative;
+    overflow: hidden;
+}
+
+.aboutimage::before {
+    content: "";
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 150px;
+    height: 150px;
+
+    background-image: url('/overlay.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.aboutimage > * {
+    position: relative;
+    z-index: 1;
+}

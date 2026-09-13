@@ -52,7 +52,7 @@ export default function AboutPage() {
                   </h1>
 
                   {/* About content */}
-                  <div className="mt-7 space-y-5 text-base leading-8 text-muted dark:text-gray-300 sm:text-[17px] sm:leading-9">
+                  <div className="mt-7 aboutimage space-y-5 text-base leading-8 text-muted dark:text-gray-300 sm:text-[17px] sm:leading-9">
                     <p>
                       &#39;बेस्ट खबर डटकम&#39; पत्रकारिता क्षेत्रमा फरक र
                       उत्कृष्ट खबर पस्कने लक्ष्यका साथ स्थापित &#39;अनलाईन न्युज

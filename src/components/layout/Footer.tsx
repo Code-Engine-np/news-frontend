@@ -130,7 +130,7 @@ const Footer = async () => {
 
                 <div className="relative flex h-full flex-col">
                   <div className="mb-5 flex items-center gap-3">
-                    <div className="h-9 w-1 rounded-full bg-white/75" />
+                    <div className="h-9 w-1 rounded-full bg-[#f15a24]" />
 
                     <h3 className="text-[19px] font-extrabold leading-7 text-white">
                       {t("companyName")}
@@ -144,7 +144,7 @@ const Footer = async () => {
                   <div className="mt-auto pt-6">
                     <Link
                       href="/about"
-                      className="group/about inline-flex w-full items-center justify-between rounded-xl bg-white px-4 py-3 text-[15px] font-extrabold text-[#078f65] shadow-[0_8px_25px_rgba(0,0,0,0.14)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_12px_30px_rgba(0,0,0,0.20)]"
+                      className="group/about inline-flex w-full items-center justify-between rounded-xl bg-[#fffefe] px-4 py-3 text-[15px] font-extrabold text-[#078f65] shadow-[0_8px_25px_rgba(0,0,0,0.14)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_12px_30px_rgba(0,0,0,0.20)]"
                     >
                       <span>हाम्रो बारेमा</span>
 
@@ -170,7 +170,7 @@ const Footer = async () => {
                   <div className="absolute left-0 top-0 h-1 w-20 rounded-r-full bg-white/75" />
 
                   <div className="mb-5 flex items-center gap-3">
-                    <div className="h-9 w-1 rounded-full bg-white/75" />
+                    <div className="h-9 w-1 rounded-full bg-[#f15a24]" />
 
                     <h3 className="text-[19px] font-extrabold leading-7 text-white">
                       {t(group.titleKey)}
@@ -202,7 +202,7 @@ const Footer = async () => {
                 <div className="absolute left-0 top-0 h-1 w-20 rounded-r-full bg-white/75" />
 
                 <div className="mb-5 flex items-center gap-3">
-                  <div className="h-9 w-1 rounded-full bg-white/75" />
+                  <div className="h-9 w-1 rounded-full bg-[#f15a24]" />
 
                   <h3 className="text-[19px] font-extrabold text-white">
                     {t("contactTitle")}
