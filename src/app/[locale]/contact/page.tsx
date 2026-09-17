@@ -31,11 +31,11 @@ export default async function ContactPage() {
             <dl className="mt-4 space-y-4 text-sm text-muted">
               <div>
                 <dt className="font-semibold text-ink">{t("email")}</dt>
-                <dd>newsroom@bestkhabar.com</dd>
+                <dd>bestkhabarweb@gmail.com</dd>
               </div>
               <div>
                 <dt className="font-semibold text-ink">{t("phone")}</dt>
-                <dd>+977-01-555-0101</dd>
+                <dd>+352 661 673 043</dd>
               </div>
               <div>
                 <dt className="font-semibold text-ink">{t("office")}</dt>
