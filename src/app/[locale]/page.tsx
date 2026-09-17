@@ -3,7 +3,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
 import NewsShell from "@/src/components/layout/NewsShell";
-import BreakingNewsBanner from "@/src/components/ui/BreakingNewsBanner";
+import BreakingNewsSection from "@/src/components/ui/BreakingNewsSection";
 import FeaturedCarousel from "@/src/components/ui/FeaturedCarousel";
 import LatestNewsList from "@/src/components/ui/LatestNewsList";
 import CategoryNewsSection from "@/src/components/ui/CategoryNewsSection";
@@ -20,7 +20,8 @@ import type { ApiAdvertisement, ApiFeaturedImage, NewsArticle } from "@/src/type
 // Normalize slug: strip hyphens + spaces + lowercase for fuzzy nav matching
 const normSlug = (s: string) => s.toLowerCase().replace(/[-\s]/g, "");
 
-export default async function Home() {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const queryClient = getQueryClient();
   const t = await getTranslations("Home");
   const tNav = await getTranslations("Nav");
@@ -61,9 +62,7 @@ export default async function Home() {
   const bannerAds =
     queryClient.getQueryData<ApiAdvertisement[]>(queryKeys.advertisements("banner")) ?? [];
 
-  const breakingNews = displayArticles
-    .filter((a) => a.isBreaking)
-    .map((a) => a.title);
+  const breakingArticles = displayArticles.filter((a) => a.isBreaking);
 
   // ── Build nav position index ────────────────────────────────────────
   // Flat walk of MAIN_NAV_ITEMS: parent first, then its children, in order.
@@ -168,16 +167,9 @@ export default async function Home() {
             </div>
           )}
 
-          {/* Breaking news ticker */}
-          {breakingNews.length > 0 && (
-            <div className="mb-3 flex items-center gap-3 rounded-xl border border-line bg-white px-3 py-2 dark:border-[#2a3832] dark:bg-[#1e2a26]">
-              <span className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-red-600">
-                {t("breakingNews")}
-              </span>
-              <div className="min-w-0 flex-1">
-                <BreakingNewsBanner items={breakingNews} />
-              </div>
-            </div>
+          {/* ── BREAKING NEWS full cards (above carousel) ────────────── */}
+          {breakingArticles.length > 0 && (
+            <BreakingNewsSection articles={breakingArticles} locale={locale} />
           )}
 
           {/* ── HERO: Carousel (left) + Trending sidebar (right, desktop only) ── */}

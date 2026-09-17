@@ -29,6 +29,7 @@ export default function NewArticlePage() {
     content: "",
     categorySlug: "",
     status: "draft" as "draft" | "published",
+    isBreaking: false,
   });
 
   // Fetch backend categories to resolve existing slugs → IDs
@@ -76,6 +77,7 @@ export default function NewArticlePage() {
       status: form.status,
     };
     if (form.slug.trim()) payload.slug = form.slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    payload.isBreaking = form.isBreaking;
     const id = slugToId[slug];
     if (id) payload.categoryId = id;
     else payload.category = allNavCats.find((c) => c.slug === slug)?.label ?? slug;
@@ -172,6 +174,19 @@ export default function NewArticlePage() {
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>
               </select>
+            </div>
+            <div className="flex items-center gap-3 pt-1">
+              <input
+                id="new-isBreaking"
+                type="checkbox"
+                checked={form.isBreaking}
+                onChange={(e) => setForm({ ...form, isBreaking: e.target.checked })}
+                className="h-4 w-4 rounded border-line text-primary focus:ring-primary"
+              />
+              <label htmlFor="new-isBreaking" className="text-sm font-medium text-ink cursor-pointer">
+                Breaking News
+                <span className="ml-1 text-xs font-normal text-muted">— show this article at the top of the home page</span>
+              </label>
             </div>
           </div>
         </div>

@@ -31,6 +31,7 @@ export default function EditArticlePage() {
     content: "",
     categorySlug: "",
     status: "draft" as "draft" | "published" | "archived",
+    isBreaking: false,
   });
 
   const { data: article, isLoading: isLoadingArticle } = useQuery({
@@ -66,6 +67,7 @@ export default function EditArticlePage() {
       content: article.content,
       categorySlug: article.category?.slug ?? "",
       status: article.status,
+      isBreaking: article.isBreaking ?? false,
       images: (article.images ?? []).map(
         (image): CloudinaryUploadResponse => ({
           secure_url: image.secureUrl ?? undefined,
@@ -106,6 +108,7 @@ export default function EditArticlePage() {
       status: form.status,
     };
     if (form.slug.trim()) payload.slug = form.slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    payload.isBreaking = form.isBreaking;
     const id = slugToId[slug];
     if (id) payload.categoryId = id;
     else payload.category = allNavCats.find((c) => c.slug === slug)?.label ?? slug;
@@ -211,6 +214,19 @@ export default function EditArticlePage() {
                 <option value="published">Published</option>
                 <option value="archived">Archived</option>
               </select>
+            </div>
+            <div className="flex items-center gap-3 pt-1">
+              <input
+                id="edit-isBreaking"
+                type="checkbox"
+                checked={form.isBreaking}
+                onChange={(e) => setForm({ ...form, isBreaking: e.target.checked })}
+                className="h-4 w-4 rounded border-line text-primary focus:ring-primary"
+              />
+              <label htmlFor="edit-isBreaking" className="text-sm font-medium text-ink cursor-pointer">
+                Breaking News
+                <span className="ml-1 text-xs font-normal text-muted">— show this article at the top of the home page</span>
+              </label>
             </div>
           </div>
         </div>

@@ -489,7 +489,7 @@ export function mapApiArticleToNewsArticle(api: ApiArticle): NewsArticle {
     publishedAt: api.createdAt,
     updatedAt: api.updatedAt,
     status: api.status,
-    isBreaking: false,
+    isBreaking: api.isBreaking ?? false,
     isFeatured: false,
     viewCount: 0,
   };

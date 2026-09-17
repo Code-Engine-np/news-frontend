@@ -1,5 +1,6 @@
 import NewsShell from "@/src/components/layout/NewsShell";
 import ContactForm from "@/src/components/ui/ContactForm";
+import { submitContactForm } from "./actions";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
@@ -13,7 +14,7 @@ export default async function ContactPage() {
   return (
     <NewsShell>
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-6">
-        <section className="rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-line bg-white p-6 shadow-sm dark:border-[#2a3832] dark:bg-[#1e2a26] sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
             {t("eyebrow")}
           </p>
@@ -26,7 +27,7 @@ export default async function ContactPage() {
         </section>
 
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <section className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+          <section className="rounded-2xl border border-line bg-white p-6 shadow-sm dark:border-[#2a3832] dark:bg-[#1e2a26]">
             <h2 className="text-2xl font-bold text-ink">{t("detailsTitle")}</h2>
             <dl className="mt-4 space-y-4 text-sm text-muted">
               <div>
@@ -44,10 +45,10 @@ export default async function ContactPage() {
             </dl>
           </section>
 
-          <section className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+          <section className="rounded-2xl border border-line bg-white p-6 shadow-sm dark:border-[#2a3832] dark:bg-[#1e2a26]">
             <h2 className="text-2xl font-bold text-ink">{t("sendTitle")}</h2>
             <div className="mt-4">
-              <ContactForm />
+              <ContactForm submitAction={submitContactForm} />
             </div>
           </section>
         </div>
