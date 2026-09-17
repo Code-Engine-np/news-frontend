@@ -3,14 +3,24 @@
 import { useState } from "react";
 import { Send, CheckCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { sendContactMessage } from "@/src/lib/api";
+
+interface ContactPayload {
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
+}
+
+interface Props {
+  submitAction: (payload: ContactPayload) => Promise<{ success: true }>;
+}
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
   "mt-1 w-full rounded-lg border border-line bg-transparent px-4 py-2.5 text-sm text-ink outline-none transition-colors focus:border-primary dark:border-[#2a3832] dark:text-gray-100";
 
-const ContactForm = () => {
+const ContactForm = ({ submitAction }: Props) => {
   const t = useTranslations("Contact");
   const [form, setForm] = useState({
     name: "",
@@ -28,7 +38,7 @@ const ContactForm = () => {
       if (status === "error") setStatus("idle");
     };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.email.includes("@")) {
       setStatus("error");
@@ -38,7 +48,7 @@ const ContactForm = () => {
     setStatus("submitting");
     setErrorMessage("");
     try {
-      await sendContactMessage({
+      await submitAction({
         name: form.name.trim(),
         email: form.email.trim(),
         subject: form.subject.trim() || undefined,

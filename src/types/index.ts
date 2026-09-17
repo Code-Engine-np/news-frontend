@@ -24,6 +24,7 @@ export interface ApiArticle {
   summary: string;
   content: string;
   status: "draft" | "published" | "archived";
+  isBreaking: boolean;
   author: ApiAuthor;
   category: ApiCategory;
   images: ApiImage[];
