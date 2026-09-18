@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PlayCircle } from "lucide-react";
 import type { NewsArticle } from "@/src/types";
+import { getYouTubeThumbnailUrl } from "@/src/lib/youtube";
 
 /** Strip HTML tags and return plain text. */
 function stripHtml(html: string): string {
@@ -66,30 +68,39 @@ export default function BreakingNewsSection({ articles, locale }: Props) {
                 </span>
               </p>
 
-              {/* Image with summary caption overlay */}
-              {article.featuredImage && (
-                <div className="relative w-full overflow-hidden rounded-2xl">
-                  <Image
-                    src={article.featuredImage}
-                    className="w-full h-[280px] md:h-[520px] object-cover transition-transform duration-700 hover:scale-[1.02]"
-                    height={700}
-                    width={1200}
-                    alt={article.title}
-                  />
+              {/* Image / video thumbnail with summary caption overlay */}
+              {(article.featuredImage || article.featuredVideoId) && (
+                <Link href={`/${locale}/article/${article.slug}`} className="block">
+                  <div className="relative w-full overflow-hidden rounded-2xl bg-black">
+                    <Image
+                      src={article.featuredImage || getYouTubeThumbnailUrl(article.featuredVideoId!)}
+                      className="w-full h-[280px] md:h-[520px] object-cover transition-transform duration-700 hover:scale-[1.02]"
+                      height={700}
+                      width={1200}
+                      alt={article.title}
+                    />
 
-                  <span className="absolute left-4 top-4 bg-red-600 text-white font-bold md:text-xl text-sm px-3 md:px-5 py-2 rounded-md shadow-lg">
-                    Breaking News
-                  </span>
+                    {/* Play overlay for YouTube videos */}
+                    {article.featuredVideoId && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <PlayCircle className="h-16 w-16 md:h-24 md:w-24 text-white drop-shadow-xl" />
+                      </div>
+                    )}
 
-                  {/* Summary as caption overlay at bottom of image */}
-                  {article.excerpt && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent pt-16 pb-4 px-4 md:px-7">
-                      <p className="text-white text-sm md:text-base italic leading-relaxed">
-                        {article.excerpt}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                    <span className="absolute left-4 top-4 bg-red-600 text-white font-bold md:text-xl text-sm px-3 md:px-5 py-2 rounded-md shadow-lg">
+                      Breaking News
+                    </span>
+
+                    {/* Summary as caption overlay at bottom of image */}
+                    {article.excerpt && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent pt-16 pb-4 px-4 md:px-7">
+                        <p className="text-white text-sm md:text-base italic leading-relaxed">
+                          {article.excerpt}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </Link>
               )}
 
               {/* First two sentences of content as description */}
