@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, PlayCircle } from "lucide-react";
 import { Link } from "@/src/i18n/navigation";
 import type { NewsArticle } from "@/src/types";
+import { getYouTubeThumbnailUrl } from "@/src/lib/youtube";
 
 interface CategoryNewsSectionProps {
   title: string;
@@ -46,15 +47,20 @@ export default function CategoryNewsSection({
       <div className="grid grid-cols-1 divide-y divide-line dark:divide-[#2a3832] lg:grid-cols-[3fr_2fr] lg:divide-x lg:divide-y-0">
         {/* Featured article */}
         <Link href={`/article/${main.slug}`} className="group block p-3">
-          {main.featuredImage && (
-            <div className="relative mb-3 aspect-video overflow-hidden rounded-xl">
+          {(main.featuredImage || main.featuredVideoId) && (
+            <div className="relative mb-3 aspect-video overflow-hidden rounded-xl bg-black">
               <Image
-                src={main.featuredImage}
+                src={main.featuredImage || getYouTubeThumbnailUrl(main.featuredVideoId!)}
                 alt={main.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 58vw"
               />
+              {main.featuredVideoId && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/35">
+                  <PlayCircle className="h-12 w-12 text-white drop-shadow-lg transition-transform group-hover:scale-110" />
+                </div>
+              )}
             </div>
           )}
           <h3 className="line-clamp-3 text-sm font-bold leading-snug text-ink transition-colors group-hover:text-primary dark:text-gray-100 sm:text-base">
@@ -75,15 +81,22 @@ export default function CategoryNewsSection({
               href={`/article/${article.slug}`}
               className="group flex gap-3 p-3 hover:bg-gray-50 dark:hover:bg-[#22302a]"
             >
-              <div className="relative h-[60px] w-[90px] shrink-0 overflow-hidden">
-                {article.featuredImage ? (
-                  <Image
-                    src={article.featuredImage}
-                    alt={article.title}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="90px"
-                  />
+              <div className="relative h-[60px] w-[90px] shrink-0 overflow-hidden rounded-md bg-black">
+                {(article.featuredImage || article.featuredVideoId) ? (
+                  <>
+                    <Image
+                      src={article.featuredImage || getYouTubeThumbnailUrl(article.featuredVideoId!)}
+                      alt={article.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="90px"
+                    />
+                    {article.featuredVideoId && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <PlayCircle className="h-5 w-5 text-white drop-shadow" />
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gray-100 dark:bg-[#2a3832]">
                     <ImageIcon className="h-4 w-4 text-gray-400" />
