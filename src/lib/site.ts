@@ -136,10 +136,11 @@ export const FOOTER_LINK_GROUPS = [
   {
     titleKey: "exploreTitle",
     links: [
-      { labelKey: "linkTrending", href: "/trending" },
-      // { labelKey: "linkPolitics", href: "/category/politics" },
-      { labelKey: "linkBusiness", href: "/category/business" },
-      { labelKey: "linkSports", href: "/category/sports" },
+      { labelKey: "linkone", href: "/trending" },
+      { labelKey: "linktwo", href: "/category/examplary-world" },
+      { labelKey: "linkthree", href: "/category/current-affairs" },
+      { labelKey: "linkfour", href: "/category/all-nepal" },
+       { labelKey: "linkfive", href: "https://old.bestkhabar.com/" },
     ],
   },
   {
